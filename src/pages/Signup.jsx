@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 import logo from '../assets/logo2.png';
+import InstallButton from '../components/InstallButton';
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -72,9 +73,11 @@ const Signup = () => {
             <div className="container container-sm">
                 <div className="auth-card card animate-fadeIn">
                     <div className="auth-header text-center mb-xl">
-                        <img src={logo} alt="CalisProgress" className="app-logo mb-md" />
-                        <h1 className="gradient-text">CalisProgress</h1>
+                        <img src={logo} alt="CalisProgress" className="auth-logo mb-md" />
                         <p className="text-secondary">Crie sua conta e comece hoje</p>
+                        <div className="mt-md">
+                            <InstallButton className="btn-sm btn-outline" />
+                        </div>
                     </div>
 
                     {error && (

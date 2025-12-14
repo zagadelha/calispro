@@ -193,10 +193,7 @@ p {
   box-shadow: var(--shadow-md);
 }
 
-.btn-icon {
-  padding: 0.75rem;
-  aspect-ratio: 1;
-}
+/* .btn-icon removed to avoid double padding */
 
 .btn-sm {
   padding: 0.5rem 1rem;
@@ -617,6 +614,20 @@ p {
 
   .section {
     padding: var(--spacing-xl) 0;
+  }
+
+  /* Compact buttons on mobile */
+  .dashboard-header .btn-text {
+    display: none;
+  }
+
+  .dashboard-header .btn-icon {
+    margin-right: 0;
+  }
+
+  .dashboard-header .btn {
+    padding: 0.5rem;
+    aspect-ratio: 1;
   }
 }
 
@@ -1368,4 +1379,17 @@ p {
   .profile-header .flex.gap-md {
     gap: 0.5rem;
   }
+}
+
+/* Auth Logo */
+.auth-logo {
+  height: 120px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: var(--spacing-md);
+  transition: transform var(--transition-base);
+}
+
+.auth-logo:hover {
+  transform: scale(1.05);
 }

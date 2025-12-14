@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 import logo from '../assets/logo2.png';
+import InstallButton from '../components/InstallButton';
+
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -58,9 +60,11 @@ const Login = () => {
             <div className="container container-sm">
                 <div className="auth-card card animate-fadeIn">
                     <div className="auth-header text-center mb-xl">
-                        <img src={logo} alt="CalisProgress" className="app-logo mb-md" />
-                        <h1 className="gradient-text">CalisProgress</h1>
-                        <p className="text-secondary">Entre para continuar sua jornada</p>
+                        <img src={logo} alt="CalisProgress" className="auth-logo mb-md" />
+                        <p className="text-secondary">Seu guia do iniciante ao avançado na Calistenia.</p>
+                        <div className="mt-md">
+                            <InstallButton className="btn-sm btn-outline" />
+                        </div>
                     </div>
 
                     {error && (

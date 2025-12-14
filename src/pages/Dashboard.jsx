@@ -7,6 +7,8 @@ import { db } from '../config/firebase';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import logo from '../assets/logo2.png';
+import InstallButton from '../components/InstallButton';
+
 
 const Dashboard = () => {
     const [workout, setWorkout] = useState(null);
@@ -87,18 +89,18 @@ const Dashboard = () => {
                                 <span className="btn-text">Plano</span>
                             </button>
                             <button
-                                onClick={() => navigate('/profile')}
-                                className="btn btn-secondary btn-sm"
-                            >
-                                <span className="btn-icon">👤</span>
-                                <span className="btn-text">Perfil</span>
-                            </button>
-                            <button
                                 onClick={() => navigate('/progress')}
                                 className="btn btn-secondary btn-sm"
                             >
                                 <span className="btn-icon">📊</span>
                                 <span className="btn-text">Progresso</span>
+                            </button>
+                            <button
+                                onClick={() => navigate('/profile')}
+                                className="btn btn-secondary btn-sm"
+                            >
+                                <span className="btn-icon">👤</span>
+                                <span className="btn-text">Perfil</span>
                             </button>
                             <button
                                 onClick={handleLogout}
@@ -116,13 +118,16 @@ const Dashboard = () => {
             <main className="dashboard-main">
                 <div className="container">
                     {/* Welcome Section */}
-                    <section className="welcome-section mb-xl">
-                        <h2 className="mb-sm">
-                            Olá, {userProfile?.name || 'Atleta'}! 👋
-                        </h2>
-                        <p className="text-secondary">
-                            {format(new Date(), "EEEE, d 'de' MMMM", { locale: ptBR })}
-                        </p>
+                    <section className="welcome-section mb-xl flex justify-between items-center">
+                        <div>
+                            <h2 className="mb-sm">
+                                Olá, {userProfile?.name || 'Atleta'}! 👋
+                            </h2>
+                            <p className="text-secondary">
+                                {format(new Date(), "EEEE, d 'de' MMMM", { locale: ptBR })}
+                            </p>
+                        </div>
+                        <InstallButton className="btn-secondary" />
                     </section>
 
                     {/* Today's Workout */}
