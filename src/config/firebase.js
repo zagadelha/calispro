@@ -6,12 +6,12 @@ import { getStorage } from 'firebase/storage';
 // Firebase configuration
 // TODO: Replace with your Firebase project configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBlsL9WwVJGrvQttMrE9P069fEIkagkJkg",
-    authDomain: "calisprogress.firebaseapp.com",
-    projectId: "calisprogress",
-    storageBucket: "calisprogress.firebasestorage.app",
-    messagingSenderId: "1033880045088",
-    appId: "1:1033880045088:web:f70ca6ed8db68eb80f5e45"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // Initialize Firebase
