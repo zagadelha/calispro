@@ -1,0 +1,23 @@
+﻿node : node:internal/modules/esm/assert:89
+At line:1 char:1
++ node test_workout_duplication.js 2>&1 | Out-File -FilePath test_outpu 
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (node:internal/modules/esm/ 
+   assert:89:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+        throw new ERR_IMPORT_ASSERTION_TYPE_MISSING(url, validType);
+              ^
+
+TypeError [ERR_IMPORT_ASSERTION_TYPE_MISSING]: Module "file:///C:/projec
+ts/@AntigravityProjects/calispro/src/assets/exercises/exercises_v1_1.jso
+n" needs an import attribute of type "json"
+    at validateAttributes (node:internal/modules/esm/assert:89:15)
+    at defaultLoad (node:internal/modules/esm/load:155:3)
+    at async ModuleLoader.loadAndTranslate 
+(node:internal/modules/esm/loader:477:45) {
+  code: 'ERR_IMPORT_ASSERTION_TYPE_MISSING'
+}
+
+Node.js v20.19.2

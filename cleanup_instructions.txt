@@ -1,0 +1,17 @@
+import { db } from './src/config/firebase.js';
+import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+
+// Hardcoded UID for the current user session context (from previous logs ideally, but user must authenticate)
+// Since this runs in node, we need to bypass or mockauth. 
+// Actually, this script is intended to be run IN THE BROWSER CONSOLE or via a temporary UI button.
+// For safety, I'll create a simple React Component "ResetButton" temporary or just instructions.
+
+// BETTER: I will create a temporary file `cleanup_script.js` that the user can run via node if they have admin SDK, but they don't.
+// I'll create a `debug_cleanup.js` file that I can ask the user to Paste into their browser console or I can just modify Dashboard to include a "Reset" button for this session.
+
+console.log("To reset the dashboard manually:");
+console.log("1. Go to Firestore Console");
+console.log("2. Delete documents in 'workouts' collection with today's date.");
+
+// Since I am the agent, I can auto-run a cleanup if I integrate it into the app via a temporary useEffect.
+// I'll append a temporary cleanup logic to Dashboard.jsx that runs ONCE.

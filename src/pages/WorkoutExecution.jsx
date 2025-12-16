@@ -1,16 +1,89 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getTodayWorkout } from '../utils/workoutGenerator';
-import { doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import exercisesData from '../assets/exercises/exercises_v1_1.json';
 
 const WorkoutExecution = () => {
+    // Normalization helper handles accents and case
+    const normalize = (str) => {
+        if (!str) return '';
+        return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+    };
+
+    // Create maps for quick lookup
+    const { idMap, nameMap } = useMemo(() => {
+        const iMap = new Map();
+        const nMap = new Map();
+
+        // Populate base maps from JSON
+        exercisesData.exercises.forEach(ex => {
+            iMap.set(ex.id, ex);
+            nMap.set(normalize(ex.name), ex);
+            if (ex.i18n_key) nMap.set(normalize(ex.i18n_key), ex);
+        });
+
+        // Helper to link legacy name to existing entry safely
+        const link = (legacyName, targetName) => {
+            const target = nMap.get(normalize(targetName));
+            if (target) {
+                nMap.set(normalize(legacyName), target);
+            }
+        };
+
+        // Manual Portuguese Mapping (Legacy -> JSON English Name)
+        link('Flexões', 'Push-up');
+        link('Agachamento', 'Bodyweight Squat');
+        link('Prancha', 'Plank');
+        link('Remada Invertida', 'Australian Row (Inverted Row)');
+        link('Afundo', 'Static Lunge');
+
+        // Variants & Plurals
+        link('Pike Push-ups', 'Pike Push-up (Beginner)');
+        link('Handstand Push-ups', 'Handstand Push-up');
+        link('Pull-ups', 'Pull-up');
+        link('Chin-ups', 'Chin-up');
+        link('Muscle-ups', 'Muscle-up');
+        link('Dips', 'Bench Dip');
+
+        link('Agachamento Jump', 'Jump Squat');
+        link('Burpees', 'Burpee');
+        link('Mountain Climbers', 'Mountain Climber');
+        link('Jumping Jacks', 'Jumping Jack');
+        link('Pistol Squat (assistido)', 'Assisted Pistol Squat');
+        link('Hanging Leg Raises', 'Hanging Leg Raises');
+
+        return { idMap: iMap, nameMap: nMap };
+    }, []);
+
     const [workout, setWorkout] = useState(null);
     const [exercises, setExercises] = useState([]);
-    const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
-    const [notes, setNotes] = useState('');
-    const [difficulty, setDifficulty] = useState(null);
+
+    // Helper to get media URL
+    const getExerciseGif = (originalId, name) => {
+        let ex = null;
+        if (originalId) ex = idMap.get(originalId);
+
+        // Fallback to name if ID lookup failed
+        if (!ex && name) {
+            ex = nameMap.get(normalize(name));
+        }
+
+        return ex?.media?.url || null;
+    };
+
+    // Per-exercise details
+    const [performanceData, setPerformanceData] = useState({});
+
+    // Session Feedback
+    const [feedback, setFeedback] = useState({
+        goalMet: null, // boolean
+        rpe: null, // 1-5
+        pain: null // 'none', 'mild', 'moderate'
+    });
+
     const [loading, setLoading] = useState(true);
     const { currentUser } = useAuth();
     const navigate = useNavigate();
@@ -28,7 +101,6 @@ const WorkoutExecution = () => {
             }
             setWorkout(todayWorkout);
             setExercises(todayWorkout.exercises || []);
-            setNotes(todayWorkout.notes || '');
         } catch (err) {
             console.error('Error loading workout:', err);
         } finally {
@@ -37,36 +109,60 @@ const WorkoutExecution = () => {
     };
 
     const toggleExerciseComplete = async (exerciseId, currentStatus) => {
+        const newStatus = !currentStatus;
         try {
             await updateDoc(doc(db, 'workout_exercises', exerciseId), {
-                completed: !currentStatus
+                completed: newStatus
             });
-
             setExercises(prev =>
-                prev.map(ex =>
-                    ex.id === exerciseId
-                        ? { ...ex, completed: !currentStatus }
-                        : ex
-                )
+                prev.map(ex => ex.id === exerciseId ? { ...ex, completed: newStatus } : ex)
             );
         } catch (err) {
             console.error('Error updating exercise:', err);
         }
     };
 
+    const handlePerformanceChange = (exerciseId, field, value) => {
+        setPerformanceData(prev => ({
+            ...prev,
+            [exerciseId]: { ...prev[exerciseId], [field]: value }
+        }));
+    };
+
+    const handleFeedbackChange = (field, value) => {
+        setFeedback(prev => ({ ...prev, [field]: value }));
+    };
+
     const handleFinishWorkout = async () => {
-        if (!difficulty) {
-            alert('Por favor, selecione o nível de dificuldade');
-            return;
-        }
+        // Use default values if feedback not provided (to prevent history gaps)
+        const finalFeedback = {
+            goalMet: feedback.goalMet !== null ? feedback.goalMet : true,
+            rpe: feedback.rpe || 3,
+            pain: feedback.pain || 'Nenhuma'
+        };
 
         try {
+            // Save global workout data
             await updateDoc(doc(db, 'workouts', workout.id), {
                 status: 'completed',
                 completed_at: new Date().toISOString(),
-                difficulty_feedback: difficulty,
-                notes: notes
+                feedback_goal_met: finalFeedback.goalMet,
+                feedback_rpe: finalFeedback.rpe,
+                feedback_pain: finalFeedback.pain
             });
+
+            // Save detailed performance data
+            for (const exercise of exercises) {
+                const data = performanceData[exercise.id];
+                if (data) {
+                    await updateDoc(doc(db, 'workout_exercises', exercise.id), {
+                        performed_reps: data.reps || null,
+                        performed_seconds: data.seconds || null,
+                        rpe: data.rpe || null,
+                        completed: true // Force completion on feedback submission
+                    });
+                }
+            }
 
             navigate('/dashboard');
         } catch (err) {
@@ -78,11 +174,7 @@ const WorkoutExecution = () => {
     if (loading) {
         return (
             <div className="workout-execution-container">
-                <div className="container">
-                    <div className="loading-state">
-                        <div className="spinner"></div>
-                    </div>
-                </div>
+                <div className="container"><div className="spinner"></div></div>
             </div>
         );
     }
@@ -96,110 +188,135 @@ const WorkoutExecution = () => {
             <header className="workout-header">
                 <div className="container">
                     <div className="flex justify-between items-center">
-                        <button
-                            onClick={() => navigate('/dashboard')}
-                            className="btn btn-secondary btn-sm"
-                        >
-                            ← Voltar
-                        </button>
+                        <button onClick={() => navigate('/dashboard')} className="btn btn-secondary btn-sm">← Voltar</button>
                         <h2 className="workout-title">{workout.name}</h2>
-                        <div className="workout-progress-badge">
-                            {completedCount}/{exercises.length}
-                        </div>
+                        <div className="workout-progress-badge">{completedCount}/{exercises.length}</div>
                     </div>
-
-                    {/* Progress Bar */}
                     <div className="progress-bar mt-md">
-                        <div
-                            className="progress-fill"
-                            style={{ width: `${progress}%` }}
-                        />
+                        <div className="progress-fill" style={{ width: `${progress}%` }} />
                     </div>
                 </div>
             </header>
 
-            {/* Main Content */}
             <main className="workout-main">
                 <div className="container">
-                    {/* Exercise List */}
                     <section className="exercises-section mb-xl">
                         <h3 className="mb-lg">Exercícios</h3>
                         <div className="exercise-list-execution">
-                            {exercises.map((exercise, index) => (
-                                <div
-                                    key={exercise.id}
-                                    className={`exercise-card card ${exercise.completed ? 'completed' : ''}`}
-                                >
-                                    <div className="flex items-center gap-md">
-                                        <button
-                                            onClick={() => toggleExerciseComplete(exercise.id, exercise.completed)}
-                                            className={`checkbox-btn ${exercise.completed ? 'checked' : ''}`}
-                                        >
-                                            {exercise.completed && '✓'}
-                                        </button>
-
-                                        <div className="exercise-details flex-1">
-                                            <h4 className="exercise-name">{exercise.exercise_name}</h4>
-                                            <p className="exercise-meta text-secondary text-sm">
-                                                {exercise.muscle_group}
-                                            </p>
-                                            <div className="exercise-sets mt-sm">
-                                                <span className="badge badge-primary">
-                                                    {exercise.target_sets} séries × {exercise.target_reps} reps
-                                                </span>
+                            {exercises.map((exercise) => (
+                                <div key={exercise.id} className={`exercise-card card ${exercise.completed ? 'completed' : ''}`}>
+                                    <div className="flex flex-col gap-md">
+                                        <div className="flex items-center gap-md">
+                                            <button
+                                                onClick={() => toggleExerciseComplete(exercise.id, exercise.completed)}
+                                                className={`checkbox-btn ${exercise.completed ? 'checked' : ''}`}
+                                            >
+                                                {exercise.completed && '✓'}
+                                            </button>
+                                            <div className="exercise-details flex-1 min-w-0">
+                                                <h4 className="exercise-name">{exercise.exercise_name}</h4>
+                                                <p className="exercise-meta text-secondary text-sm">
+                                                    {exercise.muscle_group} • Meta: {exercise.target_sets}x{exercise.target_reps}
+                                                </p>
+                                                {/* GIF Display */}
+                                                {!exercise.completed && getExerciseGif(exercise.original_id, exercise.exercise_name) && (
+                                                    <div
+                                                        className="mt-3 rounded-lg overflow-hidden border border-white/10 bg-black/20 shadow-sm"
+                                                        role="img"
+                                                        aria-label={exercise.exercise_name}
+                                                        style={{
+                                                            width: '100%',
+                                                            maxWidth: '220px',
+                                                            height: '140px',
+                                                            backgroundImage: `url(${getExerciseGif(exercise.original_id, exercise.exercise_name)})`,
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: 'center',
+                                                            backgroundRepeat: 'no-repeat'
+                                                        }}
+                                                    />
+                                                )}
                                             </div>
                                         </div>
+                                        {exercise.completed && (
+                                            <div className="mt-sm p-3 bg-tertiary rounded flex items-center justify-between gap-md animate-fadeIn">
+                                                <div className="flex-1">
+                                                    <label className="text-xs text-secondary mb-1 block">Reps/Segs Realizados</label>
+                                                    <input
+                                                        type="number"
+                                                        className="form-input py-1 px-2 text-sm"
+                                                        placeholder={exercise.target_reps || "0"}
+                                                        onChange={(e) => handlePerformanceChange(exercise.id, 'reps', parseInt(e.target.value))}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </section>
 
-                    {/* Notes Section */}
-                    <section className="notes-section mb-xl">
-                        <div className="card">
-                            <h3 className="mb-md">Observações</h3>
-                            <textarea
-                                className="form-textarea"
-                                placeholder="Como foi o treino? Alguma observação?"
-                                value={notes}
-                                onChange={(e) => setNotes(e.target.value)}
-                                rows={4}
-                            />
-                        </div>
-                    </section>
+                    {/* Quick Feedback Card (Visible when at least one exercise checked, or always) */}
+                    <section className="feedback-section mb-xl">
+                        <div className="card animate-fadeIn">
+                            <h3 className="mb-md">Feedback do Treino</h3>
 
-                    {/* Difficulty Feedback */}
-                    <section className="difficulty-section mb-xl">
-                        <div className="card">
-                            <h3 className="mb-md">Como foi o treino?</h3>
-                            <div className="difficulty-options">
-                                <button
-                                    onClick={() => setDifficulty('easy')}
-                                    className={`difficulty-btn ${difficulty === 'easy' ? 'active' : ''}`}
-                                >
-                                    <span className="difficulty-icon">😊</span>
-                                    <span className="difficulty-label">Fácil</span>
-                                </button>
-                                <button
-                                    onClick={() => setDifficulty('ok')}
-                                    className={`difficulty-btn ${difficulty === 'ok' ? 'active' : ''}`}
-                                >
-                                    <span className="difficulty-icon">😐</span>
-                                    <span className="difficulty-label">Ok</span>
-                                </button>
-                                <button
-                                    onClick={() => setDifficulty('hard')}
-                                    className={`difficulty-btn ${difficulty === 'hard' ? 'active' : ''}`}
-                                >
-                                    <span className="difficulty-icon">😰</span>
-                                    <span className="difficulty-label">Difícil</span>
-                                </button>
+                            {/* Q1: Goal Met */}
+                            <div className="mb-lg">
+                                <label className="block text-sm font-bold text-secondary mb-2">1. Meta do treino atingida?</label>
+                                <div className="flex gap-md">
+                                    <button
+                                        onClick={() => handleFeedbackChange('goalMet', true)}
+                                        className={`btn flex-1 ${feedback.goalMet === true ? 'btn-success' : 'btn-outline'}`}
+                                    >Sim 👍</button>
+                                    <button
+                                        onClick={() => handleFeedbackChange('goalMet', false)}
+                                        className={`btn flex-1 ${feedback.goalMet === false ? 'btn-error' : 'btn-outline'}`}
+                                    >Não 👎</button>
+                                </div>
+                            </div>
+
+                            {/* Q2: Difficulty 1-5 */}
+                            <div className="mb-lg">
+                                <label className="block text-sm font-bold text-secondary mb-2">2. Dificuldade Geral (1-5)</label>
+                                <div className="difficulty-btn-container">
+                                    {[1, 2, 3, 4, 5].map(rating => (
+                                        <button
+                                            key={rating}
+                                            onClick={() => handleFeedbackChange('rpe', rating)}
+                                            className={`difficulty-btn ${feedback.rpe === rating ? 'selected' : ''}`}
+                                        >
+                                            {rating}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="flex justify-between text-xs text-secondary mt-2 px-1">
+                                    <span>Muito Fácil</span>
+                                    <span>Exaustivo</span>
+                                </div>
+                            </div>
+
+                            {/* Q3: Pain */}
+                            <div className="mb-sm">
+                                <label className="block text-sm font-bold text-secondary mb-2">3. Dor ou Desconforto?</label>
+                                <div className="pain-btn-container">
+                                    <button
+                                        onClick={() => handleFeedbackChange('pain', 'none')}
+                                        className={`pain-btn pain-none ${feedback.pain === 'none' ? 'selected' : ''}`}
+                                    >Nenhuma</button>
+                                    <button
+                                        onClick={() => handleFeedbackChange('pain', 'mild')}
+                                        className={`pain-btn pain-mild ${feedback.pain === 'mild' ? 'selected' : ''}`}
+                                    >Leve</button>
+                                    <button
+                                        onClick={() => handleFeedbackChange('pain', 'moderate')}
+                                        className={`pain-btn pain-moderate ${feedback.pain === 'moderate' ? 'selected' : ''}`}
+                                    >Moderada+</button>
+                                </div>
                             </div>
                         </div>
                     </section>
 
-                    {/* Finish Button */}
                     <button
                         onClick={handleFinishWorkout}
                         className="btn btn-primary btn-full btn-lg"

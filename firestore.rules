@@ -25,5 +25,12 @@ service cloud.firestore {
     match /workout_exercises/{exerciseId} {
       allow read, write: if request.auth != null;
     }
+    
+    // Feedback collection - qualquer pessoa pode enviar feedback
+    match /feedback/{feedbackId} {
+      allow create: if true; // Permite feedback anônimo
+      // Only admins can read/update feedback
+      allow read, update, delete: if false;
+    }
   }
 }

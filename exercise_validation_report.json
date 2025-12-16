@@ -1,0 +1,34 @@
+{
+  "total_exercises": 77,
+  "total_skills": 9,
+  "errors": [],
+  "warnings": [
+    {
+      "type": "INCOMPLETE_SKILL",
+      "skill": "dragon_flag",
+      "message": "⚠️ Skill \"dragon_flag\" tem apenas 2 exercício(s). Recomendado: mínimo 3 estágios"
+    },
+    {
+      "type": "INCOMPLETE_SKILL",
+      "skill": "toes_to_bar",
+      "message": "⚠️ Skill \"toes_to_bar\" tem apenas 2 exercício(s). Recomendado: mínimo 3 estágios"
+    },
+    {
+      "type": "INCOMPLETE_SKILL",
+      "skill": "muscle_up",
+      "message": "⚠️ Skill \"muscle_up\" tem apenas 1 exercício(s). Recomendado: mínimo 3 estágios"
+    },
+    {
+      "type": "INCOMPLETE_SKILL",
+      "skill": "back_lever",
+      "message": "⚠️ Skill \"back_lever\" tem apenas 2 exercício(s). Recomendado: mínimo 3 estágios"
+    },
+    {
+      "type": "INCOMPLETE_SKILL",
+      "skill": "human_flag",
+      "message": "⚠️ Skill \"human_flag\" tem apenas 1 exercício(s). Recomendado: mínimo 3 estágios"
+    }
+  ],
+  "skill_issues": [],
+  "validation_timestamp": "2025-12-16T22:28:19.925Z"
+}

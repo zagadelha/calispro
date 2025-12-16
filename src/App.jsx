@@ -4,6 +4,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { InstallProvider } from './contexts/InstallContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import InstallPrompt from './components/InstallPrompt';
+import FeedbackButton from './components/FeedbackButton';
 
 // Pages
 import Login from './pages/Login';
@@ -14,6 +15,7 @@ import WorkoutExecution from './pages/WorkoutExecution';
 import WorkoutPlan from './pages/WorkoutPlan';
 import Profile from './pages/Profile';
 import Progress from './pages/Progress';
+import Evolution from './pages/Evolution';
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
       <InstallProvider>
         <AuthProvider>
           <InstallPrompt />
+          <FeedbackButton />
           <Routes>
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
@@ -67,6 +70,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Progress />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/evolution"
+              element={
+                <ProtectedRoute>
+                  <Evolution />
                 </ProtectedRoute>
               }
             />

@@ -63,7 +63,7 @@ const exerciseDatabase = {
     },
     advanced: {
         'Ganhar força': [
-            { name: 'Muscle-ups', muscle_group: 'Costas/Tríceps', sets: 5, reps: 5, difficulty: 'advanced' },
+            { name: 'Muscle-ups', muscle_group: 'Costas/Tríceps/Full Body', sets: 5, reps: 5, difficulty: 'advanced' },
             { name: 'One-Arm Push-up', muscle_group: 'Peito', sets: 4, reps: 5, difficulty: 'advanced' },
             { name: 'Pistol Squat', muscle_group: 'Pernas', sets: 4, reps: 8, difficulty: 'advanced' },
             { name: 'Front Lever Hold', muscle_group: 'Core/Costas', sets: 4, reps: 10, difficulty: 'advanced' },
@@ -224,9 +224,11 @@ export const generateWorkoutPlan = async (userId, profile) => {
     return planRef.id;
 };
 
+import { getVirtualDate } from './timeTravel';
+
 // Get today's workout
 export const getTodayWorkout = async (userId) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getVirtualDate();
 
     const q = query(
         collection(db, 'workouts'),

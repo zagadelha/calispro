@@ -1,0 +1,150 @@
+{
+  "timestamp": "2025-12-16T19:04:23.113Z",
+  "total_exercises": 77,
+  "statistics": {
+    "by_level": {
+      "beginner": 25,
+      "intermediate": 24,
+      "advanced": 28
+    },
+    "by_pattern": {
+      "push": 18,
+      "pull": 16,
+      "legs": 18,
+      "core": 19,
+      "skill_full_body": 6
+    },
+    "entry_exercises": 20
+  },
+  "issues": {
+    "noPrerequisites": [],
+    "noProgressions": [],
+    "invalidPrerequisites": [],
+    "invalidProgressions": [],
+    "orphanedExercises": [],
+    "circularDependencies": [],
+    "levelMismatches": [],
+    "patternMismatches": [
+      {
+        "exercise": "side_plank",
+        "exercise_pattern": "core",
+        "progression": "human_flag",
+        "progression_pattern": "skill_full_body"
+      },
+      {
+        "exercise": "scapula_pull_ups",
+        "exercise_pattern": "pull",
+        "progression": "front_lever_tuck",
+        "progression_pattern": "skill_full_body"
+      },
+      {
+        "exercise": "front_lever",
+        "exercise_pattern": "skill_full_body",
+        "progression": "front_lever_pull_up",
+        "progression_pattern": "pull"
+      }
+    ]
+  },
+  "entry_exercises": [
+    {
+      "id": "push_up_knee",
+      "name": "Knee Push-up",
+      "pattern": "push"
+    },
+    {
+      "id": "pike_push_up_beginner",
+      "name": "Pike Push-up (Beginner)",
+      "pattern": "push"
+    },
+    {
+      "id": "australian_row",
+      "name": "Australian Row (Inverted Row)",
+      "pattern": "pull"
+    },
+    {
+      "id": "towel_row_table",
+      "name": "Towel Row (Table Row)",
+      "pattern": "pull"
+    },
+    {
+      "id": "dead_hang",
+      "name": "Dead Hang",
+      "pattern": "pull"
+    },
+    {
+      "id": "scapular_retraction_bar",
+      "name": "Scapular Retraction Hang (Scapular Shrug)",
+      "pattern": "pull"
+    },
+    {
+      "id": "bodyweight_squat",
+      "name": "Bodyweight Squat",
+      "pattern": "legs"
+    },
+    {
+      "id": "partial_squat",
+      "name": "Partial Squat",
+      "pattern": "legs"
+    },
+    {
+      "id": "static_lunge",
+      "name": "Static Lunge",
+      "pattern": "legs"
+    },
+    {
+      "id": "step_up",
+      "name": "Step-up",
+      "pattern": "legs"
+    },
+    {
+      "id": "calf_raise",
+      "name": "Calf Raise",
+      "pattern": "legs"
+    },
+    {
+      "id": "glute_bridge",
+      "name": "Glute Bridge",
+      "pattern": "legs"
+    },
+    {
+      "id": "plank",
+      "name": "Plank",
+      "pattern": "core"
+    },
+    {
+      "id": "side_plank",
+      "name": "Side Plank",
+      "pattern": "core"
+    },
+    {
+      "id": "crunch",
+      "name": "Crunch",
+      "pattern": "core"
+    },
+    {
+      "id": "lying_knee_raises",
+      "name": "Lying Knee Raises",
+      "pattern": "core"
+    },
+    {
+      "id": "dead_bug",
+      "name": "Dead Bug",
+      "pattern": "core"
+    },
+    {
+      "id": "hollow_hold_basic",
+      "name": "Hollow Hold (Basic)",
+      "pattern": "core"
+    },
+    {
+      "id": "mountain_climber",
+      "name": "Mountain Climber",
+      "pattern": "core"
+    },
+    {
+      "id": "superman",
+      "name": "Superman Hold",
+      "pattern": "skill_full_body"
+    }
+  ]
+}
