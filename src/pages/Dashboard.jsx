@@ -363,43 +363,45 @@ const Dashboard = () => {
                 </div>
             </main>
 
-            {/* Debug Utility - Remove in Production */}
-            <div className="text-center p-4 opacity-70 hover:opacity-100 transition-opacity mt-8 border-t border-white/5">
-                <p className="text-[10px] text-muted uppercase tracking-wider mb-2">Ambiente de Teste</p>
-                <div className="flex flex-wrap justify-center gap-4 text-xs">
-                    <button
-                        onClick={() => addDays(1)}
-                        className="text-blue-400 hover:text-blue-300 underline"
-                    >
-                        +1 Dia (Amanhã)
-                    </button>
-                    <button
-                        onClick={() => resetDate()}
-                        className="text-emerald-400 hover:text-emerald-300 underline"
-                    >
-                        Voltar para Hoje
-                    </button>
-
-                    {workout && workout.id && (
+            {/* Debug Utility - Only visible in Development */}
+            {import.meta.env.DEV && (
+                <div className="text-center p-4 opacity-70 hover:opacity-100 transition-opacity mt-8 border-t border-white/5">
+                    <p className="text-[10px] text-muted uppercase tracking-wider mb-2">Ambiente de Teste</p>
+                    <div className="flex flex-wrap justify-center gap-4 text-xs">
                         <button
-                            onClick={async () => {
-                                if (window.confirm("Resetar treino de hoje? (Debug)")) {
-                                    try {
-                                        await deleteDoc(doc(db, 'workouts', workout.id));
-                                        window.location.reload();
-                                    } catch (e) { alert("Erro ao deletar: " + e.message); }
-                                }
-                            }}
-                            className="text-red-500 hover:text-red-400 underline"
+                            onClick={() => addDays(1)}
+                            className="text-blue-400 hover:text-blue-300 underline"
                         >
-                            Resetar Treino
+                            +1 Dia (Amanhã)
                         </button>
-                    )}
+                        <button
+                            onClick={() => resetDate()}
+                            className="text-emerald-400 hover:text-emerald-300 underline"
+                        >
+                            Voltar para Hoje
+                        </button>
+
+                        {workout && workout.id && (
+                            <button
+                                onClick={async () => {
+                                    if (window.confirm("Resetar treino de hoje? (Debug)")) {
+                                        try {
+                                            await deleteDoc(doc(db, 'workouts', workout.id));
+                                            window.location.reload();
+                                        } catch (e) { alert("Erro ao deletar: " + e.message); }
+                                    }
+                                }}
+                                className="text-red-500 hover:text-red-400 underline"
+                            >
+                                Resetar Treino
+                            </button>
+                        )}
+                    </div>
+                    <div className="text-[10px] text-gray-600 mt-2">
+                        Sistema operando em: {format(new Date(getVirtualDate() + 'T12:00:00'), "dd 'de' MMMM", { locale: ptBR })}
+                    </div>
                 </div>
-                <div className="text-[10px] text-gray-600 mt-2">
-                    Sistema operando em: {format(new Date(getVirtualDate() + 'T12:00:00'), "dd 'de' MMMM", { locale: ptBR })}
-                </div>
-            </div>
+            )}
         </div>
     );
 };
