@@ -1840,12 +1840,10 @@ p {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    135deg,
-    rgba(30, 58, 95, 0.95) 0%,
-    rgba(44, 82, 130, 0.9) 50%,
-    rgba(59, 111, 168, 0.85) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(30, 58, 95, 0.95) 0%,
+      rgba(44, 82, 130, 0.9) 50%,
+      rgba(59, 111, 168, 0.85) 100%);
   z-index: 1;
 }
 
@@ -1862,6 +1860,7 @@ p {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1877,9 +1876,12 @@ p {
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -1917,9 +1919,12 @@ p {
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
   }
+
   50% {
     box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
   }
@@ -1935,12 +1940,19 @@ p {
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateX(-50%) translateY(0);
   }
+
   40% {
     transform: translateX(-50%) translateY(-10px);
   }
+
   60% {
     transform: translateX(-50%) translateY(-5px);
   }
@@ -1981,12 +1993,10 @@ p {
 
 /* Calisthenics Section */
 .calisthenics-section {
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(44, 82, 130, 0.3) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(44, 82, 130, 0.3) 50%,
+      transparent 100%);
 }
 
 .info-grid {
@@ -2110,12 +2120,10 @@ p {
 
 /* For Everyone Section */
 .for-everyone-section {
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(44, 82, 130, 0.3) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(44, 82, 130, 0.3) 50%,
+      transparent 100%);
 }
 
 .levels-container {
@@ -2142,11 +2150,9 @@ p {
 
 .level-card-highlight {
   border-color: var(--primary-light);
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.1) 0%,
-    rgba(118, 75, 162, 0.1) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(102, 126, 234, 0.1) 0%,
+      rgba(118, 75, 162, 0.1) 100%);
   transform: scale(1.05);
 }
 
@@ -2215,11 +2221,9 @@ p {
 
 /* CTA Section */
 .cta-section {
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.1) 0%,
-    rgba(118, 75, 162, 0.1) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(102, 126, 234, 0.1) 0%,
+      rgba(118, 75, 162, 0.1) 100%);
   padding: 5rem 0;
   text-align: center;
 }
@@ -2323,4 +2327,19 @@ p {
   .cta-description {
     font-size: 1rem;
   }
+}
+
+/* Feedback Modal - Placeholder Color Fix */
+.form-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1;
+}
+
+/* Orange Text - Logo Color Match */
+.orange-text {
+  background: linear-gradient(135deg, #fb923c 0%, #f59e0b 50%, #ea580c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
 }

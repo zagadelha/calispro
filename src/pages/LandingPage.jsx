@@ -88,7 +88,7 @@ function LandingPage() {
                     <div className="container">
                         <img src={logo} alt="CalisPro" className="hero-logo" />
                         <h1 className="hero-title">
-                            Transforme Seu Corpo com <span className="gradient-text">Calistenia</span>
+                            Transforme Seu Corpo com <span className="orange-text">Calistenia</span>
                         </h1>
                         <p className="hero-subtitle">
                             O aplicativo inteligente que guia sua jornada na calistenia,
