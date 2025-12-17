@@ -1,4 +1,4 @@
-# CalisProgress - PWA de Calistenia
+# CalisPro - PWA de Calistenia
 
 Um aplicativo web progressivo (PWA) completo para acompanhamento de treinos de calistenia, com planos personalizados e tracking de evolução.
 

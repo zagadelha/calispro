@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
 import { MessageCircle, X, Send, Bug, Lightbulb, HelpCircle, Mail } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
 const FeedbackButton = () => {
+    const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
     const [feedbackType, setFeedbackType] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const { currentUser, userProfile } = useAuth();
+
+    // Don't show on landing, login, or signup pages
+    if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/signup') {
+        return null;
+    }
 
     const feedbackTypes = [
         { id: 'bug', label: 'Reportar Bug', icon: Bug, color: '#ef4444' },

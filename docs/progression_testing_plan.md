@@ -1,6 +1,6 @@
 # Plano de Testes de Sanidade - Sistema de Progressão
 
-Este documento define os testes automáticos necessários para garantir a integridade do sistema de progressão do CalisProgress.
+Este documento define os testes automáticos necessários para garantir a integridade do sistema de progressão do CalisPro.
 
 ## 1. Validação de Dados Estáticos (Build-Time)
 Estes testes devem ser executados durante o build ou em pipeline de CI/CD para validar o arquivo JSON de exercícios (`exercises_v1_1.json`).

@@ -73,7 +73,7 @@ const Signup = () => {
             <div className="container container-sm">
                 <div className="auth-card card animate-fadeIn">
                     <div className="auth-header text-center mb-xl">
-                        <img src={logo} alt="CalisProgress" className="auth-logo mb-md" />
+                        <img src={logo} alt="CalisPro" className="auth-logo mb-md" />
                         <p className="text-secondary">Crie sua conta e comece hoje</p>
                         <div className="mt-md">
                             <InstallButton className="btn-sm btn-outline" />

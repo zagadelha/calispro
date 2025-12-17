@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const InstallPrompt = () => {
+    const location = useLocation();
     const [deferredPrompt, setDeferredPrompt] = useState(null);
     const [showPrompt, setShowPrompt] = useState(false);
 
@@ -46,6 +48,9 @@ const InstallPrompt = () => {
         localStorage.setItem('installPromptSeen', 'true');
     };
 
+    // Don't show on landing page
+    if (location.pathname === '/') return null;
+
     if (!showPrompt) return null;
 
     return (
@@ -58,7 +63,7 @@ const InstallPrompt = () => {
                     </button>
                 </div>
                 <p className="text-secondary mb-lg">
-                    Instale o CalisProgress na sua tela inicial para uma melhor experiência!
+                    Instale o CalisPro na sua tela inicial para uma melhor experiência!
                 </p>
                 <div className="flex gap-md">
                     <button onClick={handleDismiss} className="btn btn-secondary flex-1">

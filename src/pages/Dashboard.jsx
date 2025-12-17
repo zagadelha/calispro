@@ -245,7 +245,7 @@ const Dashboard = () => {
             <header className="dashboard-header">
                 <div className="container">
                     <div className="flex justify-between items-center">
-                        <img src={logo} alt="CalisProgress" className="app-logo" />
+                        <img src={logo} alt="CalisPro" className="app-logo" />
                         <div className="flex items-center gap-md">
                             <button onClick={() => navigate('/evolution')} className="btn btn-secondary btn-sm flex items-center" title="Evolução">
                                 <TrendingUp size={18} className="mr-1" />

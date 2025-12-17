@@ -13,7 +13,7 @@ export default defineConfig({
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'CalisProgress',
+        name: 'CalisPro',
         short_name: 'CalisPro',
         description: 'Seu app de calistenia e progresso',
         theme_color: '#1e3a5f',

@@ -1,6 +1,6 @@
 # Guia de Configuração do Firebase
 
-Este guia detalha passo a passo como configurar o Firebase para o CalisProgress.
+Este guia detalha passo a passo como configurar o Firebase para o CalisPro.
 
 ## 1. Criar Projeto no Firebase
 
