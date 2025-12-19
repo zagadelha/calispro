@@ -4,16 +4,57 @@ import logo from '../assets/logo2.png';
 import hero1 from '../assets/hero1.png';
 import hero2 from '../assets/hero2.png';
 import hero3 from '../assets/hero3.png';
+import transformationManWeightLoss from '../assets/transformation_man_weight_loss.png';
+import transformationWomanWeightLoss from '../assets/transformation_woman_weight_loss.png';
+import transformationManMuscleGain from '../assets/transformation_man_muscle_gain.png';
+import transformationManStrength from '../assets/transformation_man_strength.png';
+import transformationWomanMuscle from '../assets/transformation_woman_muscle.png';
 
 function LandingPage() {
     const navigate = useNavigate();
     const [currentImage, setCurrentImage] = useState(0);
+    const [currentTransformation, setCurrentTransformation] = useState(0);
     const images = [hero1, hero2, hero3];
+
+    const transformations = [
+        {
+            image: transformationManWeightLoss,
+            title: 'Queima de Gordura',
+            description: 'De 95kg para 75kg em 6 meses'
+        },
+        {
+            image: transformationWomanWeightLoss,
+            title: 'Emagrecimento Saudável',
+            description: 'De 78kg para 62kg em 5 meses'
+        },
+        {
+            image: transformationManMuscleGain,
+            title: 'Ganho de Massa Muscular',
+            description: 'De 65kg para 78kg em 8 meses'
+        },
+        {
+            image: transformationManStrength,
+            title: 'Transformação Completa',
+            description: 'De 102kg para 85kg com ganho de força'
+        },
+        {
+            image: transformationWomanMuscle,
+            title: 'Definição e Força',
+            description: 'De 58kg para 63kg com muito mais músculo'
+        }
+    ];
 
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImage((prev) => (prev + 1) % images.length);
         }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTransformation((prev) => (prev + 1) % transformations.length);
+        }, 4000);
         return () => clearInterval(interval);
     }, []);
 
@@ -201,6 +242,64 @@ function LandingPage() {
                                 <li>Refinamento de técnica</li>
                             </ul>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Transformations Carousel Section */}
+            <section className="section transformations-section">
+                <div className="container">
+                    <h2 className="section-title text-center">Resultados Reais de Pessoas Reais</h2>
+                    <p className="section-intro text-center">
+                        Veja as transformações incríveis alcançadas com treinos de calistenia
+                    </p>
+
+                    <div className="transformations-carousel">
+                        <div className="transformations-track" style={{ transform: `translateX(-${currentTransformation * 100}%)` }}>
+                            {transformations.map((transformation, idx) => (
+                                <div key={idx} className="transformation-slide">
+                                    <div className="transformation-card">
+                                        <img
+                                            src={transformation.image}
+                                            alt={transformation.title}
+                                            className="transformation-image"
+                                        />
+                                        <div className="transformation-info">
+                                            <h3 className="transformation-title">{transformation.title}</h3>
+                                            <p className="transformation-description">{transformation.description}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="carousel-indicators">
+                        {transformations.map((_, idx) => (
+                            <button
+                                key={idx}
+                                className={`carousel-indicator ${idx === currentTransformation ? 'active' : ''}`}
+                                onClick={() => setCurrentTransformation(idx)}
+                                aria-label={`Ver transformação ${idx + 1}`}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="carousel-navigation">
+                        <button
+                            className="carousel-nav-btn prev"
+                            onClick={() => setCurrentTransformation((prev) => prev === 0 ? transformations.length - 1 : prev - 1)}
+                            aria-label="Transformação anterior"
+                        >
+                            ‹
+                        </button>
+                        <button
+                            className="carousel-nav-btn next"
+                            onClick={() => setCurrentTransformation((prev) => (prev + 1) % transformations.length)}
+                            aria-label="Próxima transformação"
+                        >
+                            ›
+                        </button>
                     </div>
                 </div>
             </section>

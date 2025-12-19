@@ -11,7 +11,10 @@ const exerciseMap = new Map(exercises.map(ex => [ex.id, ex]));
  */
 export const isExerciseUnlocked = (exerciseId, masteredExerciseIds) => {
     const exercise = exerciseMap.get(exerciseId);
-    if (!exercise) return false;
+    if (!exercise) {
+        console.warn(`[isExerciseUnlocked] ❌ Exercise not found: ${exerciseId}`);
+        return false;
+    }
 
     // Advanced exercises locked until prerequisites are fulfilled
     if (!exercise.prerequisites || exercise.prerequisites.length === 0) {
@@ -191,10 +194,8 @@ export const getUserSkillStage = (skillName, userHistory) => {
 
     console.log(`[Skill: ${skillName}] Total exercises:`, skillExercises.length);
 
-    // 2. Identify mastered IDs derived from history
-    // Note: This needs to be calculated dynamically because history might update 
-    // without explicitly updating a "mastered list".
-    const masteredIds = skillExercises
+    // 2. Calculate mastered IDs for THIS SKILL (for display/logging)
+    const skillMasteredIds = skillExercises
         .filter(ex => {
             const stats = userHistory[ex.id];
             if (!stats) return false;
@@ -202,14 +203,23 @@ export const getUserSkillStage = (skillName, userHistory) => {
         })
         .map(ex => ex.id);
 
-    console.log(`[Skill: ${skillName}] Mastered:`, masteredIds);
+    console.log(`[Skill: ${skillName}] Mastered:`, skillMasteredIds);
+
+    // 🔥 FIX: Calculate ALL mastered exercises globally (for prerequisite checking)
+    const allMasteredIds = exercises
+        .filter(ex => {
+            const stats = userHistory[ex.id];
+            if (!stats) return false;
+            return checkMastery(ex, stats);
+        })
+        .map(ex => ex.id);
 
     // 3. Find the first candidate
     // A candidate is "Unlocked" (prereqs met) AND "Not Mastered".
     // Since we sorted by difficulty, the first such candidate is the current stage.
     for (const ex of skillExercises) {
-        const unlocked = isExerciseUnlocked(ex.id, masteredIds);
-        const mastered = masteredIds.includes(ex.id);
+        const unlocked = isExerciseUnlocked(ex.id, allMasteredIds); // 🔥 Use global mastered list
+        const mastered = skillMasteredIds.includes(ex.id);
 
         console.log(`  - ${ex.id} (diff:${ex.difficulty_score}): unlocked=${unlocked}, mastered=${mastered}`);
 
@@ -219,12 +229,17 @@ export const getUserSkillStage = (skillName, userHistory) => {
         }
     }
 
-    // ✅ NEW: Check if ALL exercises in this skill are mastered (skill maxed out)
-    const allMastered = skillExercises.length > 0 &&
-        skillExercises.every(ex => masteredIds.includes(ex.id));
+    // ✅ FIXED: Check if skill is maxed (no unlocked non-mastered exercises remain)
+    // OLD: Check if ALL mastered (wrong - doesn't account for locked exercises)
+    // NEW: Check if there are NO unlocked exercises that are NOT mastered
+    const hasUnlockedNonMastered = skillExercises.some(ex => {
+        const unlocked = isExerciseUnlocked(ex.id, allMasteredIds); // 🔥 Use global mastered list
+        const mastered = skillMasteredIds.includes(ex.id);
+        return unlocked && !mastered; // Has at least one unlocked non-mastered
+    });
 
-    if (allMastered) {
-        console.log(`  ⚠️ [Skill: ${skillName}] ALL MASTERED! Signaling rotation...`);
+    if (!hasUnlockedNonMastered) {
+        console.log(`  ⚠️ [Skill: ${skillName}] NO MORE UNLOCKED EXERCISES! Signaling rotation...`);
         return null; // Signal that rotation is needed
     }
 

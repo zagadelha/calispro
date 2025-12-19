@@ -88,19 +88,50 @@ const WorkoutExecution = () => {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
 
+
     useEffect(() => {
         loadWorkout();
     }, []);
 
+
     const loadWorkout = async () => {
         try {
+            // Import exercise database for fallback data
+            const exerciseData = await import('../assets/exercises/exercises_v1_1.json');
+            console.log('[loadWorkout] Exercise data keys:', Object.keys(exerciseData));
+
+            // Access exercises from default export
+            const exerciseList = exerciseData.default?.exercises || exerciseData.exercises;
+            console.log('[loadWorkout] Exercise list length:', exerciseList?.length);
+
+            const exerciseMap = new Map(exerciseList.map(ex => [ex.id, ex]));
+            console.log('[loadWorkout] Exercise map size:', exerciseMap.size);
+
             const todayWorkout = await getTodayWorkout(currentUser.uid);
             if (!todayWorkout) {
                 navigate('/dashboard');
                 return;
             }
+
+            // Enrich exercises with missing metric_type from database
+            const enrichedExercises = (todayWorkout.exercises || []).map(exercise => {
+                const dbExercise = exerciseMap.get(exercise.original_id);
+                console.log(`[Enrich] ${exercise.exercise_name}:`, {
+                    original_id: exercise.original_id,
+                    dbFound: !!dbExercise,
+                    dbMetricType: dbExercise?.metric_type,
+                    currentMetricType: exercise.metric_type
+                });
+
+                return {
+                    ...exercise,
+                    metric_type: dbExercise?.metric_type || exercise.metric_type || 'reps',
+                    target_seconds: exercise.target_seconds || dbExercise?.default_prescription?.seconds_max || null
+                };
+            });
+
             setWorkout(todayWorkout);
-            setExercises(todayWorkout.exercises || []);
+            setExercises(enrichedExercises);
         } catch (err) {
             console.error('Error loading workout:', err);
         } finally {
@@ -240,12 +271,18 @@ const WorkoutExecution = () => {
                                         {exercise.completed && (
                                             <div className="mt-sm p-3 bg-tertiary rounded flex items-center justify-between gap-md animate-fadeIn">
                                                 <div className="flex-1">
-                                                    <label className="text-xs text-secondary mb-1 block">Reps/Segs Realizados</label>
+                                                    <label className="text-xs text-secondary mb-1 block">
+                                                        {exercise.metric_type === 'reps' ? 'Reps Realizados' : 'Segundos Realizados'}
+                                                    </label>
                                                     <input
                                                         type="number"
                                                         className="form-input py-1 px-2 text-sm"
-                                                        placeholder={exercise.target_reps || "0"}
-                                                        onChange={(e) => handlePerformanceChange(exercise.id, 'reps', parseInt(e.target.value))}
+                                                        placeholder={exercise.metric_type === 'reps' ? (exercise.target_reps || "0") : (exercise.target_seconds || "0")}
+                                                        onChange={(e) => {
+                                                            const value = parseInt(e.target.value);
+                                                            const field = exercise.metric_type === 'reps' ? 'reps' : 'seconds';
+                                                            handlePerformanceChange(exercise.id, field, value);
+                                                        }}
                                                     />
                                                 </div>
                                             </div>

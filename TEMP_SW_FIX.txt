@@ -1,0 +1,12 @@
+// TEMPORARIAMENTE desabilite o service worker
+// Adicione isto no topo de src/main.jsx
+
+// Unregister service worker for debugging
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+        registrations.forEach(registration => {
+            console.log('[DEBUG] Unregistering service worker...');
+            registration.unregister();
+        });
+    });
+}

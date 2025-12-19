@@ -70,6 +70,18 @@ const Dashboard = () => {
         }
     };
 
+    // Handle adding days and reloading
+    const handleAddDays = (days) => {
+        addDays(days);
+        loadData();
+    };
+
+    // Reset date to today
+    const handleResetDate = () => {
+        resetDate();
+        loadData();
+    };
+
     const loadData = async () => {
         try {
             setLoading(true);
@@ -198,6 +210,8 @@ const Dashboard = () => {
                         muscle_group: ex.muscle_group,
                         target_sets: ex.target_sets,
                         target_reps: ex.target_reps, // String "8-12" or number
+                        target_seconds: ex.target_seconds || null, // Use null instead of undefined
+                        metric_type: ex.metric_type || 'reps', // Default to reps
                         type: ex.type, // Store the type (Skill, Strength...)
                         original_id: ex.original_id, // Important for tracking
                         order_index: i,
@@ -220,6 +234,54 @@ const Dashboard = () => {
             navigate('/login');
         } catch (err) {
             console.error('Error logging out:', err);
+        }
+    };
+
+    // Jump to next day without workout
+    const jumpToNextMissingWorkout = async () => {
+        try {
+            const currentDate = getVirtualDate();
+            const maxDaysToCheck = 365; // Limit search to 1 year ahead
+
+            // Get all completed workouts for the user
+            const q = query(
+                collection(db, 'workouts'),
+                where('user_id', '==', currentUser.uid)
+            );
+            const snapshot = await getDocs(q);
+
+            // Create a Set of dates that have workouts
+            const workoutDates = new Set(
+                snapshot.docs.map(doc => doc.data().date)
+            );
+
+            // Find the next day without a workout
+            let daysToAdd = 1;
+            let found = false;
+
+            while (daysToAdd <= maxDaysToCheck && !found) {
+                // Calculate the next date
+                const checkDate = new Date(currentDate);
+                checkDate.setDate(checkDate.getDate() + daysToAdd);
+                const checkDateStr = checkDate.toISOString().split('T')[0];
+
+                // If this date doesn't have a workout, we found it!
+                if (!workoutDates.has(checkDateStr)) {
+                    found = true;
+                    addDays(daysToAdd);
+                    console.log(`Jumped ${daysToAdd} days forward to ${checkDateStr} (no workout found)`);
+                    break;
+                }
+
+                daysToAdd++;
+            }
+
+            if (!found) {
+                alert('Todos os próximos 365 dias têm treinos registrados! 🏆');
+            }
+        } catch (err) {
+            console.error('Error jumping to next missing workout:', err);
+            alert('Erro ao buscar próximo dia sem treino');
         }
     };
 
@@ -369,13 +431,19 @@ const Dashboard = () => {
                     <p className="text-[10px] text-muted uppercase tracking-wider mb-2">Ambiente de Teste</p>
                     <div className="flex flex-wrap justify-center gap-4 text-xs">
                         <button
-                            onClick={() => addDays(1)}
+                            onClick={() => handleAddDays(1)}
                             className="text-blue-400 hover:text-blue-300 underline"
                         >
                             +1 Dia (Amanhã)
                         </button>
                         <button
-                            onClick={() => resetDate()}
+                            onClick={jumpToNextMissingWorkout}
+                            className="text-purple-400 hover:text-purple-300 underline font-bold"
+                        >
+                            ⏭️ Próximo Dia Sem Treino
+                        </button>
+                        <button
+                            onClick={handleResetDate}
                             className="text-emerald-400 hover:text-emerald-300 underline"
                         >
                             Voltar para Hoje

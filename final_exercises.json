@@ -1,0 +1,178 @@
+[
+    {
+        "id": "pseudo_planche_push_up",
+        "i18n_key": "pseudo_planche_push_up",
+        "name": "Pseudo Planche Push-up",
+        "level": "intermediate",
+        "pattern": "push",
+        "primary_muscles": [
+            "ombros",
+            "peitoral",
+            "core"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 6,
+        "equipment": [
+            "none"
+        ],
+        "skill": "planche",
+        "skill_stage": "pseudo",
+        "prerequisites": [
+            "diamond_push_up"
+        ],
+        "progresses_to": [
+            "planche_lean"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 10,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o7btNRptqBgLSKR2w/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/pseudo-planche-pushup"
+    },
+    {
+        "id": "planche_lean",
+        "i18n_key": "planche_lean",
+        "name": "Planche Lean",
+        "level": "advanced",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "ombros",
+            "core"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 7,
+        "equipment": [
+            "none"
+        ],
+        "skill": "planche",
+        "skill_stage": "lean",
+        "prerequisites": [
+            "pseudo_planche_push_up"
+        ],
+        "progresses_to": [
+            "tuck_planche"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 10,
+            "seconds_max": 30,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/planche-lean"
+    },
+    {
+        "id": "tuck_planche",
+        "i18n_key": "tuck_planche",
+        "name": "Tuck Planche",
+        "level": "advanced",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "ombros",
+            "core"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 8,
+        "equipment": [
+            "none"
+        ],
+        "skill": "planche",
+        "skill_stage": "tuck",
+        "prerequisites": [
+            "planche_lean"
+        ],
+        "progresses_to": [
+            "planche_push_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 10,
+            "seconds_max": 30,
+            "rest_seconds": 150
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o6ZsYq4nYQ7ky7t96/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/tuck-planche"
+    },
+    {
+        "id": "planche_push_up",
+        "i18n_key": "planche_push_up",
+        "name": "Planche Push-up",
+        "level": "expert",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "ombros",
+            "peitoral",
+            "core"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 10,
+        "equipment": [
+            "none"
+        ],
+        "skill": "planche",
+        "skill_stage": "full",
+        "prerequisites": [
+            "tuck_planche",
+            "pseudo_planche_push_up"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 1,
+            "reps_max": 5,
+            "rest_seconds": 180
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/xT9IgN8YKRhByRBzMI/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/planche-pushup"
+    },
+    {
+        "id": "muscle_up",
+        "i18n_key": "muscle_up",
+        "name": "Muscle-up",
+        "level": "expert",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "dorsais",
+            "peitorais",
+            "tríceps"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 9,
+        "equipment": [
+            "barra"
+        ],
+        "skill": "muscle_up",
+        "skill_stage": "full",
+        "prerequisites": [
+            "chest_to_bar_pull_up",
+            "dip"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 1,
+            "reps_max": 5,
+            "rest_seconds": 180
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0HlNQ03J5JxX6lva/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/muscle-up"
+    }
+]

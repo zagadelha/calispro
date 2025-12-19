@@ -1,0 +1,1047 @@
+[
+    {
+        "id": "scapular_pull_up",
+        "i18n_key": "scapular_pull_up",
+        "name": "Scapular Pull-up",
+        "level": "beginner",
+        "pattern": "pull",
+        "primary_muscles": [
+            "dorsais",
+            "trapézio"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 2,
+        "equipment": [
+            "barra"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [],
+        "progresses_to": [
+            "dead_hang",
+            "assisted_pull_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 60
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGV6OXczd2R5cHN3YXhxYm9uZXZvcGNkYjBwank2OGRhcnM3eGF5OSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/26n6WtXHvAjKKXy5q/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/scapular-pullup"
+    },
+    {
+        "id": "dead_hang",
+        "i18n_key": "dead_hang",
+        "name": "Dead Hang",
+        "level": "beginner",
+        "pattern": "pull",
+        "primary_muscles": [
+            "antebraços",
+            "grip"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 2,
+        "equipment": [
+            "barra"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [
+            "scapular_pull_up"
+        ],
+        "progresses_to": [
+            "assisted_pull_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 20,
+            "seconds_max": 45,
+            "rest_seconds": 60
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3oKIPpFfNL3RML7jUY/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/dead-hang"
+    },
+    {
+        "id": "assisted_pull_up",
+        "i18n_key": "assisted_pull_up",
+        "name": "Assisted Pull-up",
+        "level": "beginner",
+        "pattern": "pull",
+        "primary_muscles": [
+            "dorsais",
+            "bíceps"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 3,
+        "equipment": [
+            "barra",
+            "banda_elastica"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [
+            "dead_hang",
+            "scapular_pull_up"
+        ],
+        "progresses_to": [
+            "negative_pull_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 10,
+            "rest_seconds": 90
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/26BRte7E5dlGs8xiw/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/assisted-pullup"
+    },
+    {
+        "id": "negative_pull_up",
+        "i18n_key": "negative_pull_up",
+        "name": "Negative Pull-up",
+        "level": "beginner",
+        "pattern": "pull",
+        "primary_muscles": [
+            "dorsais",
+            "bíceps"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 4,
+        "equipment": [
+            "barra"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [
+            "assisted_pull_up"
+        ],
+        "progresses_to": [
+            "pull_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 3,
+            "reps_max": 6,
+            "rest_seconds": 90
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0HlTBqWHZimHi8WQ/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/eccentric-pullup"
+    },
+    {
+        "id": "pull_up",
+        "i18n_key": "pull_up",
+        "name": "Pull-up",
+        "level": "intermediate",
+        "pattern": "pull",
+        "primary_muscles": [
+            "dorsais",
+            "bíceps"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 5,
+        "equipment": [
+            "barra"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [
+            "negative_pull_up"
+        ],
+        "progresses_to": [
+            "chest_to_bar_pull_up",
+            "wide_grip_pull_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 10,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/5t9IcXeGulZh6mGMlT/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/pullup"
+    },
+    {
+        "id": "chest_to_bar_pull_up",
+        "i18n_key": "chest_to_bar_pull_up",
+        "name": "Chest-to-Bar Pull-up",
+        "level": "intermediate",
+        "pattern": "pull",
+        "primary_muscles": [
+            "dorsais",
+            "bíceps",
+            "trapézio"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 6,
+        "equipment": [
+            "barra"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [
+            "pull_up"
+        ],
+        "progresses_to": [
+            "weighted_pull_up",
+            "archer_pull_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 8,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o7btPOMufscWOr7Gw/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/chest-to-bar-pullup"
+    },
+    {
+        "id": "wide_grip_pull_up",
+        "i18n_key": "wide_grip_pull_up",
+        "name": "Wide Grip Pull-up",
+        "level": "intermediate",
+        "pattern": "pull",
+        "primary_muscles": [
+            "dorsais",
+            "bíceps"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 6,
+        "equipment": [
+            "barra"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [
+            "pull_up"
+        ],
+        "progresses_to": [
+            "weighted_pull_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 8,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o6ZsYq4nYQ7ky7t96/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/wide-pullup"
+    },
+    {
+        "id": "weighted_pull_up",
+        "i18n_key": "weighted_pull_up",
+        "name": "Weighted Pull-up",
+        "level": "advanced",
+        "pattern": "pull",
+        "primary_muscles": [
+            "dorsais",
+            "bíceps"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 7,
+        "equipment": [
+            "barra",
+            "peso"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [
+            "chest_to_bar_pull_up",
+            "wide_grip_pull_up"
+        ],
+        "progresses_to": [
+            "one_arm_pull_up_assisted"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 8,
+            "rest_seconds": 180
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/26n6WywJyh39n1pBu/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/weighted-pullup"
+    },
+    {
+        "id": "archer_pull_up",
+        "i18n_key": "archer_pull_up",
+        "name": "Archer Pull-up",
+        "level": "advanced",
+        "pattern": "pull",
+        "primary_muscles": [
+            "dorsais",
+            "bíceps"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 7,
+        "equipment": [
+            "barra"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [
+            "chest_to_bar_pull_up"
+        ],
+        "progresses_to": [
+            "one_arm_pull_up_assisted"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 4,
+            "reps_max": 8,
+            "rest_seconds": 180
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/archer-pullup"
+    },
+    {
+        "id": "one_arm_pull_up_assisted",
+        "i18n_key": "one_arm_pull_up_assisted",
+        "name": "One-Arm Pull-up Assisted",
+        "level": "advanced",
+        "pattern": "pull",
+        "primary_muscles": [
+            "dorsais",
+            "bíceps"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 8,
+        "equipment": [
+            "barra"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [
+            "archer_pull_up",
+            "weighted_pull_up"
+        ],
+        "progresses_to": [
+            "one_arm_pull_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "re ps_min": 2,
+            "reps_max": 5,
+            "rest_seconds": 180
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0HlPwMAU9gZZwmqc/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/assisted-one-arm-pullup"
+    },
+    {
+        "id": "one_arm_pull_up",
+        "i18n_key": "one_arm_pull_up",
+        "name": "One-Arm Pull-up",
+        "level": "expert",
+        "pattern": "pull",
+        "primary_muscles": [
+            "dorsais",
+            "bíceps"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 10,
+        "equipment": [
+            "barra"
+        ],
+        "skill": null,
+        "skill_stage": null,
+        "prerequisites": [
+            "one_arm_pull_up_assisted"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 1,
+            "reps_max": 3,
+            "rest_seconds": 240
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3oKIPtjElfqwMOTbH2/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/one-arm-pullup"
+    },
+    {
+        "id": "muscle_up",
+        "i18n_key": "muscle_up",
+        "name": "Muscle-up",
+        "level": "expert",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "dorsais",
+            "peitorais",
+            "tríceps"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 9,
+        "equipment": [
+            "barra"
+        ],
+        "skill": "muscle_up",
+        "skill_stage": "full",
+        "prerequisites": [
+            "chest_to_bar_pull_up",
+            "dip"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 1,
+            "reps_max": 5,
+            "rest_seconds": 180
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0HlNQ03J5JxX6lva/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/muscle-up"
+    },
+    {
+        "id": "pseudo_planche_push_up",
+        "i18n_key": "pseudo_planche_push_up",
+        "name": "Pseudo Planche Push-up",
+        "level": "intermediate",
+        "pattern": "push",
+        "primary_muscles": [
+            "ombros",
+            "peitoral",
+            "core"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 6,
+        "equipment": [
+            "none"
+        ],
+        "skill": "planche",
+        "skill_stage": "pseudo",
+        "prerequisites": [
+            "diamond_push_up"
+        ],
+        "progresses_to": [
+            "planche_lean"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 10,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o7btNRptqBgLSKR2w/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/pseudo-planche-pushup"
+    },
+    {
+        "id": "planche_lean",
+        "i18n_key": "planche_lean",
+        "name": "Planche Lean",
+        "level": "advanced",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "ombros",
+            "core"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 7,
+        "equipment": [
+            "none"
+        ],
+        "skill": "planche",
+        "skill_stage": "lean",
+        "prerequisites": [
+            "pseudo_planche_push_up"
+        ],
+        "progresses_to": [
+            "tuck_planche"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 10,
+            "seconds_max": 30,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/planche-lean"
+    },
+    {
+        "id": "tuck_planche",
+        "i18n_key": "tuck_planche",
+        "name": "Tuck Planche",
+        "level": "advanced",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "ombros",
+            "core"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 8,
+        "equipment": [
+            "none"
+        ],
+        "skill": "planche",
+        "skill_stage": "tuck",
+        "prerequisites": [
+            "planche_lean"
+        ],
+        "progresses_to": [
+            "planche_push_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 10,
+            "seconds_max": 30,
+            "rest_seconds": 150
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o6ZsYq4nYQ7ky7t96/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/tuck-planche"
+    },
+    {
+        "id": "planche_push_up",
+        "i18n_key": "planche_push_up",
+        "name": "Planche Push-up",
+        "level": "expert",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "ombros",
+            "peitoral",
+            "core"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 10,
+        "equipment": [
+            "none"
+        ],
+        "skill": "planche",
+        "skill_stage": "full",
+        "prerequisites": [
+            "tuck_planche",
+            "pseudo_planche_push_up"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 1,
+            "reps_max": 5,
+            "rest_seconds": 180
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/xT9IgN8YKRhByRBzMI/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/planche-pushup"
+    },
+    {
+        "id": "l_sit_tuck",
+        "i18n_key": "l_sit_tuck",
+        "name": "L-Sit Tuck",
+        "level": "intermediate",
+        "pattern": "core",
+        "primary_muscles": [
+            "abdômen",
+            "hip_flexors"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 5,
+        "equipment": [
+            "parallelas"
+        ],
+        "skill": "l_sit",
+        "skill_stage": "tuck",
+        "prerequisites": [
+            "l_sit_knee_tuck"
+        ],
+        "progresses_to": [
+            "l_sit_full"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 10,
+            "seconds_max": 30,
+            "rest_seconds": 90
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0HlNQ03J5JxX6lva/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/tuck-l-sit"
+    },
+    {
+        "id": "l_sit_full",
+        "i18n_key": "l_sit_full",
+        "name": "L-Sit Full",
+        "level": "advanced",
+        "pattern": "core",
+        "primary_muscles": [
+            "abdômen",
+            "hip_flexors"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 7,
+        "equipment": [
+            "parallelas"
+        ],
+        "skill": "l_sit",
+        "skill_stage": "full",
+        "prerequisites": [
+            "l_sit_tuck"
+        ],
+        "progresses_to": [
+            "v_sit"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 10,
+            "seconds_max": 30,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o7btPOMufscWOr7Gw/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/l-sit"
+    },
+    {
+        "id": "v_sit",
+        "i18n_key": "v_sit",
+        "name": "V-Sit",
+        "level": "expert",
+        "pattern": "core",
+        "primary_muscles": [
+            "abdômen",
+            "hip_flexors"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 9,
+        "equipment": [
+            "none"
+        ],
+        "skill": "l_sit",
+        "skill_stage": "v_sit",
+        "prerequisites": [
+            "l_sit_full"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 5,
+            "seconds_max": 20,
+            "rest_seconds": 150
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/v-sit"
+    },
+    {
+        "id": "dragon_flag_negative",
+        "i18n_key": "dragon_flag_negative",
+        "name": "Dragon Flag Negative",
+        "level": "advanced",
+        "pattern": "core",
+        "primary_muscles": [
+            "abdômen",
+            "dorsais"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 7,
+        "equipment": [
+            "banco"
+        ],
+        "skill": "dragon_flag",
+        "skill_stage": "negative",
+        "prerequisites": [
+            "windshield_wipers_full",
+            "l_sit_full"
+        ],
+        "progresses_to": [
+            "dragon_flag_full"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 3,
+            "reps_max": 6,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o6ZsYq4nYQ7ky7t96/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/dragon-flag-negative"
+    },
+    {
+        "id": "dragon_flag_full",
+        "i18n_key": "dragon_flag_full",
+        "name": "Dragon Flag Full",
+        "level": "expert",
+        "pattern": "core",
+        "primary_muscles": [
+            "abdômen",
+            "dorsais"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 9,
+        "equipment": [
+            "banco"
+        ],
+        "skill": "dragon_flag",
+        "skill_stage": "full",
+        "prerequisites": [
+            "dragon_flag_negative"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 3,
+            "reps_max": 8,
+            "rest_seconds": 150
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/xT9IgN8YKRhByRBzMI/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/dragon-flag"
+    },
+    {
+        "id": "toes_to_bar_partial",
+        "i18n_key": "toes_to_bar_partial",
+        "name": "Toes to Bar Partial",
+        "level": "intermediate",
+        "pattern": "core",
+        "primary_muscles": [
+            "abdômen"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 6,
+        "equipment": [
+            "barra"
+        ],
+        "skill": "toes_to_bar",
+        "skill_stage": "partial",
+        "prerequisites": [
+            "lying_knee_raises",
+            "pull_up"
+        ],
+        "progresses_to": [
+            "toes_to_bar"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 10,
+            "rest_seconds": 90
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0HlPwMAU9gZZwmqc/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/knees-to-elbow"
+    },
+    {
+        "id": "toes_to_bar",
+        "i18n_key": "toes_to_bar",
+        "name": "Toes to Bar",
+        "level": "advanced",
+        "pattern": "core",
+        "primary_muscles": [
+            "abdômen"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 8,
+        "equipment": [
+            "barra"
+        ],
+        "skill": "toes_to_bar",
+        "skill_stage": "full",
+        "prerequisites": [
+            "toes_to_bar_partial"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 10,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o7btNRptqBgLSKR2w/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/toes-to-bar"
+    },
+    {
+        "id": "front_lever_tuck",
+        "i18n_key": "front_lever_tuck",
+        "name": "Front Lever Tuck",
+        "level": "intermediate",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "dorsais",
+            "core"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 6,
+        "equipment": [
+            "barra"
+        ],
+        "skill": "front_lever",
+        "skill_stage": "tuck",
+        "prerequisites": [
+            "pull_up",
+            "l_sit_tuck"
+        ],
+        "progresses_to": [
+            "tucked_front_lever_raise"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 10,
+            "seconds_max": 30,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0HlNQ03J5JxX6lva/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/tuck-front-lever"
+    },
+    {
+        "id": "tucked_front_lever_raise",
+        "i18n_key": "tucked_front_lever_raise",
+        "name": "Tucked Front Lever Raise",
+        "level": "advanced",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "dorsais",
+            "core"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 7,
+        "equipment": [
+            "barra"
+        ],
+        "skill": "front_lever",
+        "skill_stage": "raise",
+        "prerequisites": [
+            "front_lever_tuck"
+        ],
+        "progresses_to": [
+            "front_lever"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 3,
+            "reps_max": 6,
+            "rest_seconds": 150
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o6ZsYq4nYQ7ky7t96/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/front-lever-raise"
+    },
+    {
+        "id": "front_lever",
+        "i18n_key": "front_lever",
+        "name": "Front Lever",
+        "level": "expert",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "dorsais",
+            "core"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 9,
+        "equipment": [
+            "barra"
+        ],
+        "skill": "front_lever",
+        "skill_stage": "full",
+        "prerequisites": [
+            "tucked_front_lever_raise"
+        ],
+        "progresses_to": [
+            "front_lever_pull_up"
+        ],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 5,
+            "seconds_max": 20,
+            "rest_seconds": 180
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/xT9IgN8YKRhByRBzMI/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/front-lever"
+    },
+    {
+        "id": "front_lever_pull_up",
+        "i18n_key": "front_lever_pull_up",
+        "name": "Front Lever Pull-up",
+        "level": "expert",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "dorsais",
+            "core"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 10,
+        "equipment": [
+            "barra"
+        ],
+        "skill": "front_lever",
+        "skill_stage": "pull_up",
+        "prerequisites": [
+            "front_lever"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 1,
+            "reps_max": 3,
+            "rest_seconds": 240
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0HlPwMAU9gZZwmqc/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/front-lever-pullup"
+    },
+    {
+        "id": "back_lever",
+        "i18n_key": "back_lever",
+        "name": "Back Lever",
+        "level": "expert",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "dorsais",
+            "ombros"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 8,
+        "equipment": [
+            "barra"
+        ],
+        "skill": "back_lever",
+        "skill_stage": "full",
+        "prerequisites": [
+            "front_lever_tuck"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 5,
+            "seconds_max": 20,
+            "rest_seconds": 150
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o7btPOMufscWOr7Gw/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/back-lever"
+    },
+    {
+        "id": "skin_the_cat",
+        "i18n_key": "skin_the_cat",
+        "name": "Skin the Cat",
+        "level": "expert",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "ombros",
+            "core"
+        ],
+        "metric_type": "reps",
+        "difficulty_score": 8,
+        "equipment": [
+            "argolas"
+        ],
+        "skill": "back_lever",
+        "skill_stage": "transition",
+        "prerequisites": [
+            "back_lever"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "reps_min": 3,
+            "reps_max": 6,
+            "rest_seconds": 120
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/skin-the-cat"
+    },
+    {
+        "id": "human_flag",
+        "i18n_key": "human_flag",
+        "name": "Human Flag",
+        "level": "expert",
+        "pattern": "skill_full_body",
+        "primary_muscles": [
+            "oblíquos",
+            "dorsais",
+            "ombros"
+        ],
+        "metric_type": "seconds",
+        "difficulty_score": 10,
+        "equipment": [
+            "barra_vertical"
+        ],
+        "skill": "human_flag",
+        "skill_stage": "full",
+        "prerequisites": [
+            "front_lever",
+            "l_sit_full"
+        ],
+        "progresses_to": [],
+        "default_prescription": {
+            "sets": 3,
+            "seconds_min": 3,
+            "seconds_max": 10,
+            "rest_seconds": 180
+        },
+        "media": {
+            "type": "gif",
+            "url": "https://media.giphy.com/media/3o6ZsYq4nYQ7ky7t96/giphy.gif"
+        },
+        "fallback_media_search_url": "https://giphy.com/search/human-flag"
+    }
+]
