@@ -2035,9 +2035,56 @@ p {
 }
 
 .info-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--border-hover);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-8px);
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-2xl), 0 0 30px rgba(102, 126, 234, 0.2);
+}
+
+.info-image-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.info-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.info-card:hover .info-image {
+  transform: scale(1.1);
+}
+
+.info-card-content {
+  padding: var(--spacing-xl);
+}
+
+.info-icon {
+  font-size: 4rem;
+  margin: var(--spacing-xl) 0;
+  display: block;
+  text-align: center;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.info-card:nth-child(1) .info-icon {
+  animation-delay: 0s;
+}
+
+.info-card:nth-child(2) .info-icon {
+  animation-delay: 0.2s;
+}
+
+.info-card:nth-child(3) .info-icon {
+  animation-delay: 0.4s;
+}
+
+.info-card:nth-child(4) .info-icon {
+  animation-delay: 0.6s;
 }
 
 .info-title {

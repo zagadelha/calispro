@@ -4,6 +4,23 @@ const exercises = exercisesData.exercises;
 const exerciseMap = new Map(exercises.map(ex => [ex.id, ex]));
 
 /**
+ * Formats a skill name from database format to display format.
+ * Converts underscores to hyphens and capitalizes appropriately.
+ * Example: 'front_lever' -> 'Front-Lever', 'l_sit' -> 'L-Sit'
+ * @param {string} skillName - The skill name in database format
+ * @returns {string} - Formatted skill name for display
+ */
+const formatSkillName = (skillName) => {
+    if (!skillName) return '';
+
+    // Split by underscore, capitalize each part, join with hyphen
+    return skillName
+        .split('_')
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+        .join('-');
+};
+
+/**
  * Checks if an exercise is unlocked for a user based on their mastery history.
  * @param {string} exerciseId - The ID of the exercise to check.
  * @param {string[]} masteredExerciseIds - Array of exercise IDs the user has mastered.
@@ -169,6 +186,61 @@ export const getAvailableExercisesByPattern = (pattern, masteredExerciseIds) => 
         .filter(ex => ex.pattern === pattern)
         .filter(ex => isExerciseUnlocked(ex.id, masteredExerciseIds))
         .sort((a, b) => a.difficulty_score - b.difficulty_score);
+};
+
+/**
+ * Identifies "unlock-key" exercises that, when mastered, unlock the most blocked progressions.
+ * This is crucial for preventing stagnation when user has mastered most available exercises.
+ * 
+ * @param {string[]} masteredIds - Array of mastered exercise IDs
+ * @returns {Array<{id: string, name: string, pattern: string, unlockCount: number}>} - Key exercises sorted by unlock impact
+ */
+const findUnlockKeyExercises = (masteredIds) => {
+    // 1. Find all currently locked exercises
+    const lockedExercises = exercises.filter(ex => {
+        if (masteredIds.includes(ex.id)) return false;
+
+        const prereqs = ex.prerequisites || [];
+        if (prereqs.length === 0) return false; // No prerequisites, not locked
+
+        // Check if any prerequisite is missing
+        return prereqs.some(p => !masteredIds.includes(p));
+    });
+
+    // 2. Count how many exercises each missing prerequisite would unlock
+    const unlockImpact = {};
+
+    for (const lockedEx of lockedExercises) {
+        for (const prereq of (lockedEx.prerequisites || [])) {
+            if (masteredIds.includes(prereq)) continue; // Already mastered
+
+            if (!unlockImpact[prereq]) {
+                const prereqEx = exerciseMap.get(prereq);
+                if (prereqEx) {
+                    unlockImpact[prereq] = {
+                        id: prereq,
+                        name: prereqEx.name,
+                        pattern: prereqEx.pattern,
+                        difficulty: prereqEx.difficulty_score,
+                        unlockCount: 0,
+                        unlocks: []
+                    };
+                }
+            }
+
+            if (unlockImpact[prereq]) {
+                unlockImpact[prereq].unlockCount++;
+                unlockImpact[prereq].unlocks.push(lockedEx.id);
+            }
+        }
+    }
+
+    // 3. Sort by unlock count (highest impact first)
+    const keyExercises = Object.values(unlockImpact)
+        .filter(ex => ex.unlockCount > 0)
+        .sort((a, b) => b.unlockCount - a.unlockCount);
+
+    return keyExercises;
 };
 
 // --- NEW SKILL LOGIC ---
@@ -489,21 +561,47 @@ export const generateSkillWorkout = (targetSkill, userHistory, availableEquipmen
         // Fallback to candidates if all are repeated (to avoid empty workout)
         const pool = fresh.length > 0 ? fresh : candidates;
 
-        // Pick hardest (last one sorted by difficulty)
-        const maxDifficulty = Math.max(...pool.map(ex => ex.difficulty_score || 0));
+        // 🆕 PRIORITY: Separate mastered from non-mastered
+        const nonMastered = pool.filter(ex => {
+            const stats = userHistory[ex.id];
+            return !checkMastery(ex, stats);
+        });
+        const mastered = pool.filter(ex => {
+            const stats = userHistory[ex.id];
+            return checkMastery(ex, stats);
+        });
 
-        // Get all exercises with max difficulty (there might be ties)
-        const hardest = pool.filter(ex => (ex.difficulty_score || 0) === maxDifficulty);
+        console.log(`[Selection] Non-mastered: ${nonMastered.length}, Mastered: ${mastered.length}`);
 
-        // If there are multiple with same difficulty, randomize to add variety
+        // 🎯 PRIORITY 1: Pick EASIEST non-mastered for gradual progression & injury prevention
+        if (nonMastered.length > 0) {
+            const minDifficulty = Math.min(...nonMastered.map(ex => ex.difficulty_score || 0));
+            const easiest = nonMastered.filter(ex => (ex.difficulty_score || 0) === minDifficulty);
+
+            let selected;
+            if (easiest.length > 1) {
+                const randomIndex = Math.floor(Math.random() * easiest.length);
+                selected = easiest[randomIndex];
+                console.log(`[Selection] 🆕 Selected EASIEST non-mastered (difficulty ${minDifficulty}):`, selected.id);
+            } else {
+                selected = easiest[0];
+                console.log(`[Selection] 🆕 Selected EASIEST non-mastered (difficulty ${minDifficulty}):`, selected?.id);
+            }
+            return selected;
+        }
+
+        // 🎯 PRIORITY 2: If all are mastered, pick hardest mastered (maintenance)
+        const maxDifficulty = Math.max(...mastered.map(ex => ex.difficulty_score || 0));
+        const hardest = mastered.filter(ex => (ex.difficulty_score || 0) === maxDifficulty);
+
         let selected;
         if (hardest.length > 1) {
             const randomIndex = Math.floor(Math.random() * hardest.length);
             selected = hardest[randomIndex];
-            console.log(`[Selection] Multiple exercises with difficulty ${maxDifficulty}, randomly chose:`, selected.id);
+            console.log(`[Selection] ✅ All mastered, maintaining with hardest (difficulty ${maxDifficulty}):`, selected.id);
         } else {
             selected = hardest[0];
-            console.log(`[Selection] Selected hardest:`, selected?.id, `(difficulty ${maxDifficulty})`);
+            console.log(`[Selection] ✅ All mastered, maintaining with hardest:`, selected?.id, `(difficulty ${maxDifficulty})`);
         }
 
         return selected;
@@ -528,7 +626,7 @@ export const generateSkillWorkout = (targetSkill, userHistory, availableEquipmen
                     console.log(`[Rotation] ✅ Switched from ${targetSkill} to ${altSkill}`);
                     skillStage = altStage;
                     targetSkill = altSkill;
-                    skillNameForTitle = altSkill.charAt(0).toUpperCase() + altSkill.slice(1);
+                    skillNameForTitle = formatSkillName(altSkill);
                     break;
                 }
             }
@@ -538,7 +636,7 @@ export const generateSkillWorkout = (targetSkill, userHistory, availableEquipmen
                 console.log(`[Rotation] ⚠️ ALL SKILLS MAXED! Using fallback...`);
             }
         } else {
-            skillNameForTitle = targetSkill.charAt(0).toUpperCase() + targetSkill.slice(1);
+            skillNameForTitle = formatSkillName(targetSkill);
         }
     }
 
@@ -561,19 +659,36 @@ export const generateSkillWorkout = (targetSkill, userHistory, availableEquipmen
 
     // Fallback if no skill stage (e.g. no skills unlocked or passed)
     if (!skillStage) {
-        // Prioritize preparatory (Push/Pull basics)
-        const cands = getCandidates('push').concat(getCandidates('pull'));
+        // 🔑 NEW: First, try to find "unlock-key" exercises that open new progressions
+        const unlockKeys = findUnlockKeyExercises(masteredIds);
 
-        console.log('[Fallback] No skill stage. Push/Pull candidates:', cands.map(c => `${c.id}(${c.difficulty_score})`));
+        if (unlockKeys.length > 0) {
+            // Found exercises that unlock new progressions!
+            console.log('[Fallback] 🔑 Found unlock-key exercises:', unlockKeys.slice(0, 3).map(k =>
+                `${k.id} (unlocks ${k.unlockCount} exercises)`
+            ));
 
-        // ✅ FIX: Pick HARDEST unlocked, not first
-        if (cands.length > 0) {
-            const maxDiff = Math.max(...cands.map(c => c.difficulty_score || 0));
-            const hardest = cands.filter(c => (c.difficulty_score || 0) === maxDiff);
-            skillStage = hardest[Math.floor(Math.random() * hardest.length)];
-            console.log('[Fallback] Selected hardest:', skillStage?.id, `(diff:${skillStage?.difficulty_score})`);
+            // Pick the highest-impact unlock-key (by unlock count, then by lowest difficulty for accessibility)
+            const bestKey = unlockKeys[0];
+            skillStage = exerciseMap.get(bestKey.id);
+
+            console.log(`[Fallback] ✅ Selected unlock-key: ${skillStage?.id} (unlocks ${bestKey.unlockCount} exercises)`);
+            console.log(`  Will unlock: ${bestKey.unlocks.slice(0, 3).join(', ')}${bestKey.unlocks.length > 3 ? '...' : ''}`);
         } else {
-            skillStage = null;
+            // No unlock-keys found, fall back to traditional logic (hardest push/pull)
+            const cands = getCandidates('push').concat(getCandidates('pull'));
+
+            console.log('[Fallback] No unlock-keys. Push/Pull candidates:', cands.map(c => `${c.id}(${c.difficulty_score})`));
+
+            // ✅ FIX: Pick HARDEST unlocked, not first
+            if (cands.length > 0) {
+                const maxDiff = Math.max(...cands.map(c => c.difficulty_score || 0));
+                const hardest = cands.filter(c => (c.difficulty_score || 0) === maxDiff);
+                skillStage = hardest[Math.floor(Math.random() * hardest.length)];
+                console.log('[Fallback] Selected hardest:', skillStage?.id, `(diff:${skillStage?.difficulty_score})`);
+            } else {
+                skillStage = null;
+            }
         }
     }
 

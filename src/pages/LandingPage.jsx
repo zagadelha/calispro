@@ -9,6 +9,10 @@ import transformationWomanWeightLoss from '../assets/transformation_woman_weight
 import transformationManMuscleGain from '../assets/transformation_man_muscle_gain.png';
 import transformationManStrength from '../assets/transformation_man_strength.png';
 import transformationWomanMuscle from '../assets/transformation_woman_muscle.png';
+import infoStrength from '../assets/info_strength.png';
+import infoWomanHandstand from '../assets/info_woman_handstand.png';
+import infoVSitBars from '../assets/info_vsit_bars.png';
+import infoWomanFullPlancheBeach from '../assets/info_woman_full_planche_beach.png';
 
 function LandingPage() {
     const navigate = useNavigate();
@@ -93,20 +97,24 @@ function LandingPage() {
 
     const calisthenicsInfo = [
         {
+            image: infoStrength,
             title: 'Força Funcional',
-            description: 'Desenvolva força real aplicável ao dia a dia, não apenas músculos isolados'
+            description: 'Desenvolva força real aplicável ao dia a dia, não apenas músculos isolados. Pense em carregar objetos pesados com facilidade.'
         },
         {
+            image: infoWomanHandstand,
             title: 'Flexibilidade Total',
-            description: 'Treine em qualquer lugar - parque, casa ou academia. Sem equipamentos caros'
+            description: 'Treine em qualquer lugar, parque, casa ou academia. A liberdade de se mover sem amarras.'
         },
         {
+            image: infoVSitBars,
             title: 'Corpo Equilibrado',
-            description: 'Construa um físico harmonioso trabalhando todo o corpo de forma integrada'
+            description: 'Construa um físico harmonioso trabalhando todo o corpo de forma integrada e estável.'
         },
         {
+            image: infoWomanFullPlancheBeach,
             title: 'Sempre Desafiador',
-            description: 'Progressões infinitas - do básico ao avançado, sempre há um novo desafio'
+            description: 'Progressões infinitas, do básico ao avançado, sempre há um novo desafio para superar.'
         }
     ];
 
@@ -164,8 +172,17 @@ function LandingPage() {
                     <div className="info-grid">
                         {calisthenicsInfo.map((info, idx) => (
                             <div key={idx} className="info-card">
-                                <h3 className="info-title">{info.title}</h3>
-                                <p className="info-description">{info.description}</p>
+                                {info.image ? (
+                                    <div className="info-image-container">
+                                        <img src={info.image} alt={info.title} className="info-image" />
+                                    </div>
+                                ) : (
+                                    <div className="info-icon">{info.icon}</div>
+                                )}
+                                <div className="info-card-content">
+                                    <h3 className="info-title">{info.title}</h3>
+                                    <p className="info-description">{info.description}</p>
+                                </div>
                             </div>
                         ))}
                     </div>

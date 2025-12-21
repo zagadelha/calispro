@@ -56,12 +56,15 @@ export const getUserHistory = async (userId) => {
                     // Use Per-Exercise RPE if exists, else Global Workout RPE, else 3 (default)
                     const rpe = exData.rpe || workout.feedback_rpe || 3;
 
+                    // Use Per-Exercise goalMet if exists, else Global Workout goalMet, else true (for backwards compatibility)
+                    const goalMet = exData.goalMet !== undefined ? exData.goalMet : (workout.feedback_goal_met !== undefined ? workout.feedback_goal_met : true);
+
                     historyMap[exData.original_id].history.push({
                         date: workout.date,
                         reps: exData.performed_reps || exData.target_reps || 0, // Fallback to target if synced
                         seconds: exData.performed_seconds || 0,
                         rpe: rpe,
-                        goalMet: true // Assuming completion means goal met for now
+                        goalMet: goalMet
                     });
                 }
             });

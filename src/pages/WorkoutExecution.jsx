@@ -132,6 +132,31 @@ const WorkoutExecution = () => {
 
             setWorkout(todayWorkout);
             setExercises(enrichedExercises);
+
+            // Carregar feedback salvo anteriormente (se o treino já foi concluído)
+            if (todayWorkout.status === 'completed' && todayWorkout.feedback_goal_met !== undefined) {
+                setFeedback({
+                    goalMet: todayWorkout.feedback_goal_met,
+                    rpe: todayWorkout.feedback_rpe,
+                    pain: todayWorkout.feedback_pain
+                });
+            }
+
+            // Carregar performance data salva anteriormente
+            const savedPerformanceData = {};
+            enrichedExercises.forEach(exercise => {
+                if (exercise.performed_reps !== undefined || exercise.performed_seconds !== undefined) {
+                    savedPerformanceData[exercise.id] = {
+                        reps: exercise.performed_reps,
+                        seconds: exercise.performed_seconds,
+                        rpe: exercise.rpe
+                    };
+                }
+            });
+
+            if (Object.keys(savedPerformanceData).length > 0) {
+                setPerformanceData(savedPerformanceData);
+            }
         } catch (err) {
             console.error('Error loading workout:', err);
         } finally {
@@ -164,35 +189,72 @@ const WorkoutExecution = () => {
         setFeedback(prev => ({ ...prev, [field]: value }));
     };
 
+    // Validação do feedback completo
+    const isFeedbackComplete = () => {
+        return feedback.goalMet !== null && feedback.rpe !== null && feedback.pain !== null;
+    };
+
+    // Validação de performance data completo
+    const isPerformanceComplete = () => {
+        for (const exercise of exercises) {
+            const data = performanceData[exercise.id];
+
+            // Check if exercise has data
+            if (!data) {
+                return { complete: false, exercise };
+            }
+
+            // Check if appropriate metric is filled
+            if (exercise.metric_type === 'seconds') {
+                if (!data.seconds || data.seconds <= 0) {
+                    return { complete: false, exercise };
+                }
+            } else {
+                if (!data.reps || data.reps <= 0) {
+                    return { complete: false, exercise };
+                }
+            }
+        }
+        return { complete: true };
+    };
+
     const handleFinishWorkout = async () => {
-        // Use default values if feedback not provided (to prevent history gaps)
-        const finalFeedback = {
-            goalMet: feedback.goalMet !== null ? feedback.goalMet : true,
-            rpe: feedback.rpe || 3,
-            pain: feedback.pain || 'Nenhuma'
-        };
+        // Validar se performance está completa
+        const perfCheck = isPerformanceComplete();
+        if (!perfCheck.complete) {
+            alert('⚠️ Por favor, preencha os dados de performance (reps ou segundos) para todos os exercícios antes de finalizar o treino.');
+            return;
+        }
+
+        // Validar se o feedback está completo
+        if (!isFeedbackComplete()) {
+            alert('Por favor, preencha todo o feedback do treino antes de finalizar.');
+            return;
+        }
 
         try {
             // Save global workout data
             await updateDoc(doc(db, 'workouts', workout.id), {
                 status: 'completed',
                 completed_at: new Date().toISOString(),
-                feedback_goal_met: finalFeedback.goalMet,
-                feedback_rpe: finalFeedback.rpe,
-                feedback_pain: finalFeedback.pain
+                feedback_goal_met: feedback.goalMet,
+                feedback_rpe: feedback.rpe,
+                feedback_pain: feedback.pain
             });
 
-            // Save detailed performance data
+            // Save performance data for all exercises (already validated above)
             for (const exercise of exercises) {
                 const data = performanceData[exercise.id];
-                if (data) {
-                    await updateDoc(doc(db, 'workout_exercises', exercise.id), {
-                        performed_reps: data.reps || null,
-                        performed_seconds: data.seconds || null,
-                        rpe: data.rpe || null,
-                        completed: true // Force completion on feedback submission
-                    });
-                }
+
+                console.log(`[Saving] ${exercise.original_id}: reps=${data.reps || 0}, seconds=${data.seconds || 0}, rpe=${data.rpe || 'global'}, goalMet=${feedback.goalMet}`);
+
+                await updateDoc(doc(db, 'workout_exercises', exercise.id), {
+                    performed_reps: data.reps || 0,
+                    performed_seconds: data.seconds || 0,
+                    rpe: data.rpe || null,
+                    goalMet: feedback.goalMet,
+                    completed: true
+                });
             }
 
             navigate('/dashboard');
@@ -273,11 +335,13 @@ const WorkoutExecution = () => {
                                                 <div className="flex-1">
                                                     <label className="text-xs text-secondary mb-1 block">
                                                         {exercise.metric_type === 'reps' ? 'Reps Realizados' : 'Segundos Realizados'}
+                                                        <span className="text-red-500 ml-1">*</span>
                                                     </label>
                                                     <input
                                                         type="number"
                                                         className="form-input py-1 px-2 text-sm"
                                                         placeholder={exercise.metric_type === 'reps' ? (exercise.target_reps || "0") : (exercise.target_seconds || "0")}
+                                                        value={performanceData[exercise.id]?.[exercise.metric_type === 'reps' ? 'reps' : 'seconds'] || ''}
                                                         onChange={(e) => {
                                                             const value = parseInt(e.target.value);
                                                             const field = exercise.metric_type === 'reps' ? 'reps' : 'seconds';
@@ -296,7 +360,10 @@ const WorkoutExecution = () => {
                     {/* Quick Feedback Card (Visible when at least one exercise checked, or always) */}
                     <section className="feedback-section mb-xl">
                         <div className="card animate-fadeIn">
-                            <h3 className="mb-md">Feedback do Treino</h3>
+                            <div className="flex items-center justify-between mb-md">
+                                <h3>Feedback do Treino</h3>
+                                <span className="font-semibold" style={{ color: '#ff6b6b', fontSize: '0.65rem', whiteSpace: 'nowrap' }}>* Obrigatório</span>
+                            </div>
 
                             {/* Q1: Goal Met */}
                             <div className="mb-lg">
@@ -357,10 +424,15 @@ const WorkoutExecution = () => {
                     <button
                         onClick={handleFinishWorkout}
                         className="btn btn-primary btn-full btn-lg"
-                        disabled={completedCount === 0}
+                        disabled={completedCount === 0 || !isFeedbackComplete()}
                     >
                         ✅ Finalizar Treino
                     </button>
+                    {!isFeedbackComplete() && completedCount > 0 && (
+                        <p className="text-center text-error text-sm mt-md">
+                            ⚠️ Preencha todo o feedback para finalizar o treino
+                        </p>
+                    )}
                 </div>
             </main>
         </div>

@@ -7,7 +7,7 @@
     {
       "id": "push_up",
       "i18n_key": "push_up",
-      "name": "Push-up",
+      "name": "Push-Up",
       "level": "beginner",
       "pattern": "push",
       "primary_muscles": [
@@ -44,7 +44,7 @@
     {
       "id": "push_up_knee",
       "i18n_key": "push_up_knee",
-      "name": "Knee Push-up",
+      "name": "Knee Push-Up",
       "level": "beginner",
       "pattern": "push",
       "primary_muscles": [
@@ -78,7 +78,7 @@
     {
       "id": "incline_push_up",
       "i18n_key": "incline_push_up",
-      "name": "Incline Push-up",
+      "name": "Incline Push-Up",
       "level": "beginner",
       "pattern": "push",
       "primary_muscles": [
@@ -114,7 +114,7 @@
     {
       "id": "diamond_push_up_light",
       "i18n_key": "diamond_push_up_light",
-      "name": "Diamond Push-up",
+      "name": "Diamond Push-Up",
       "level": "beginner",
       "pattern": "push",
       "primary_muscles": [
@@ -150,7 +150,7 @@
     {
       "id": "wide_grip_push_up",
       "i18n_key": "wide_grip_push_up",
-      "name": "Wide Push-up",
+      "name": "Wide Push-Up",
       "level": "beginner",
       "pattern": "push",
       "primary_muscles": [
@@ -186,7 +186,7 @@
     {
       "id": "pike_push_up_beginner",
       "i18n_key": "pike_push_up_beginner",
-      "name": "Pike Push-up (Beginner)",
+      "name": "Pike Push-Up (Beginner)",
       "level": "beginner",
       "pattern": "push",
       "primary_muscles": [
@@ -354,7 +354,7 @@
     {
       "id": "assisted_chin_up",
       "i18n_key": "assisted_chin_up",
-      "name": "Assisted Chin-up",
+      "name": "Assisted Chin-Up",
       "level": "beginner",
       "pattern": "pull",
       "primary_muscles": [
@@ -492,7 +492,7 @@
     {
       "id": "step_up",
       "i18n_key": "step_up",
-      "name": "Step-up",
+      "name": "Step-Up",
       "level": "beginner",
       "pattern": "legs",
       "primary_muscles": [
@@ -858,7 +858,7 @@
     {
       "id": "decline_push_up",
       "i18n_key": "decline_push_up",
-      "name": "Decline Push-up",
+      "name": "Decline Push-Up",
       "level": "intermediate",
       "pattern": "push",
       "primary_muscles": [
@@ -895,7 +895,7 @@
     {
       "id": "explosive_push_up",
       "i18n_key": "explosive_push_up",
-      "name": "Explosive Push-up",
+      "name": "Explosive Push-Up",
       "level": "intermediate",
       "pattern": "push",
       "primary_muscles": [
@@ -931,7 +931,7 @@
     {
       "id": "archer_push_up",
       "i18n_key": "archer_push_up",
-      "name": "Archer Push-up",
+      "name": "Archer Push-Up",
       "level": "intermediate",
       "pattern": "push",
       "primary_muscles": [
@@ -1004,7 +1004,7 @@
     {
       "id": "pseudo_planche_push_up",
       "i18n_key": "pseudo_planche_push_up",
-      "name": "Pseudo Planche Push-up",
+      "name": "Pseudo Planche Push-Up",
       "level": "intermediate",
       "pattern": "push",
       "primary_muscles": [
@@ -1042,7 +1042,7 @@
     {
       "id": "pike_push_up_advanced",
       "i18n_key": "pike_push_up_advanced",
-      "name": "Pike Push-up (Advanced)",
+      "name": "Pike Push-Up (Advanced)",
       "level": "intermediate",
       "pattern": "push",
       "primary_muscles": [
@@ -1078,7 +1078,7 @@
     {
       "id": "pull_up",
       "i18n_key": "pull_up",
-      "name": "Pull-up",
+      "name": "Pull-Up",
       "level": "intermediate",
       "pattern": "pull",
       "primary_muscles": [
@@ -1116,7 +1116,7 @@
     {
       "id": "chin_up",
       "i18n_key": "chin_up",
-      "name": "Chin-up",
+      "name": "Chin-Up",
       "level": "intermediate",
       "pattern": "pull",
       "primary_muscles": [
@@ -1152,7 +1152,7 @@
     {
       "id": "commando_pull_up",
       "i18n_key": "commando_pull_up",
-      "name": "Commando Pull-up",
+      "name": "Commando Pull-Up",
       "level": "intermediate",
       "pattern": "pull",
       "primary_muscles": [
@@ -1188,7 +1188,7 @@
     {
       "id": "isometric_90_deg",
       "i18n_key": "isometric_90_deg",
-      "name": "Pull-up Hold (90°)",
+      "name": "Pull-Up Hold (90°)",
       "level": "intermediate",
       "pattern": "pull",
       "primary_muscles": [
@@ -1224,7 +1224,7 @@
     {
       "id": "scapula_pull_ups",
       "i18n_key": "scapula_pull_ups",
-      "name": "Scapular Pull-ups",
+      "name": "Scapular Pull-Ups",
       "level": "intermediate",
       "pattern": "pull",
       "primary_muscles": [
@@ -1546,7 +1546,7 @@
     {
       "id": "l_sit_tuck",
       "i18n_key": "l_sit_tuck",
-      "name": "Tuck L-sit",
+      "name": "Tuck L-Sit",
       "level": "intermediate",
       "pattern": "core",
       "primary_muscles": [
@@ -1691,7 +1691,7 @@
     {
       "id": "toes_to_bar_partial",
       "i18n_key": "toes_to_bar_partial",
-      "name": "Toes-to-Bar (Partial)",
+      "name": "Toes-To-Bar (Partial)",
       "level": "intermediate",
       "pattern": "core",
       "primary_muscles": [
@@ -1764,7 +1764,7 @@
     {
       "id": "handstand_push_up",
       "i18n_key": "handstand_push_up",
-      "name": "Handstand Push-up",
+      "name": "Handstand Push-Up",
       "level": "advanced",
       "pattern": "push",
       "primary_muscles": [
@@ -1799,7 +1799,7 @@
     {
       "id": "one_arm_push_up",
       "i18n_key": "one_arm_push_up",
-      "name": "One-Arm Push-up",
+      "name": "One-Arm Push-Up",
       "level": "advanced",
       "pattern": "push",
       "primary_muscles": [
@@ -1910,7 +1910,7 @@
     {
       "id": "planche_push_up",
       "i18n_key": "planche_push_up",
-      "name": "Planche Push-up",
+      "name": "Planche Push-Up",
       "level": "advanced",
       "pattern": "push",
       "primary_muscles": [
@@ -1980,7 +1980,7 @@
     {
       "id": "muscle_up",
       "i18n_key": "muscle_up",
-      "name": "Muscle-up",
+      "name": "Muscle-Up",
       "level": "advanced",
       "pattern": "pull",
       "primary_muscles": [
@@ -2016,7 +2016,7 @@
     {
       "id": "explosive_pull_up",
       "i18n_key": "explosive_pull_up",
-      "name": "Explosive Pull-up",
+      "name": "Explosive Pull-Up",
       "level": "advanced",
       "pattern": "pull",
       "primary_muscles": [
@@ -2052,7 +2052,7 @@
     {
       "id": "one_arm_pull_up_progression",
       "i18n_key": "one_arm_pull_up_progression",
-      "name": "One-Arm Pull-up (Progression)",
+      "name": "One-Arm Pull-Up (Progression)",
       "level": "advanced",
       "pattern": "pull",
       "primary_muscles": [
@@ -2087,7 +2087,7 @@
     {
       "id": "typewriter_pull_up",
       "i18n_key": "typewriter_pull_up",
-      "name": "Typewriter Pull-up",
+      "name": "Typewriter Pull-Up",
       "level": "advanced",
       "pattern": "pull",
       "primary_muscles": [
@@ -2123,7 +2123,7 @@
     {
       "id": "front_lever_pull_up",
       "i18n_key": "front_lever_pull_up",
-      "name": "Front Lever Pull-up",
+      "name": "Front Lever Pull-Up",
       "level": "advanced",
       "pattern": "pull",
       "primary_muscles": [
@@ -2395,7 +2395,7 @@
     {
       "id": "l_sit_full",
       "i18n_key": "l_sit_full",
-      "name": "L-sit",
+      "name": "L-Sit",
       "level": "advanced",
       "pattern": "core",
       "primary_muscles": [
@@ -2432,7 +2432,7 @@
     {
       "id": "v_sit",
       "i18n_key": "v_sit",
-      "name": "V-sit",
+      "name": "V-Sit",
       "level": "advanced",
       "pattern": "core",
       "primary_muscles": [
@@ -2534,7 +2534,7 @@
     {
       "id": "toes_to_bar",
       "i18n_key": "toes_to_bar",
-      "name": "Toes-to-Bar",
+      "name": "Toes-To-Bar",
       "level": "advanced",
       "pattern": "core",
       "primary_muscles": [
@@ -2785,7 +2785,7 @@
     {
       "id": "archer_pull_up",
       "i18n_key": "archer_pull_up",
-      "name": "Archer Pull-up",
+      "name": "Archer Pull-Up",
       "level": "intermediate",
       "pattern": "pull",
       "primary_muscles": [
@@ -2821,7 +2821,7 @@
     {
       "id": "commando_pull_up",
       "i18n_key": "commando_pull_up",
-      "name": "Commando Pull-up",
+      "name": "Commando Pull-Up",
       "level": "intermediate",
       "pattern": "pull",
       "primary_muscles": [
@@ -2857,7 +2857,7 @@
     {
       "id": "wide_grip_pull_up",
       "i18n_key": "wide_grip_pull_up",
-      "name": "Wide Grip Pull-up",
+      "name": "Wide Grip Pull-Up",
       "level": "intermediate",
       "pattern": "pull",
       "primary_muscles": [
@@ -3033,7 +3033,7 @@
     {
       "id": "pike_push_up_elevated_feet",
       "i18n_key": "pike_push_up_elevated_feet",
-      "name": "Pike Push-up (Elevated Feet)",
+      "name": "Pike Push-Up (Elevated Feet)",
       "level": "intermediate",
       "pattern": "push",
       "primary_muscles": [
@@ -3068,7 +3068,7 @@
     {
       "id": "close_grip_push_up",
       "i18n_key": "close_grip_push_up",
-      "name": "Close Grip Push-up",
+      "name": "Close Grip Push-Up",
       "level": "beginner",
       "pattern": "push",
       "primary_muscles": [
@@ -3139,7 +3139,7 @@
     {
       "id": "negative_pull_up",
       "i18n_key": "negative_pull_up",
-      "name": "Negative Pull-up",
+      "name": "Negative Pull-Up",
       "level": "beginner",
       "pattern": "pull",
       "primary_muscles": [
@@ -3246,7 +3246,7 @@
     {
       "id": "scapular_pull_up",
       "i18n_key": "scapular_pull_up",
-      "name": "Scapular Pull-up",
+      "name": "Scapular Pull-Up",
       "level": "beginner",
       "pattern": "pull",
       "primary_muscles": [
@@ -3280,7 +3280,7 @@
     {
       "id": "assisted_pull_up",
       "i18n_key": "assisted_pull_up",
-      "name": "Assisted Pull-up",
+      "name": "Assisted Pull-Up",
       "level": "beginner",
       "pattern": "pull",
       "primary_muscles": [
@@ -3317,7 +3317,7 @@
     {
       "id": "chest_to_bar_pull_up",
       "i18n_key": "chest_to_bar_pull_up",
-      "name": "Chest-to-Bar Pull-up",
+      "name": "Chest-To-Bar Pull-Up",
       "level": "intermediate",
       "pattern": "pull",
       "primary_muscles": [
@@ -3354,7 +3354,7 @@
     {
       "id": "weighted_pull_up",
       "i18n_key": "weighted_pull_up",
-      "name": "Weighted Pull-up",
+      "name": "Weighted Pull-Up",
       "level": "advanced",
       "pattern": "pull",
       "primary_muscles": [
@@ -3391,7 +3391,7 @@
     {
       "id": "one_arm_pull_up_assisted",
       "i18n_key": "one_arm_pull_up_assisted",
-      "name": "One-Arm Pull-up Assisted",
+      "name": "One-Arm Pull-Up Assisted",
       "level": "advanced",
       "pattern": "pull",
       "primary_muscles": [
@@ -3427,7 +3427,7 @@
     {
       "id": "one_arm_pull_up",
       "i18n_key": "one_arm_pull_up",
-      "name": "One-Arm Pull-up",
+      "name": "One-Arm Pull-Up",
       "level": "expert",
       "pattern": "pull",
       "primary_muscles": [
