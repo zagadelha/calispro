@@ -1,7 +1,7 @@
 import exercisesData from '../assets/exercises/exercises_v1_1.json';
 import { getVirtualNow } from './timeTravel';
 
-const exercises = exercisesData.exercises;
+export const exercises = exercisesData.exercises;
 export const exerciseMap = new Map(exercises.map(ex => [ex.id, ex]));
 
 /**
@@ -13,6 +13,12 @@ export const exerciseMap = new Map(exercises.map(ex => [ex.id, ex]));
  */
 export const formatSkillName = (skillName) => {
     if (!skillName) return '';
+
+    if (skillName.startsWith('base_')) {
+        const base = skillName.replace('base_', '');
+        const trans = { push: 'Flexões (Empurrar)', pull: 'Barras (Puxar)', legs: 'Pernas', core: 'Core' };
+        return trans[base] || base;
+    }
 
     // Split by underscore, capitalize each part, join with hyphen
     return skillName
@@ -322,12 +328,81 @@ export const getUserSkillStage = (skillName, userHistory) => {
     return skillExercises[skillExercises.length - 1];
 };
 
+
+
 /**
  * Returns all exercises grouped by skill.
  */
 export const getAllSkills = () => {
     const skills = new Set(exercises.map(ex => ex.skill).filter(Boolean));
     return Array.from(skills);
+};
+
+/**
+ * Gets a comprehensive list of skills and their progression status for the user.
+ * @param {object} userHistory 
+ * @returns {object[]} - Array of skill status objects
+ */
+export const getSkillProgression = (userHistory) => {
+    const skills = getAllSkills();
+    const patterns = ['push', 'pull', 'legs', 'core'];
+
+    // Globally calculate mastered IDs once
+    const allMasteredIds = exercises
+        .filter(ex => checkMastery(ex, userHistory[ex.id]))
+        .map(ex => ex.id);
+
+    const getStatusForList = (name, list) => {
+        const mastered = list.filter(ex => allMasteredIds.includes(ex.id));
+
+        // Find current stage (first unlocked non-mastered)
+        const currentStage = list.find(ex => {
+            const unlocked = isExerciseUnlocked(ex.id, allMasteredIds);
+            const mastered = allMasteredIds.includes(ex.id);
+            return unlocked && !mastered;
+        });
+
+        let status = 'locked';
+        if (mastered.length === list.length && list.length > 0) {
+            status = 'completed';
+        } else if (currentStage) {
+            status = 'in_progress';
+        } else if (mastered.length > 0) {
+            status = 'in_progress';
+        }
+
+        return {
+            skill: name,
+            status,
+            currentStage,
+            masteredCount: mastered.length,
+            totalCount: list.length,
+            hardestMastered: mastered.length > 0 ? mastered[mastered.length - 1] : null
+        };
+    };
+
+    const skillList = skills.map(skillName => {
+        const skillExercises = exercises
+            .filter(ex => ex.skill === skillName)
+            .sort((a, b) => a.difficulty_score - b.difficulty_score);
+        return getStatusForList(skillName, skillExercises);
+    });
+
+    const patternList = patterns.map(p => {
+        const patternExercises = exercises
+            .filter(ex => ex.pattern === p && !ex.skill)
+            .sort((a, b) => a.difficulty_score - b.difficulty_score);
+
+        const labelMap = {
+            push: 'base_push',
+            pull: 'base_pull',
+            legs: 'base_legs',
+            core: 'base_core'
+        };
+        return getStatusForList(labelMap[p], patternExercises);
+    });
+
+    return [...patternList, ...skillList];
 };
 
 /**

@@ -68,7 +68,9 @@ export const AuthProvider = ({ children }) => {
         try {
             const userDoc = await getDoc(doc(db, 'users', uid));
             if (userDoc.exists()) {
-                setUserProfile(userDoc.data());
+                const data = userDoc.data();
+                setUserProfile(data);
+                console.log('[Auth] Firestore Profile Email:', data.email);
             }
         } catch (error) {
             console.error('[AuthContext] Error loading user profile:', error);
@@ -107,6 +109,7 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             setCurrentUser(user);
             if (user) {
+                console.log('[Auth] Session Email (Auth):', user.email, 'UID:', user.uid);
                 await loadUserProfile(user.uid);
             } else {
                 setUserProfile(null);

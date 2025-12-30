@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { generateWorkoutPlan } from '../utils/workoutGenerator';
+import { collection, query, where, getDocs, writeBatch, doc } from 'firebase/firestore';
+import { db } from '../config/firebase';
 
 const Profile = () => {
     const { currentUser, userProfile, updateUserProfile, uploadProfilePhoto } = useAuth();
@@ -87,6 +89,119 @@ const Profile = () => {
             alert('Erro ao fazer upload da foto');
         } finally {
             setUploadingPhoto(false);
+        }
+    };
+
+    const handleDeleteHistory = async () => {
+        const confirm1 = confirm('⚠️ ATENÇÃO: Isso irá apagar TODO o seu histórico de treinos, recordes e evolução. Esta ação NÃO pode ser desfeita e você perderá todo o seu progresso.');
+        if (!confirm1) return;
+
+        const confirm2 = confirm('Você tem CERTEZA absoluta? Todos os seus dados de progresso sumirão para sempre.');
+        if (!confirm2) return;
+
+        try {
+            setLoading(true);
+            const userId = currentUser.uid;
+
+            console.log('[DeleteHistory] Iniciando limpeza total para:', userId);
+
+            // 1. Buscar documentos - Cada um em seu próprio try/catch para não travar o processo todo
+            let historySnap = { docs: [], size: 0 };
+            let plansSnap = { docs: [], size: 0 };
+            let workoutsSnapshot = { docs: [], size: 0 };
+
+            try {
+                const historyQ = query(collection(db, 'history'), where('user_id', '==', userId));
+                console.log('[DeleteHistory] Buscando History...');
+                historySnap = await getDocs(historyQ);
+            } catch (e) {
+                console.warn('[DeleteHistory] Falha ao buscar History:', e.message);
+            }
+
+            try {
+                const plansQ = query(collection(db, 'plans'), where('user_id', '==', userId));
+                console.log('[DeleteHistory] Buscando Plans...');
+                plansSnap = await getDocs(plansQ);
+            } catch (e) {
+                console.warn('[DeleteHistory] Falha ao buscar Plans:', e.message);
+            }
+
+            try {
+                const workoutsQ = query(collection(db, 'workouts'), where('user_id', '==', userId));
+                console.log('[DeleteHistory] Buscando Workouts...');
+                workoutsSnapshot = await getDocs(workoutsQ);
+            } catch (e) {
+                console.error('[DeleteHistory] Erro Crítico ao buscar Workouts:', e.message);
+                throw e;
+            }
+
+            console.log(`[DeleteHistory] Documentos encontrados: History(${historySnap.size}), Plans(${plansSnap.size}), Workouts(${workoutsSnapshot.size})`);
+
+            let batch = writeBatch(db);
+            let count = 0;
+
+            const commitBatch = async () => {
+                if (count > 0) {
+                    console.log(`[DeleteHistory] Commitando lote de ${count} operações...`);
+                    await batch.commit();
+                    batch = writeBatch(db);
+                    count = 0;
+                }
+            };
+
+            // Deletar Histórico (Progressões e Recordes)
+            for (const docSnap of historySnap.docs) {
+                batch.delete(docSnap.ref);
+                count++;
+                if (count >= 500) await commitBatch();
+            }
+
+            // Deletar Planos
+            for (const docSnap of plansSnap.docs) {
+                batch.delete(docSnap.ref);
+                count++;
+                if (count >= 500) await commitBatch();
+            }
+
+            // Deletar Exercícios de Treinos e os próprios Treinos
+            for (const workoutDoc of workoutsSnapshot.docs) {
+                console.log(`[DeleteHistory] Deletando treino: ${workoutDoc.id} (${workoutDoc.data().status})`);
+
+                // Buscar exercícios deste treino específico
+                const exQ = query(collection(db, 'workout_exercises'), where('workout_id', '==', workoutDoc.id));
+                const exSnap = await getDocs(exQ);
+
+                for (const exDoc of exSnap.docs) {
+                    batch.delete(exDoc.ref);
+                    count++;
+                    if (count >= 500) await commitBatch();
+                }
+
+                batch.delete(workoutDoc.ref);
+                count++;
+                if (count >= 500) await commitBatch();
+            }
+
+            // Resetar perfil do usuário (campos de plano)
+            const userRef = doc(db, 'users', userId);
+            batch.update(userRef, {
+                current_plan_id: null,
+                last_workout_date: null,
+                experience_level: null, // Resetar também para forçar novo onboarding/perfil se necessário
+                goal: null
+            });
+            count++;
+
+            await commitBatch();
+
+            console.log('[DeleteHistory] Limpeza concluída com sucesso!');
+            alert('Histórico e progresso apagados com sucesso!');
+            navigate('/dashboard');
+        } catch (err) {
+            console.error('[DeleteHistory] Erro Crítico:', err);
+            alert('Ocorreu um erro ao apagar seu histórico. Detalhes: ' + err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -293,10 +408,17 @@ const Profile = () => {
                                     </button>
                                     <button
                                         onClick={handleRecalculatePlan}
-                                        className="btn btn-secondary btn-full"
+                                        className="btn btn-secondary btn-full mb-md"
                                         disabled={loading}
                                     >
                                         🔄 Recalcular Plano de Treino
+                                    </button>
+                                    <button
+                                        onClick={handleDeleteHistory}
+                                        className="btn btn-error btn-full"
+                                        disabled={loading}
+                                    >
+                                        🗑️ Apagar Histórico de Treino
                                     </button>
                                 </>
                             )}

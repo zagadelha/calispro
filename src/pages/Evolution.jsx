@@ -1,17 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { calculateReadinessScore, getUserSkillStage, getAllSkills } from '../utils/progressionSystem';
+import {
+    calculateReadinessScore,
+    getUserSkillStage,
+    getSkillProgression,
+    exercises,
+    formatSkillName
+} from '../utils/progressionSystem';
+import {
+    Trophy,
+    Lock,
+    CheckCircle2,
+    AlertCircle,
+    Award,
+    TrendingUp
+} from 'lucide-react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import bgEvolution from '../assets/bg-evolution.png'; // Imported new background
 
 import { getUserHistory } from '../utils/historyManager';
 import { getVirtualDate } from '../utils/timeTravel';
+import {
+    Radar,
+    RadarChart,
+    PolarGrid,
+    PolarAngleAxis,
+    PolarRadiusAxis,
+    ResponsiveContainer
+} from 'recharts';
 
 const Evolution = () => {
     const [readiness, setReadiness] = useState(null);
     const [skillStages, setSkillStages] = useState([]);
+    const [radarData, setRadarData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { currentUser } = useAuth();
     const navigate = useNavigate();
@@ -32,32 +55,47 @@ const Evolution = () => {
             setReadiness(scoreData);
 
             // Calculate Skills
-            const skills = getAllSkills();
-            const stages = skills.map(skill => {
-                const stage = getUserSkillStage(skill, userHistory);
+            const skillProgress = getSkillProgression(userHistory);
+            const stages = skillProgress.map(item => {
+                // If in progress, show current stage
+                // If completed, show hardest mastered
+                // If locked, show first exercise of the skill
+                const skillExercises = exercises
+                    .filter(ex => ex.skill === item.skill)
+                    .sort((a, b) => a.difficulty_score - b.difficulty_score);
+
+                const stage = item.currentStage || item.hardestMastered || skillExercises[0];
+
                 if (!stage) return null;
 
-                // Get most recent stats for display (PR)
                 const stats = userHistory[stage.id] || { reps: 0, seconds: 0 };
-                // If history exists, pick 'reps' from last entry? or max?
-                // Logic above uses raw object. getUserHistory returns { history: [] }
-                // We need to extract a simple { reps } object for the UI display if it expects it.
-                // Let's verify what UI expects.
-                // Line 86 original: const stats = mockHistory[stage.id] || { reps: 0, seconds: 0 };
-
-                // We'll flatten the history to find PR (Personal Record)
                 let displayStats = { reps: 0, seconds: 0 };
                 if (stats.history && stats.history.length > 0) {
-                    // Find max reps
                     const maxReps = Math.max(...stats.history.map(h => h.reps || 0));
                     const maxSecs = Math.max(...stats.history.map(h => h.seconds || 0));
                     displayStats = { reps: maxReps, seconds: maxSecs };
                 }
 
-                return { skill, stage, stats: displayStats };
-            }).filter(s => s); // Filter out nulls
+                return { ...item, stage, stats: displayStats };
+            }).filter(s => s);
 
             setSkillStages(stages);
+
+            // Prepare Radar Data
+            const categoryMap = {
+                push: 'Empurrar',
+                pull: 'Puxar',
+                legs: 'Pernas',
+                core: 'Core',
+                skills: 'Habilidades'
+            };
+
+            const radarDataFormatted = Object.entries(scoreData.breakdown).map(([key, val]) => ({
+                subject: categoryMap[key] || key,
+                value: val,
+                fullMark: 100
+            }));
+            setRadarData(radarDataFormatted);
 
         } catch (err) {
             console.error(err);
@@ -80,107 +118,224 @@ const Evolution = () => {
                 <div className="container">
                     <div className="flex justify-between items-center">
                         <button onClick={() => navigate('/dashboard')} className="btn btn-secondary btn-sm">← Voltar</button>
-                        <h2>Evolução</h2>
+                        <h2>Minha Evolução</h2>
                         <div style={{ width: '80px' }}></div>
                     </div>
                 </div>
             </header>
 
             <main className="progress-main container">
-                {/* Readiness Score Card */}
+                {/* Readiness Score & Radar Chart */}
                 <section className="mb-xl">
-                    <div className="card text-center" style={{
-                        background: `linear-gradient(135deg, rgba(30, 58, 95, 0.9), rgba(30, 58, 95, 0.7)), url(${bgEvolution})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center'
-                    }}>
-                        <h3 className="mb-sm text-primary">Nível de Preparação</h3>
-                        <div className="flex items-center justify-center">
-                            <div style={{
-                                width: '120px', height: '120px', borderRadius: '50%',
-                                border: '8px solid var(--primary-light)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                fontSize: '3rem', fontWeight: 'bold', background: 'rgba(0,0,0,0.5)',
-                                backdropFilter: 'blur(5px)'
-                            }}>
-                                {readiness?.totalScore}
+                    <div className="grid grid-2 gap-lg items-stretch">
+                        <div className="card text-center flex flex-col justify-center items-center overflow-hidden" style={{
+                            background: `linear-gradient(135deg, rgba(30, 58, 95, 0.95), rgba(30, 58, 95, 0.8)), url(${bgEvolution})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            minHeight: '350px'
+                        }}>
+                            <h3 className="mb-md text-primary" style={{ position: 'relative', zIndex: 10 }}>Nível de Preparação</h3>
+                            <div className="flex items-center justify-center relative" style={{ zIndex: 10 }}>
+                                <div style={{
+                                    width: '160px', height: '160px', borderRadius: '50%',
+                                    border: '10px solid var(--primary-light)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    fontSize: '3rem', fontWeight: '800', background: 'rgba(0,0,0,0.65)',
+                                    backdropFilter: 'blur(10px)',
+                                    boxShadow: '0 0 30px rgba(102, 126, 234, 0.4)',
+                                    paddingLeft: '10px'
+                                }}>
+                                    {readiness?.totalScore || 0}
+                                    <span style={{ fontSize: '1.2rem', opacity: 0.5, marginLeft: '4px', fontWeight: '600' }}>/100</span>
+                                </div>
                             </div>
+                            <p className="mt-xl text-secondary opacity-90 uppercase tracking-widest text-xs font-bold" style={{ position: 'relative', zIndex: 10 }}>Capacidade Atlética Global</p>
                         </div>
-                        <p className="mt-md text-secondary">Seu nível de preparação atual</p>
 
-                        {/* Breakdown Mini-Grid */}
-                        <div className="grid grid-4 mt-lg gap-sm">
-                            {Object.entries(readiness?.breakdown || {}).map(([key, val]) => {
-                                const categoryMap = {
-                                    push: 'Empurrar',
-                                    pull: 'Puxar',
-                                    legs: 'Pernas',
-                                    core: 'Core',
-                                    skills: 'Habilidade'
-                                };
-                                return (
-                                    <div key={key} className="p-2 bg-tertiary rounded text-sm">
-                                        <div className="font-bold capitalize">{categoryMap[key] || key}</div>
-                                        <div className="text-primary">{val}</div>
-                                    </div>
-                                );
-                            })}
+                        <div className="card" style={{ minHeight: '350px' }}>
+                            <h3 className="mb-lg text-center" style={{ fontSize: '1.1rem' }}>Progresso por Categoria</h3>
+                            <div style={{ width: '100%', height: '300px' }}>
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
+                                        <PolarGrid stroke="rgba(255,255,255,0.15)" />
+                                        <PolarAngleAxis
+                                            dataKey="subject"
+                                            tick={{ fill: 'white', fontSize: 13, fontWeight: 500 }}
+                                        />
+                                        <PolarRadiusAxis
+                                            angle={90}
+                                            domain={[0, 100]}
+                                            tick={false}
+                                            axisLine={false}
+                                        />
+                                        <Radar
+                                            name="Resultado"
+                                            dataKey="value"
+                                            stroke="var(--primary-light)"
+                                            fill="var(--primary-light)"
+                                            fillOpacity={0.5}
+                                            strokeWidth={3}
+                                            dot={{ r: 4, fill: 'var(--primary-light)', stroke: 'white', strokeWidth: 2 }}
+                                        />
+                                    </RadarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 {/* Skills Section */}
                 <section>
-                    <h3 className="mb-lg">Minhas Habilidades</h3>
-                    <div className="grid grid-2">
-                        {skillStages.map(({ skill, stage, stats }) => {
+                    <div className="flex justify-between items-end mb-xl">
+                        <div>
+                            <h2 className="mb-xs">Habilidades & Conquistas</h2>
+                            <p className="text-secondary text-base">Acompanhe seu progresso e desbloqueie novas conquistas para elevar seu nível atlético.</p>
+                        </div>
+                        <div className="flex gap-lg items-center text-right">
+                            <div className="hidden sm:block">
+                                <div className="text-[10px] text-secondary uppercase font-black tracking-widest opacity-60">Concluídas</div>
+                                <div className="text-2xl font-black text-success">
+                                    {skillStages.filter(s => s.status === 'completed').length}
+                                </div>
+                            </div>
+                            <div className="hidden sm:block">
+                                <div className="text-[10px] text-secondary uppercase font-black tracking-widest opacity-60">Em Foco</div>
+                                <div className="text-2xl font-black text-primary">
+                                    {skillStages.filter(s => s.status === 'in_progress').length}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-1 md-grid-2 lg-grid-3 gap-xl">
+                        {skillStages.map(({ skill, stage, stats, status, masteredCount, totalCount }) => {
                             const isReps = stage.metric_type === 'reps';
                             const goal = isReps ? stage.default_prescription.reps_max : stage.default_prescription.seconds_max;
                             const current = isReps ? (stats.reps || 0) : (stats.seconds || 0);
                             const percent = Math.min(100, Math.max(0, (current / goal) * 100));
-                            const missing = Math.max(0, goal - current);
                             const unit = isReps ? 'reps' : 's';
 
-                            let message = `Faltam ${missing} ${unit}. Quase lá! 🔥`;
-                            if (current >= goal) {
-                                message = "Pronto para desbloquear! 🔓";
-                            } else if (current === 0) {
-                                message = "Comece agora para evoluir! 🚀";
-                            }
+                            const difficulty = stage.difficulty_score;
+                            const levelLabel = difficulty <= 3 ? 'Iniciante' : difficulty <= 6 ? 'Intermediário' : 'Avançado';
+                            const levelColor = difficulty <= 3 ? '#10B981' : difficulty <= 6 ? '#F59E0B' : '#EF4444';
 
                             return (
-                                <div key={skill} className="card relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-2 opacity-10 text-9xl font-bold capitalize pointer-events-none">
-                                        {skill.charAt(0)}
+                                <div
+                                    key={skill}
+                                    className={`card relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] cursor-pointer ${status === 'completed' ? 'border-success border-opacity-40' : status === 'locked' ? 'opacity-60 grayscale-[0.3]' : 'hover:border-primary-light'}`}
+                                    style={{
+                                        background: status === 'completed'
+                                            ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 0, 0, 0.5))'
+                                            : 'var(--bg-card)',
+                                        borderLeft: `6px solid ${levelColor}`
+                                    }}
+                                >
+                                    {/* Background Decor */}
+                                    <div className="absolute -top-6 -right-6 opacity-5 pointer-events-none rotate-12">
+                                        {status === 'completed' ? <Trophy size={140} /> : <TrendingUp size={140} />}
                                     </div>
-                                    <h4 className="capitalize mb-sm relative z-10">{skill.replace('_', ' ')}</h4>
-                                    <div className="mb-md relative z-10">
-                                        <span className="text-secondary text-sm">Foco Atual:</span>
-                                        <div className="text-xl font-bold text-primary mt-1">
-                                            {stage.name}
+
+                                    <div className="relative z-10">
+                                        <div className="flex justify-between items-start mb-lg">
+                                            <div className="flex flex-col gap-1.5">
+                                                <span
+                                                    className="text-[10px] font-black uppercase px-2 py-0.5 rounded shadow-sm w-fit"
+                                                    style={{ backgroundColor: levelColor, color: '#fff' }}
+                                                >
+                                                    {levelLabel}
+                                                </span>
+                                                <div className="text-[10px] font-bold text-secondary uppercase tracking-widest bg-white bg-opacity-5 px-2 py-0.5 rounded border border-white border-opacity-5 w-fit">
+                                                    Domínio {masteredCount}/{totalCount}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex flex-col items-end gap-2">
+                                                {status === 'completed' ? (
+                                                    <div className="bg-success text-white p-2 rounded-full shadow-glow">
+                                                        <Trophy size={20} />
+                                                    </div>
+                                                ) : status === 'locked' ? (
+                                                    <div className="bg-gray-800 text-secondary p-2 rounded-full border border-white border-opacity-10 opacity-60">
+                                                        <Lock size={20} />
+                                                    </div>
+                                                ) : current >= goal ? (
+                                                    <div className="bg-primary text-white p-2 rounded-full shadow-glow animate-pulse">
+                                                        <Award size={20} />
+                                                    </div>
+                                                ) : (
+                                                    <div className="bg-white bg-opacity-5 text-secondary p-2 rounded-full border border-white border-opacity-5">
+                                                        <TrendingUp size={20} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <h3 className="text-2xl font-black mb-1 capitalize tracking-tight flex items-center gap-2">
+                                            {formatSkillName(skill)}
+                                        </h3>
+
+                                        <div className="w-full h-1 bg-white bg-opacity-5 rounded-full overflow-hidden mb-xl">
+                                            <div
+                                                className={`h-full transition-all duration-1000 ${status === 'completed' ? 'bg-success shadow-glow' : 'bg-primary'}`}
+                                                style={{ width: `${(masteredCount / totalCount) * 100}%` }}
+                                            />
+                                        </div>
+
+                                        <div className="mb-lg">
+                                            <p className="text-[10px] text-secondary uppercase font-black tracking-widest opacity-50 mb-2">
+                                                {status === 'completed' ? 'CONQUISTA MÁXIMA' : status === 'locked' ? 'BLOQUEADO' : 'FOCO ATUAL'}
+                                            </p>
+                                            <h4 className={`text-base font-bold truncate ${status === 'locked' ? 'text-secondary font-normal italic' : 'text-primary'}`}>
+                                                {stage.name}
+                                            </h4>
+                                        </div>
+
+                                        {/* Progress Artifact */}
+                                        <div className="bg-black bg-opacity-40 p-4 rounded-xl border border-white border-opacity-5 shadow-inner">
+                                            <div className="flex justify-between items-end mb-3">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">Personal Record</span>
+                                                    <span className="text-lg font-black text-white">{current}{unit}</span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">Objetivo</span>
+                                                    <div className="text-sm font-bold text-white opacity-80">{goal}{unit}</div>
+                                                </div>
+                                            </div>
+
+                                            <div className="w-full bg-gray-800 h-2 rounded-full overflow-hidden shadow-inner border border-white border-opacity-5">
+                                                <div
+                                                    className={`h-full transition-all duration-1000 ease-out shadow-glow ${status === 'completed' ? 'bg-success' : current >= goal ? 'bg-primary' : 'bg-primary bg-opacity-60'}`}
+                                                    style={{ width: `${status === 'completed' ? 100 : percent}%` }}
+                                                ></div>
+                                            </div>
+
+                                            <div className="flex items-center gap-2 mt-4 text-[10px] font-black uppercase tracking-widest">
+                                                {status === 'completed' ? (
+                                                    <span className="text-success flex items-center gap-1.5 animate-bounce">
+                                                        <CheckCircle2 size={12} /> Desafio Concluído!
+                                                    </span>
+                                                ) : status === 'locked' ? (
+                                                    <span className="text-secondary opacity-60 flex items-center gap-1.5">
+                                                        <Lock size={12} /> Requer Pré-requisitos
+                                                    </span>
+                                                ) : current >= goal ? (
+                                                    <span className="text-primary flex items-center gap-1.5 ">
+                                                        <Award size={12} /> Pronto para Evoluir!
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-secondary flex items-center gap-1.5">
+                                                        <TrendingUp size={12} /> {Math.round(percent)}% concluído
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Progress Bar / Next Milestone */}
-                                    <div className="relative z-10">
-                                        <div className="flex justify-between text-xs text-secondary mb-1">
-                                            <span>
-                                                PR: <span className="text-white font-bold">{current} {unit}</span>
-                                            </span>
-                                            <span>
-                                                Meta: <span className="text-white font-bold">{goal} {unit}</span>
-                                            </span>
-                                        </div>
-                                        <div className="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                            <div
-                                                className={`h-full transition-all duration-500 ${current >= goal ? 'bg-green-500' : 'bg-primary'}`}
-                                                style={{ width: `${percent}%` }}
-                                            ></div>
-                                        </div>
-                                        <p className={`text-xs mt-2 font-medium ${current >= goal ? 'text-green-400' : 'text-secondary'}`}>
-                                            {message}
-                                        </p>
-                                    </div>
+                                    {/* Locked Mask */}
+                                    {status === 'locked' && (
+                                        <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-[1px] pointer-events-none" />
+                                    )}
                                 </div>
                             );
                         })}

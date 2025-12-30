@@ -424,7 +424,7 @@ const Dashboard = () => {
                     {/* Today's Workout Card */}
                     {displayWorkout && (
                         <div className="mb-md">
-                            <h3 className="text-lg font-bold">Seu Plano de Treino</h3>
+                            <h3 className="text-lg font-bold">Seu Treino de Hoje</h3>
                         </div>
                     )}
                     {displayWorkout ? (
