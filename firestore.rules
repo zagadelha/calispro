@@ -29,8 +29,10 @@ service cloud.firestore {
     // Feedback collection - qualquer pessoa pode enviar feedback
     match /feedback/{feedbackId} {
       allow create: if true; // Permite feedback anônimo
-      // Only admins can read/update feedback
-      allow read, update, delete: if false;
+      // Restricted to authenticated users for administrative viewing/marking as read
+      // In production, this should be further restricted to admin users
+      allow read, update: if request.auth != null;
+      allow delete: if false;
     }
   }
 }

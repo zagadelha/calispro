@@ -1,215 +1,192 @@
-import { collection, addDoc, doc, setDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc, getDocs, query, where, writeBatch } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import { getVirtualDate, getVirtualNow } from './timeTravel';
+import {
+    generateSkillWorkout,
+    generatePatternWorkout,
+    checkMastery,
+    formatSkillName
+} from './progressionSystem';
+import exercisesData from '../assets/exercises/exercises_v1_1.json';
 
-// Exercise database
-const exerciseDatabase = {
-    beginner: {
-        'Ganhar força': [
-            { name: 'Flexões', muscle_group: 'Peito/Tríceps', sets: 3, reps: 8, difficulty: 'beginner' },
-            { name: 'Agachamento', muscle_group: 'Pernas', sets: 3, reps: 12, difficulty: 'beginner' },
-            { name: 'Prancha', muscle_group: 'Core', sets: 3, reps: 30, difficulty: 'beginner' },
-            { name: 'Remada Invertida', muscle_group: 'Costas', sets: 3, reps: 8, difficulty: 'beginner' },
-            { name: 'Afundo', muscle_group: 'Pernas', sets: 3, reps: 10, difficulty: 'beginner' },
-        ],
-        'Hipertrofia': [
-            { name: 'Flexões', muscle_group: 'Peito/Tríceps', sets: 4, reps: 12, difficulty: 'beginner' },
-            { name: 'Agachamento', muscle_group: 'Pernas', sets: 4, reps: 15, difficulty: 'beginner' },
-            { name: 'Prancha', muscle_group: 'Core', sets: 3, reps: 45, difficulty: 'beginner' },
-            { name: 'Pike Push-up', muscle_group: 'Ombros', sets: 3, reps: 10, difficulty: 'beginner' },
-            { name: 'Glute Bridge', muscle_group: 'Glúteos', sets: 4, reps: 15, difficulty: 'beginner' },
-        ],
-        'Definição': [
-            { name: 'Burpees', muscle_group: 'Full Body', sets: 3, reps: 10, difficulty: 'beginner' },
-            { name: 'Mountain Climbers', muscle_group: 'Core', sets: 3, reps: 20, difficulty: 'beginner' },
-            { name: 'Jumping Jacks', muscle_group: 'Cardio', sets: 3, reps: 30, difficulty: 'beginner' },
-            { name: 'Flexões', muscle_group: 'Peito', sets: 3, reps: 10, difficulty: 'beginner' },
-            { name: 'Agachamento Jump', muscle_group: 'Pernas', sets: 3, reps: 12, difficulty: 'beginner' },
-        ],
-        'Manutenção': [
-            { name: 'Flexões', muscle_group: 'Peito', sets: 3, reps: 10, difficulty: 'beginner' },
-            { name: 'Agachamento', muscle_group: 'Pernas', sets: 3, reps: 12, difficulty: 'beginner' },
-            { name: 'Prancha', muscle_group: 'Core', sets: 3, reps: 30, difficulty: 'beginner' },
-            { name: 'Superman', muscle_group: 'Costas', sets: 3, reps: 12, difficulty: 'beginner' },
-        ]
-    },
-    intermediate: {
-        'Ganhar força': [
-            { name: 'Pull-ups', muscle_group: 'Costas', sets: 4, reps: 6, difficulty: 'intermediate' },
-            { name: 'Dips', muscle_group: 'Tríceps/Peito', sets: 4, reps: 8, difficulty: 'intermediate' },
-            { name: 'Pistol Squat (assistido)', muscle_group: 'Pernas', sets: 3, reps: 6, difficulty: 'intermediate' },
-            { name: 'Handstand Hold', muscle_group: 'Ombros', sets: 3, reps: 20, difficulty: 'intermediate' },
-            { name: 'L-Sit', muscle_group: 'Core', sets: 3, reps: 15, difficulty: 'intermediate' },
-        ],
-        'Hipertrofia': [
-            { name: 'Pull-ups', muscle_group: 'Costas', sets: 4, reps: 10, difficulty: 'intermediate' },
-            { name: 'Dips', muscle_group: 'Tríceps/Peito', sets: 4, reps: 12, difficulty: 'intermediate' },
-            { name: 'Bulgarian Split Squat', muscle_group: 'Pernas', sets: 4, reps: 12, difficulty: 'intermediate' },
-            { name: 'Pike Push-ups', muscle_group: 'Ombros', sets: 4, reps: 12, difficulty: 'intermediate' },
-            { name: 'Hanging Leg Raises', muscle_group: 'Core', sets: 4, reps: 12, difficulty: 'intermediate' },
-        ],
-        'Definição': [
-            { name: 'Burpees', muscle_group: 'Full Body', sets: 4, reps: 15, difficulty: 'intermediate' },
-            { name: 'Pull-ups', muscle_group: 'Costas', sets: 3, reps: 8, difficulty: 'intermediate' },
-            { name: 'Jump Squats', muscle_group: 'Pernas', sets: 4, reps: 15, difficulty: 'intermediate' },
-            { name: 'Mountain Climbers', muscle_group: 'Core', sets: 4, reps: 30, difficulty: 'intermediate' },
-            { name: 'Dips', muscle_group: 'Tríceps', sets: 3, reps: 10, difficulty: 'intermediate' },
-        ],
-        'Manutenção': [
-            { name: 'Pull-ups', muscle_group: 'Costas', sets: 3, reps: 8, difficulty: 'intermediate' },
-            { name: 'Dips', muscle_group: 'Tríceps/Peito', sets: 3, reps: 10, difficulty: 'intermediate' },
-            { name: 'Pistol Squat', muscle_group: 'Pernas', sets: 3, reps: 6, difficulty: 'intermediate' },
-            { name: 'Hanging Leg Raises', muscle_group: 'Core', sets: 3, reps: 10, difficulty: 'intermediate' },
-        ]
-    },
-    advanced: {
-        'Ganhar força': [
-            { name: 'Muscle-ups', muscle_group: 'Costas/Tríceps/Full Body', sets: 5, reps: 5, difficulty: 'advanced' },
-            { name: 'One-Arm Push-up', muscle_group: 'Peito', sets: 4, reps: 5, difficulty: 'advanced' },
-            { name: 'Pistol Squat', muscle_group: 'Pernas', sets: 4, reps: 8, difficulty: 'advanced' },
-            { name: 'Front Lever Hold', muscle_group: 'Core/Costas', sets: 4, reps: 10, difficulty: 'advanced' },
-            { name: 'Planche Lean', muscle_group: 'Ombros/Core', sets: 4, reps: 15, difficulty: 'advanced' },
-        ],
-        'Hipertrofia': [
-            { name: 'Weighted Pull-ups', muscle_group: 'Costas', sets: 5, reps: 8, difficulty: 'advanced' },
-            { name: 'Weighted Dips', muscle_group: 'Tríceps/Peito', sets: 5, reps: 10, difficulty: 'advanced' },
-            { name: 'Pistol Squat', muscle_group: 'Pernas', sets: 4, reps: 10, difficulty: 'advanced' },
-            { name: 'Handstand Push-ups', muscle_group: 'Ombros', sets: 4, reps: 8, difficulty: 'advanced' },
-            { name: 'Dragon Flag', muscle_group: 'Core', sets: 4, reps: 8, difficulty: 'advanced' },
-        ],
-        'Definição': [
-            { name: 'Muscle-ups', muscle_group: 'Full Body', sets: 4, reps: 6, difficulty: 'advanced' },
-            { name: 'Burpee Pull-ups', muscle_group: 'Full Body', sets: 4, reps: 12, difficulty: 'advanced' },
-            { name: 'Pistol Squat Jump', muscle_group: 'Pernas', sets: 4, reps: 8, difficulty: 'advanced' },
-            { name: 'Toes to Bar', muscle_group: 'Core', sets: 4, reps: 15, difficulty: 'advanced' },
-            { name: 'Clapping Push-ups', muscle_group: 'Peito', sets: 4, reps: 10, difficulty: 'advanced' },
-        ],
-        'Manutenção': [
-            { name: 'Muscle-ups', muscle_group: 'Full Body', sets: 3, reps: 5, difficulty: 'advanced' },
-            { name: 'Pistol Squat', muscle_group: 'Pernas', sets: 3, reps: 8, difficulty: 'advanced' },
-            { name: 'Handstand Push-ups', muscle_group: 'Ombros', sets: 3, reps: 6, difficulty: 'advanced' },
-            { name: 'Front Lever Hold', muscle_group: 'Core', sets: 3, reps: 10, difficulty: 'advanced' },
-        ]
+const exercises = exercisesData.exercises;
+
+// Mapping for equipment from UI (Onboarding/Profile) to internal IDs
+const EQUIPMENT_MAP = {
+    'Peso corporal': 'none',
+    'Barra fixa': 'pull_up_bar',
+    'Paralelas': 'dip_bars',
+    'Elásticos': 'resistance_bands'
+};
+
+/**
+ * Maps UI equipment list to internal IDs.
+ * @param {string[]} uiEquipment 
+ * @returns {string[]}
+ */
+const mapEquipment = (uiEquipment) => {
+    if (!uiEquipment || !Array.isArray(uiEquipment)) return ['none'];
+    const mapped = uiEquipment.map(item => EQUIPMENT_MAP[item]).filter(Boolean);
+    return mapped.length > 0 ? mapped : ['none'];
+};
+
+/**
+ * Initializes a user's mastery history based on their experience level.
+ * This avoids forcing experienced users to start from level 1.
+ * 
+ * @param {string} userId 
+ * @param {string} level - 'Iniciante', 'Intermediário', 'Avançado'
+ */
+const initializeMastery = async (userId, level) => {
+    if (level === 'Iniciante') return {};
+
+    const maxDifficultyToSeed = level === 'Intermediário' ? 2 : 4;
+    const history = {};
+    const batch = writeBatch(db);
+
+    // Filter exercises to seed
+    const toSeed = exercises.filter(ex => (ex.difficulty_score || 0) <= maxDifficultyToSeed);
+
+    const yesterday = new Date(getVirtualNow());
+    yesterday.setDate(yesterday.getDate() - 1);
+    const dateStr = yesterday.toISOString().split('T')[0];
+
+    for (const ex of toSeed) {
+        // Create 2 "perfect" logs to satisfy mastery criteria (2 sessions with RPE <= 4)
+        const stats = {
+            exercise_id: ex.id,
+            reps: ex.metric_type === 'reps' ? ex.default_prescription.reps_max : 0,
+            seconds: ex.metric_type === 'seconds' ? ex.default_prescription.seconds_max : 0,
+            history: [
+                {
+                    date: dateStr,
+                    reps: ex.metric_type === 'reps' ? ex.default_prescription.reps_max : 0,
+                    seconds: ex.metric_type === 'seconds' ? ex.default_prescription.seconds_max : 0,
+                    rpe: 3,
+                    goalMet: true,
+                    isInitialSeed: true
+                },
+                {
+                    date: dateStr,
+                    reps: ex.metric_type === 'reps' ? ex.default_prescription.reps_max : 0,
+                    seconds: ex.metric_type === 'seconds' ? ex.default_prescription.seconds_max : 0,
+                    rpe: 2,
+                    goalMet: true,
+                    isInitialSeed: true
+                }
+            ]
+        };
+
+        history[ex.id] = stats;
+
+        // Optionally save to Firestore to make it persistent for other logic
+        // For simplicity and performance, we'll just return it for the initial generation
+        // But the user might want to see them in stats.
     }
+
+    return history;
+};
+
+/**
+ * Simplified helper to fetch full user history for generator use
+ */
+const getFullUserHistory = async (userId) => {
+    const q = query(collection(db, 'history'), where('user_id', '==', userId));
+    const querySnapshot = await getDocs(q);
+
+    const history = {};
+    querySnapshot.forEach(doc => {
+        const data = doc.data();
+        if (!history[data.exercise_id]) {
+            history[data.exercise_id] = {
+                exercise_id: data.exercise_id,
+                history: []
+            };
+        }
+        history[data.exercise_id].history.push(data);
+    });
+
+    return history;
 };
 
 // Generate workout plan based on user profile
 export const generateWorkoutPlan = async (userId, profile) => {
+    console.log('[workoutGenerator] Generating NEW plan for:', userId, profile);
     const { experience_level, goal, days_per_week, equipment } = profile;
 
-    // Map experience level to database key
-    const levelMap = {
-        'Iniciante': 'beginner',
-        'Intermediário': 'intermediate',
-        'Avançado': 'advanced'
-    };
+    const internalEquipment = mapEquipment(equipment);
 
-    const level = levelMap[experience_level];
-    const exercises = exerciseDatabase[level][goal] || exerciseDatabase[level]['Manutenção'];
+    // 1. Initialize Mastery (Virtual for generation)
+    // We don't write to DB yet to avoid cluttering history with fake logs
+    // unless the user specifically wants that. 
+    // Here we'll use it to seed the generator.
+    const virtualHistory = await initializeMastery(userId, experience_level);
 
-    // Determine number of workout days
+    // 2. Determine Plan Details
     const daysCount = parseInt(days_per_week) || 3;
-
-    // Create workout splits
-    const workoutDays = [];
-
-    if (daysCount <= 3) {
-        // Full body workouts
-        workoutDays.push({
-            day_label: 'A',
-            name: 'Treino Full Body A',
-            exercises: exercises.slice(0, 5)
-        });
-        if (daysCount >= 2) {
-            workoutDays.push({
-                day_label: 'B',
-                name: 'Treino Full Body B',
-                exercises: exercises.slice(2, 7)
-            });
-        }
-        if (daysCount >= 3) {
-            workoutDays.push({
-                day_label: 'C',
-                name: 'Treino Full Body C',
-                exercises: exercises.slice(1, 6)
-            });
-        }
-    } else {
-        // Split workouts
-        workoutDays.push({
-            day_label: 'A',
-            name: 'Treino A - Empurrar + Core',
-            exercises: exercises.filter(e =>
-                e.muscle_group.includes('Peito') ||
-                e.muscle_group.includes('Ombros') ||
-                e.muscle_group.includes('Tríceps') ||
-                e.muscle_group.includes('Core')
-            )
-        });
-        workoutDays.push({
-            day_label: 'B',
-            name: 'Treino B - Puxar',
-            exercises: exercises.filter(e =>
-                e.muscle_group.includes('Costas') ||
-                e.muscle_group.includes('Full Body')
-            )
-        });
-        workoutDays.push({
-            day_label: 'C',
-            name: 'Treino C - Pernas',
-            exercises: exercises.filter(e =>
-                e.muscle_group.includes('Pernas') ||
-                e.muscle_group.includes('Glúteos')
-            )
-        });
-        if (daysCount >= 5) {
-            workoutDays.push({
-                day_label: 'D',
-                name: 'Treino D - Cardio/Condicionamento',
-                exercises: exercises.filter(e =>
-                    e.muscle_group.includes('Cardio') ||
-                    e.muscle_group.includes('Full Body')
-                )
-            });
-        }
-    }
+    const skillRotation = ['handstand', 'front_lever', 'planche', 'back_lever'];
 
     // Save plan to Firestore
     const planRef = await addDoc(collection(db, 'plans'), {
         user_id: userId,
-        name: `Plano ${experience_level} - ${goal}`,
+        name: `Plano CalisPro - ${experience_level}`,
         level: experience_level,
         goal: goal,
         days_per_week: days_per_week,
-        created_at: new Date().toISOString(),
-        active: true
+        created_at: getVirtualNow().toISOString(),
+        active: true,
+        version: '1.1' // New system version
     });
 
-    // Create initial workouts for the week
-    const today = new Date();
-    for (let i = 0; i < workoutDays.length; i++) {
+    // 3. Create initial workouts for the week
+    const today = getVirtualNow();
+
+    for (let i = 0; i < daysCount; i++) {
         const workoutDate = new Date(today);
         workoutDate.setDate(today.getDate() + i);
+        const dateStr = workoutDate.toISOString().split('T')[0];
 
+        // Pick skill based on rotation
+        const targetSkill = skillRotation[i % skillRotation.length];
+
+        // Generate workout using new system logic
+        const genWorkout = generateSkillWorkout(targetSkill, virtualHistory, internalEquipment, dateStr, true);
+
+        if (genWorkout.error) {
+            console.warn(`[workoutGenerator] Skip day ${i}: ${genWorkout.error}`);
+            continue;
+        }
+
+        // Save Workout Doc
         const workoutRef = await addDoc(collection(db, 'workouts'), {
             user_id: userId,
             plan_id: planRef.id,
-            date: workoutDate.toISOString().split('T')[0],
-            day_label: workoutDays[i].day_label,
-            name: workoutDays[i].name,
+            date: dateStr,
+            day_label: String.fromCharCode(65 + i), // A, B, C...
+            name: genWorkout.name,
             status: 'pending',
             difficulty_feedback: null,
-            notes: ''
+            notes: '',
+            readiness_score: genWorkout.readiness_score || 0,
+            skill_id: targetSkill,
+            skill_media_url: genWorkout.skill_media_url || null
         });
 
         // Add exercises to workout
-        for (let j = 0; j < workoutDays[i].exercises.length; j++) {
-            const exercise = workoutDays[i].exercises[j];
+        const exercisesToAdd = genWorkout.exercises || [];
+        for (let j = 0; j < exercisesToAdd.length; j++) {
+            const ex = exercisesToAdd[j];
             await addDoc(collection(db, 'workout_exercises'), {
                 workout_id: workoutRef.id,
-                exercise_name: exercise.name,
-                muscle_group: exercise.muscle_group,
-                target_sets: exercise.sets,
-                target_reps: exercise.reps,
+                exercise_name: ex.exercise_name || ex.name,
+                muscle_group: ex.muscle_group,
+                target_sets: ex.target_sets,
+                target_reps: ex.target_reps,
+                target_seconds: ex.target_seconds || null,
+                metric_type: ex.metric_type || 'reps',
+                type: ex.type,
+                original_id: ex.original_id,
+                difficulty_score: ex.difficulty_score || 0,
                 order_index: j,
                 completed: false
             });
@@ -218,15 +195,17 @@ export const generateWorkoutPlan = async (userId, profile) => {
 
     // Update user's current plan
     await setDoc(doc(db, 'users', userId), {
-        current_plan_id: planRef.id
+        current_plan_id: planRef.id,
+        experience_level: experience_level,
+        goal: goal,
+        equipment: internalEquipment // Store mapped equipment
     }, { merge: true });
 
     return planRef.id;
 };
 
-import { getVirtualDate } from './timeTravel';
 
-// Get today's workout
+// Get today's workout (Updated to support new format)
 export const getTodayWorkout = async (userId) => {
     const today = getVirtualDate();
 
@@ -242,6 +221,7 @@ export const getTodayWorkout = async (userId) => {
         return null;
     }
 
+    // If multiple found (e.g. specialized + plan), pick most recent or plan
     const workoutDoc = querySnapshot.docs[0];
     const workout = { id: workoutDoc.id, ...workoutDoc.data() };
 
@@ -259,3 +239,4 @@ export const getTodayWorkout = async (userId) => {
 
     return workout;
 };
+

@@ -52,9 +52,22 @@ const WorkoutPlan = () => {
                 );
 
                 const exercisesSnapshot = await getDocs(exercisesQuery);
+                // Enrich with difficulty score from database for sorting if missing
+                const exerciseData = await import('../assets/exercises/exercises_v1_1.json');
+                const exerciseList = exerciseData.default?.exercises || exerciseData.exercises;
+                const exerciseMap = new Map(exerciseList.map(ex => [ex.id, ex]));
+
                 workoutData.exercises = exercisesSnapshot.docs
-                    .map(doc => ({ id: doc.id, ...doc.data() }))
-                    .sort((a, b) => a.order_index - b.order_index);
+                    .map(doc => {
+                        const data = doc.data();
+                        const dbEx = exerciseMap.get(data.original_id);
+                        return {
+                            id: doc.id,
+                            ...data,
+                            difficulty_score: data.difficulty_score || dbEx?.difficulty_score || 0
+                        };
+                    })
+                    .sort((a, b) => a.difficulty_score - b.difficulty_score);
 
                 workoutsData.push(workoutData);
             }
@@ -209,7 +222,7 @@ const WorkoutPlan = () => {
                                                         </div>
                                                         <div className="plan-exercise-sets">
                                                             <span className="badge badge-primary">
-                                                                {exercise.target_sets}×{exercise.target_reps}
+                                                                {exercise.target_sets}×{exercise.metric_type === 'seconds' ? `${exercise.target_seconds}s` : (exercise.prescription || exercise.target_reps)}
                                                             </span>
                                                         </div>
                                                     </div>

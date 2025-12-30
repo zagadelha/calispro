@@ -9,6 +9,7 @@ import {
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { auth, googleProvider, db, storage } from '../config/firebase';
+import { getVirtualNow } from '../utils/timeTravel';
 
 const AuthContext = createContext({});
 
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         await setDoc(doc(db, 'users', userCredential.user.uid), {
             name: name,
             email: email,
-            created_at: new Date().toISOString(),
+            created_at: getVirtualNow().toISOString(),
             profile_completed: false
         });
 
@@ -49,7 +50,7 @@ export const AuthProvider = ({ children }) => {
             await setDoc(doc(db, 'users', result.user.uid), {
                 name: result.user.displayName,
                 email: result.user.email,
-                created_at: new Date().toISOString(),
+                created_at: getVirtualNow().toISOString(),
                 profile_completed: false
             });
         }
@@ -64,9 +65,13 @@ export const AuthProvider = ({ children }) => {
 
     // Load user profile from Firestore
     const loadUserProfile = async (uid) => {
-        const userDoc = await getDoc(doc(db, 'users', uid));
-        if (userDoc.exists()) {
-            setUserProfile(userDoc.data());
+        try {
+            const userDoc = await getDoc(doc(db, 'users', uid));
+            if (userDoc.exists()) {
+                setUserProfile(userDoc.data());
+            }
+        } catch (error) {
+            console.error('[AuthContext] Error loading user profile:', error);
         }
     };
 

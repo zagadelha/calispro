@@ -1,8 +1,20 @@
 
-export const getVirtualDate = () => {
+export const getTodayStr = () => {
     const stored = localStorage.getItem('calispro_virtual_date');
     if (stored) return stored;
     return new Date().toISOString().split('T')[0];
+};
+
+export const getVirtualDate = getTodayStr; // Alias for backward compatibility
+
+export const getVirtualNow = () => {
+    const todayStr = getTodayStr();
+    const now = new Date();
+    // Create a date object using the virtual date string and current time
+    const [year, month, day] = todayStr.split('-').map(Number);
+    const virtualNow = new Date(now);
+    virtualNow.setFullYear(year, month - 1, day);
+    return virtualNow;
 };
 
 export const setVirtualDate = (dateStr) => {

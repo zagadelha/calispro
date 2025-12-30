@@ -1,7 +1,8 @@
 import exercisesData from '../assets/exercises/exercises_v1_1.json';
+import { getVirtualNow } from './timeTravel';
 
 const exercises = exercisesData.exercises;
-const exerciseMap = new Map(exercises.map(ex => [ex.id, ex]));
+export const exerciseMap = new Map(exercises.map(ex => [ex.id, ex]));
 
 /**
  * Formats a skill name from database format to display format.
@@ -10,7 +11,7 @@ const exerciseMap = new Map(exercises.map(ex => [ex.id, ex]));
  * @param {string} skillName - The skill name in database format
  * @returns {string} - Formatted skill name for display
  */
-const formatSkillName = (skillName) => {
+export const formatSkillName = (skillName) => {
     if (!skillName) return '';
 
     // Split by underscore, capitalize each part, join with hyphen
@@ -56,31 +57,15 @@ export const checkMastery = (exercise, stats) => {
 
     // Consistency Check (New Logic)
     if (stats.history && Array.isArray(stats.history)) {
-        // Find sessions that meet criteria:
-        // 1. Value >= Target
-        // 2. RPE <= 4 (Easy to Hard, but not Max Effort which is 5)
-        // 3. Explicitly Goal Met
         const validSessions = stats.history.filter(session => {
             const val = metric_type === 'reps' ? (session.reps || 0) : (session.seconds || 0);
-            // If RPE is missing, assume it was okay (safe default for older data), unless explicit fail
             const rpe = session.rpe !== undefined ? session.rpe : 3;
-            const met = session.goalMet !== false; // Assume true unless marked false
+            const met = session.goalMet !== false;
 
-            const valid = val >= target && rpe <= 4 && met;
-
-            if (!valid && val > 0) {
-                console.log(`  ❌ [${exercise.id}] Invalid session: val=${val}/${target}, rpe=${rpe}, met=${met}`);
-            }
-
-            return valid;
+            return val >= target && rpe <= 4 && met;
         });
 
         const mastered = validSessions.length >= 2;
-
-        if (stats.history.length > 0) {
-            console.log(`[Mastery] ${exercise.id}: ${validSessions.length}/2 valid (${stats.history.length} total) => ${mastered ? '✅ MASTERED' : '❌ not yet'}`);
-        }
-
         return mastered;
     }
 
@@ -177,6 +162,22 @@ export const evaluateProgression = (exerciseId, performance) => {
  * Existing helper
  */
 export const getExercise = (id) => exerciseMap.get(id);
+
+/**
+ * Gets the representative media URL for a skill.
+ * Typically the hardest exercise associated with that skill.
+ * @param {string} skillName 
+ * @returns {string|null}
+ */
+export const getSkillMediaUrl = (skillName) => {
+    if (!skillName) return null;
+    const skillExercises = exercises.filter(ex => ex.skill === skillName);
+    if (skillExercises.length === 0) return null;
+
+    // Pick the hardest exercise for that skill to show the goal
+    const hardest = [...skillExercises].sort((a, b) => (b.difficulty_score || 0) - (a.difficulty_score || 0))[0];
+    return hardest.media?.url || null;
+};
 
 /**
  * Existing helper
@@ -293,10 +294,10 @@ export const getUserSkillStage = (skillName, userHistory) => {
         const unlocked = isExerciseUnlocked(ex.id, allMasteredIds); // 🔥 Use global mastered list
         const mastered = skillMasteredIds.includes(ex.id);
 
-        console.log(`  - ${ex.id} (diff:${ex.difficulty_score}): unlocked=${unlocked}, mastered=${mastered}`);
+        /* console.log(`  - ${ex.id} (diff:${ex.difficulty_score}): unlocked=${unlocked}, mastered=${mastered}`); */
 
         if (unlocked && !mastered) {
-            console.log(`  ✅ [Skill: ${skillName}] Selected: ${ex.id}`);
+            /* console.log(`  ✅ [Skill: ${skillName}] Selected: ${ex.id}`); */
             return ex;
         }
     }
@@ -329,6 +330,35 @@ export const getAllSkills = () => {
     return Array.from(skills);
 };
 
+/**
+ * Phase 1 Rotation Logic.
+ * In Phase 1, the primary skill focus rotates every single session 
+ * to build foundational strength across all patterns.
+ * Core Phase 1 Skills: Handstand, Front-Lever, Back-Lever, Planche.
+ * 
+ * @param {object} userHistory - Full history map
+ * @returns {string} - The next skill to train
+ */
+export const getSkillRotation = (userHistory) => {
+    const phase1Skills = ['handstand', 'front_lever', 'back_lever', 'planche'];
+
+    // Count unique workout dates to determine the rotation index
+    const allDates = new Set();
+    Object.values(userHistory).forEach(stat => {
+        if (stat.history) {
+            stat.history.forEach(h => {
+                if (h.date) allDates.add(h.date);
+            });
+        }
+    });
+
+    const workoutCount = allDates.size;
+    const skillIndex = workoutCount % phase1Skills.length;
+
+    console.log(`[Rotation] Phase 1 Logic: ${workoutCount} workouts found. Index: ${skillIndex}`);
+    return phase1Skills[skillIndex];
+};
+
 // --- READINESS / ATHLETE SCORE LOGIC ---
 
 /**
@@ -349,9 +379,10 @@ export const getAllSkills = () => {
  * 3. Global Adjustment: Bonus for consistency (workouts in last 7 days).
  * 
  * @param {object} userHistory - { exerciseId: { reps: number, history: [{date, rpe, ...}] } }
+ * @param {string} referenceDateStr - Optional. The "current" date to use for calculations (YYYY-MM-DD).
  * @returns {object} - { totalScore: number, breakdown: { push: number, pull: number, ... } }
  */
-export const calculateReadinessScore = (userHistory) => {
+export const calculateReadinessScore = (userHistory, referenceDateStr = null) => {
     const categories = [
         { key: 'push', weight: 0.20, filter: ex => ex.pattern === 'push' },
         { key: 'pull', weight: 0.20, filter: ex => ex.pattern === 'pull' },
@@ -371,17 +402,17 @@ export const calculateReadinessScore = (userHistory) => {
         }
     });
     // Sort logs by date descending
-    allLogs.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+    allLogs.sort((a, b) => new Date((b.date || 0) + 'T12:00:00') - new Date((a.date || 0) + 'T12:00:00'));
 
     // Consistency Bonus Calculation
     // Count unique days with workouts in the last 7 days
-    const now = new Date();
-    const sevenDaysAgo = new Date();
+    const now = referenceDateStr ? new Date(referenceDateStr + 'T12:00:00') : getVirtualNow();
+    const sevenDaysAgo = new Date(now);
     sevenDaysAgo.setDate(now.getDate() - 7);
 
     const recentDates = new Set();
     allLogs.forEach(log => {
-        const logDate = new Date(log.date || 0);
+        const logDate = new Date((log.date || 0) + 'T12:00:00');
         if (logDate >= sevenDaysAgo && logDate <= now) {
             recentDates.add(logDate.toDateString());
         }
@@ -414,7 +445,7 @@ export const calculateReadinessScore = (userHistory) => {
             }
         });
         // Sort descenting
-        catLogs.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        catLogs.sort((a, b) => new Date((b.date || 0) + 'T12:00:00') - new Date((a.date || 0) + 'T12:00:00'));
 
         // Take last 3 relevant logs for this category
         const last3 = catLogs.slice(0, 3);
@@ -451,7 +482,12 @@ export const calculateReadinessScore = (userHistory) => {
     });
 
     // Final Global Score
-    let finalScore = totalWeightedScore + consistencyBonus;
+    // Only apply consistency bonus if user has at least some base proficiency 
+    // to avoid a "phantom" score of 10 for absolute beginners.
+    let finalScore = totalWeightedScore;
+    if (totalWeightedScore > 0) {
+        finalScore += consistencyBonus;
+    }
 
     // Clamp 0-100
     finalScore = Math.min(100, Math.max(0, finalScore));
@@ -493,19 +529,23 @@ export const calculateReadinessScore = (userHistory) => {
  * @param {string} targetSkill - e.g. 'handstand' (if null/empty, generates prep)
  * @param {object} userHistory - { exercise_id: stats }
  * @param {string[]} availableEquipment - e.g. ['pull_up_bar', 'dip_bars']
+ * @param {string} referenceDateStr - Optional. The "current" date (YYYY-MM-DD).
  * @returns {object} - Workout plan object
  */
-export const generateSkillWorkout = (targetSkill, userHistory, availableEquipment = []) => {
+export const generateSkillWorkout = (targetSkill, userHistory, availableEquipment = [], referenceDateStr = null, isPhase1 = false, level = null) => {
     console.log('='.repeat(60));
-    console.log('[generateSkillWorkout] START');
+    console.log(`[generateSkillWorkout] START - Level Override: ${level || 'none'}`);
     console.log('[History] Total exercises:', Object.keys(userHistory).length);
     console.log('[History] Sample:', Object.keys(userHistory).slice(0, 5));
     console.log('[Target Skill]:', targetSkill || '(none - prep mode)');
 
-    const readiness = calculateReadinessScore(userHistory);
-    const score = readiness.totalScore;
+    const readiness = calculateReadinessScore(userHistory, referenceDateStr);
+    let score = level === 'beginner' ? 25 :
+        level === 'intermediate' ? 55 :
+            level === 'advanced' ? 85 :
+                readiness.totalScore;
 
-    console.log('[Readiness] Score:', score, readiness.breakdown);
+    console.log('[Readiness] Final Score used:', score, `(Source: ${level ? 'Manual ' + level : 'Readiness System'})`);
 
     // Helper: Filter by equipment
     const isEquipmentMet = (ex) => {
@@ -613,7 +653,30 @@ export const generateSkillWorkout = (targetSkill, userHistory, availableEquipmen
 
 
     if (targetSkill) {
-        skillStage = getUserSkillStage(targetSkill, userHistory);
+        if (level) {
+            // Manual Level Mode: Pick hardest exercise for the skill within difficulty range
+            const diffRange = level === 'beginner' ? [1, 3] : level === 'intermediate' ? [4, 6] : [7, 10];
+            const skillExercises = exercises
+                .filter(ex => ex.skill === targetSkill)
+                .filter(ex => ex.difficulty_score >= diffRange[0] && ex.difficulty_score <= diffRange[1])
+                .filter(isEquipmentMet)
+                .sort((a, b) => b.difficulty_score - a.difficulty_score);
+
+            skillStage = skillExercises.length > 0 ? skillExercises[0] : null;
+
+            // Fallback: If no exercise in that exact range, pick any for that skill that meets equipment
+            if (!skillStage) {
+                const anySkillEx = exercises
+                    .filter(ex => ex.skill === targetSkill)
+                    .filter(isEquipmentMet)
+                    .sort((a, b) => b.difficulty_score - a.difficulty_score);
+
+                // If advanced, pick hardest. If beginner, pick easiest.
+                skillStage = level === 'advanced' ? anySkillEx[0] : anySkillEx[anySkillEx.length - 1];
+            }
+        } else {
+            skillStage = getUserSkillStage(targetSkill, userHistory);
+        }
 
         // ✅ NEW: If skill is maxed (returns null), try rotating to another skill
         if (!skillStage) {
@@ -653,6 +716,14 @@ export const generateSkillWorkout = (targetSkill, userHistory, availableEquipmen
 
     // Filter available exercises (Unlocked + Equipment)
     const getCandidates = (pattern) => {
+        if (level) {
+            const diffRange = level === 'beginner' ? [1, 3] : level === 'intermediate' ? [4, 6] : [7, 10];
+            return exercises
+                .filter(ex => ex.pattern === pattern)
+                .filter(ex => ex.difficulty_score >= diffRange[0] && ex.difficulty_score <= diffRange[1])
+                .filter(isEquipmentMet)
+                .sort((a, b) => a.difficulty_score - b.difficulty_score);
+        }
         return getAvailableExercisesByPattern(pattern, masteredIds)
             .filter(isEquipmentMet);
     };
@@ -787,20 +858,158 @@ export const generateSkillWorkout = (targetSkill, userHistory, availableEquipmen
         return {
             ...formatExerciseForUI(ex),
             target_sets: sets,
-            target_reps: pReps
+            prescription: pReps, // Display string
+            target_reps: ex.metric_type === 'reps' ?
+                (repsMode === 'min' ? ex.default_prescription.reps_min :
+                    repsMode === 'max' ? ex.default_prescription.reps_max :
+                        ex.default_prescription.reps_max) : null,
+            target_seconds: ex.metric_type === 'seconds' ?
+                (repsMode === 'min' ? ex.default_prescription.seconds_min :
+                    repsMode === 'max' ? ex.default_prescription.seconds_max :
+                        ex.default_prescription.seconds_max) : null
         };
     };
 
     return {
-        name: `Foco em ${skillNameForTitle}`,
+        name: isPhase1 ? `Objetivo: ${skillNameForTitle}` : `Foco em ${skillNameForTitle}`,
         description: typeLabel,
+        skill_id: targetSkill,
+        skill_media_url: getSkillMediaUrl(targetSkill),
         readiness_score: score,
         exercises: [
-            { type: 'Skill', ...buildPrescription(skillStage) },
-            { type: 'Strength', ...buildPrescription(strengthEx) },
-            { type: 'Core', ...buildPrescription(coreEx) },
-            { type: 'Accessory', ...buildPrescription(accessoryEx) }
-        ].filter(e => e.original_id)
+            { id: skillStage?.id, type: 'Skill', ...buildPrescription(skillStage) },
+            { id: strengthEx?.id, type: 'Strength', ...buildPrescription(strengthEx) },
+            { id: coreEx?.id, type: 'Core', ...buildPrescription(coreEx) },
+            { id: accessoryEx?.id, type: 'Accessory', ...buildPrescription(accessoryEx) }
+        ]
+            .filter(e => e.original_id)
+            .sort((a, b) => (a.difficulty_score || 0) - (b.difficulty_score || 0))
+    };
+};
+
+/**
+ * Generates a workout focused on a specific movement pattern.
+ * @param {string} pattern - 'push', 'pull', 'legs', 'core'
+ * @param {object} userHistory 
+ * @param {string[]} availableEquipment 
+ * @param {string} referenceDateStr - Optional. The "current" date (YYYY-MM-DD).
+ */
+export const generatePatternWorkout = (pattern, userHistory, availableEquipment = [], referenceDateStr = null, level = null) => {
+    console.log(`[generatePatternWorkout] START - Pattern: ${pattern}, Level Override: ${level || 'none'}`);
+
+    // For pattern-based workouts, the "Skill" component is actually the hardest
+    // available exercise in that pattern.
+
+    const readiness = calculateReadinessScore(userHistory, referenceDateStr);
+    let score = level === 'beginner' ? 25 :
+        level === 'intermediate' ? 55 :
+            level === 'advanced' ? 85 :
+                readiness.totalScore;
+
+    const isEquipmentMet = (ex) => {
+        if (!ex.equipment || ex.equipment.includes('none')) return true;
+        return ex.equipment.every(req =>
+            req === 'none' || availableEquipment.includes(req)
+        );
+    };
+
+    const masteredIds = exercises
+        .filter(ex => {
+            const stats = userHistory[ex.id];
+            return stats && checkMastery(ex, stats);
+        })
+        .map(ex => ex.id);
+
+    const getCandidates = (pat) => {
+        if (level) {
+            const diffRange = level === 'beginner' ? [1, 3] : level === 'intermediate' ? [4, 6] : [7, 10];
+            return exercises
+                .filter(ex => ex.pattern === pat)
+                .filter(ex => ex.difficulty_score >= diffRange[0] && ex.difficulty_score <= diffRange[1])
+                .filter(isEquipmentMet)
+                .sort((a, b) => a.difficulty_score - b.difficulty_score);
+        }
+        return getAvailableExercisesByPattern(pat, masteredIds)
+            .filter(isEquipmentMet);
+    };
+
+    const selectExercise = (candidates, usedIds) => {
+        if (!candidates || candidates.length === 0) return null;
+
+        const filtered = candidates.filter(ex => !usedIds.has(ex.id));
+        const pool = filtered.length > 0 ? filtered : candidates;
+
+        // Pick hardest non-mastered OR hardest mastered
+        const nonMastered = pool.filter(ex => !checkMastery(ex, userHistory[ex.id]));
+
+        if (nonMastered.length > 0) {
+            // Pick the one with highest difficulty that is still within reach
+            return nonMastered.sort((a, b) => b.difficulty_score - a.difficulty_score)[0];
+        }
+
+        return pool.sort((a, b) => b.difficulty_score - a.difficulty_score)[0];
+    };
+
+    const usedIds = new Set();
+
+    // 1. Main Exercise (Hardest available in selected pattern)
+    const mainCandidates = getCandidates(pattern);
+    const mainEx = selectExercise(mainCandidates, usedIds);
+    if (mainEx) usedIds.add(mainEx.id);
+
+    // 2. Second Exercise (Same pattern if possible, or related)
+    const secondEx = selectExercise(mainCandidates, usedIds);
+    if (secondEx) usedIds.add(secondEx.id);
+
+    // 3. Complementary (Antagonist or Core)
+    const compPattern = pattern === 'push' ? 'pull' :
+        pattern === 'pull' ? 'push' :
+            pattern === 'legs' ? 'core' : 'legs';
+    const compCandidates = getCandidates(compPattern);
+    const compEx = selectExercise(compCandidates, usedIds);
+    if (compEx) usedIds.add(compEx.id);
+
+    // 4. Core (if not already selected)
+    const coreCandidates = getCandidates('core');
+    const coreEx = selectExercise(coreCandidates, usedIds);
+    if (coreEx) usedIds.add(coreEx.id);
+
+    // Prescription logic
+    const buildPrescription = (ex) => {
+        if (!ex) return null;
+        let sets = score > 60 ? 4 : score > 30 ? 3 : 2;
+        let repsDisplay = ex.metric_type === 'reps' ?
+            `${ex.default_prescription.reps_min}-${ex.default_prescription.reps_max}` :
+            `${ex.default_prescription.seconds_min}-${ex.default_prescription.seconds_max}s`;
+
+        return {
+            ...formatExerciseForUI(ex),
+            target_sets: sets,
+            prescription: repsDisplay,
+            target_reps: ex.metric_type === 'reps' ? ex.default_prescription.reps_max : null,
+            target_seconds: ex.metric_type === 'seconds' ? ex.default_prescription.seconds_max : null
+        };
+    };
+
+    const patternLabels = {
+        'push': 'Empurrar',
+        'pull': 'Puxar',
+        'legs': 'Pernas',
+        'core': 'Core'
+    };
+
+    return {
+        name: `Treino de ${patternLabels[pattern] || pattern}`,
+        description: 'Treino especializado fora do plano',
+        readiness_score: score,
+        exercises: [
+            { id: mainEx?.id, type: 'Main', ...buildPrescription(mainEx) },
+            { id: secondEx?.id, type: 'Support', ...buildPrescription(secondEx) },
+            { id: compEx?.id, type: 'Balance', ...buildPrescription(compEx) },
+            { id: coreEx?.id, type: 'Core', ...buildPrescription(coreEx) }
+        ]
+            .filter(e => e.original_id)
+            .sort((a, b) => (a.difficulty_score || 0) - (b.difficulty_score || 0))
     };
 };
 
@@ -813,6 +1022,7 @@ export const formatExerciseForUI = (exercise) => {
         target_sets: exercise.default_prescription.sets,
         target_reps: `${exercise.default_prescription.reps_min}-${exercise.default_prescription.reps_max}`,
         difficulty: `Lvl ${exercise.difficulty_score}`,
+        difficulty_score: exercise.difficulty_score,
         original_id: exercise.id,
         media: exercise.media // Ensure media is passed
     };

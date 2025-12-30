@@ -5,6 +5,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { getVirtualNow } from '../utils/timeTravel';
 
 const Progress = () => {
     const [workouts, setWorkouts] = useState([]);
@@ -34,10 +35,13 @@ const Progress = () => {
             );
 
             const querySnapshot = await getDocs(q);
-            const workoutData = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+            const today = getVirtualNow().toISOString().split('T')[0];
+            const workoutData = querySnapshot.docs
+                .map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }))
+                .filter(w => (w.date || '') <= today);
 
             // Sort by date in JavaScript (descending)
             workoutData.sort((a, b) => {
@@ -49,35 +53,50 @@ const Progress = () => {
             setWorkouts(workoutData);
 
             // Calculate stats
-            const now = new Date();
+            const now = getVirtualNow();
             const weekStart = startOfWeek(now, { locale: ptBR });
             const weekEnd = endOfWeek(now, { locale: ptBR });
             const monthStart = startOfMonth(now);
             const monthEnd = endOfMonth(now);
 
             const thisWeekCount = workoutData.filter(w => {
-                const workoutDate = new Date(w.date);
+                const workoutDate = new Date(w.date + 'T12:00:00');
                 return workoutDate >= weekStart && workoutDate <= weekEnd;
             }).length;
 
             const thisMonthCount = workoutData.filter(w => {
-                const workoutDate = new Date(w.date);
+                const workoutDate = new Date(w.date + 'T12:00:00');
                 return workoutDate >= monthStart && workoutDate <= monthEnd;
             }).length;
 
-            // Calculate streak
+            // Calculate streak (improved logic)
             let streak = 0;
             const sortedDates = [...new Set(workoutData.map(w => w.date))].sort().reverse();
 
-            for (let i = 0; i < sortedDates.length; i++) {
-                const currentDate = new Date(sortedDates[i]);
-                const expectedDate = new Date();
-                expectedDate.setDate(expectedDate.getDate() - i);
+            if (sortedDates.length > 0) {
+                const todayStr = format(getVirtualNow(), 'yyyy-MM-dd');
+                const yesterday = getVirtualNow();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = format(yesterday, 'yyyy-MM-dd');
 
-                if (currentDate.toISOString().split('T')[0] === expectedDate.toISOString().split('T')[0]) {
-                    streak++;
-                } else {
-                    break;
+                // Streak is active if the most recent workout was today OR yesterday
+                if (sortedDates[0] === todayStr || sortedDates[0] === yesterdayStr) {
+                    streak = 1;
+                    // For subsequent dates, each must be exactly one day before the previous one
+                    for (let i = 0; i < sortedDates.length - 1; i++) {
+                        const d1 = new Date(sortedDates[i] + 'T12:00:00');
+                        const d2 = new Date(sortedDates[i + 1] + 'T12:00:00');
+
+                        const oneDayBeforeD1 = new Date(d1);
+                        oneDayBeforeD1.setDate(oneDayBeforeD1.getDate() - 1);
+                        const oneDayBeforeD1Str = format(oneDayBeforeD1, 'yyyy-MM-dd');
+
+                        if (sortedDates[i + 1] === oneDayBeforeD1Str) {
+                            streak++;
+                        } else {
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -179,7 +198,7 @@ const Progress = () => {
                                             <div>
                                                 <h4 className="workout-history-name">{workout.name}</h4>
                                                 <p className="text-secondary text-sm">
-                                                    {format(new Date(workout.date), "d 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                                                    {format(new Date(workout.date + 'T12:00:00'), "d 'de' MMMM 'de' yyyy", { locale: ptBR })}
                                                 </p>
                                             </div>
 

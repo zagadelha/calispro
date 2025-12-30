@@ -18,10 +18,13 @@ import WorkoutPlan from './pages/WorkoutPlan';
 import Profile from './pages/Profile';
 import Progress from './pages/Progress';
 import Evolution from './pages/Evolution';
+import AdminDashboard from './pages/AdminDashboard';
+import ExerciseTreeReport from './pages/ExerciseTreeReport';
+import FeedbackReport from './pages/FeedbackReport';
 
 function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <InstallProvider>
         <AuthProvider>
           <InstallPrompt />
@@ -82,6 +85,30 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Evolution />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/exercises"
+              element={
+                <ProtectedRoute>
+                  <ExerciseTreeReport />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/feedback"
+              element={
+                <ProtectedRoute>
+                  <FeedbackReport />
                 </ProtectedRoute>
               }
             />

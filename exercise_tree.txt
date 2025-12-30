@@ -1,0 +1,155 @@
+EXERCISE PROGRESSION TREE (By Pattern)
+======================================
+
+PATTERN: PUSH
+-------------
+└─ Knee Push-Up (push_up_knee) (Diff: 2)
+   └─ Incline Push-Up (incline_push_up) (Diff: 2)
+      └─ Push-Up (push_up) (Diff: 3)
+         └─ Decline Push-Up (decline_push_up) (Diff: 6)
+            └─ Archer Push-Up (archer_push_up) (Diff: 6)
+               └─ Pseudo Planche Push-Up (pseudo_planche_push_up) [Skill: planche] (Diff: 6)
+                  └─ Planche Lean (planche_lean) [Skill: planche] (Diff: 9)
+                     └─ Tuck Planche (tuck_planche) [Skill: planche] (Diff: 9)
+                        └─ Planche Push-Up (planche_push_up) [Skill: planche] (Diff: 10)
+└─ Pike Push-Up (Beginner) (pike_push_up_beginner) [Skill: handstand] (Diff: 3)
+   └─ Pike Push-Up (Advanced) (pike_push_up_advanced) [Skill: handstand] (Diff: 6)
+      └─ Handstand Push-Up (handstand_push_up) [Skill: handstand] (Diff: 10)
+└─ Dip (dip) (Diff: 5)
+
+PATTERN: PULL
+-------------
+└─ Scapular Pull-Up (scapular_pull_up) (Diff: 2)
+   └─ Dead Hang (dead_hang) (Diff: 3)
+      └─ Assisted Chin-Up (assisted_chin_up) (Diff: 3)
+         └─ Chin-Up (chin_up) (Diff: 6)
+            └─ Pull-Up (pull_up) (Diff: 6)
+               └─ Commando Pull-Up (commando_pull_up) (Diff: 6)
+                  └─ Typewriter Pull-Up (typewriter_pull_up) (Diff: 9)
+                     └─ One-Arm Pull-Up (Progression) (one_arm_pull_up_progression) (Diff: 10)
+               └─ Explosive Pull-Up (explosive_pull_up) (Diff: 9)
+                  └─ Muscle-Up (muscle_up) [Skill: muscle_up] (Diff: 9)
+   └─ Assisted Pull-Up (assisted_pull_up) (Diff: 3)
+      └─ Negative Pull-Up (negative_pull_up) (Diff: 3)
+         └─ Chin-Up (chin_up) [ALREADY LISTED]
+└─ Australian Row (Inverted Row) (australian_row) (Diff: 3)
+   └─ Assisted Chin-Up (assisted_chin_up) [ALREADY LISTED]
+└─ Towel Row (Table Row) (towel_row_table) (Diff: 3)
+   └─ Australian Row (Inverted Row) (australian_row) [ALREADY LISTED]
+└─ Dead Hang (dead_hang) [ALREADY LISTED]
+└─ Scapular Retraction Hang (Scapular Shrug) (scapular_retraction_bar) (Diff: 3)
+   └─ Scapular Pull-Ups (scapula_pull_ups) (Diff: 6)
+      └─ Tuck Front Lever (front_lever_tuck) [Skill: front_lever] (Diff: 6)
+         └─ Front Lever (front_lever) [Skill: front_lever] (Diff: 9)
+            └─ Front Lever Pull-Up (front_lever_pull_up) [Skill: front_lever] (Diff: 10)
+
+PATTERN: LEGS
+-------------
+└─ Partial Squat (partial_squat) (Diff: 2)
+   └─ Bodyweight Squat (bodyweight_squat) (Diff: 3)
+      └─ Bulgarian Split Squat (bulgarian_split_squat) (Diff: 6)
+         └─ Assisted Pistol Squat (assisted_pistol_squat) (Diff: 6)
+            └─ Pistol Squat (pistol_squat) (Diff: 9)
+               └─ Jump Pistol Squat (jump_pistol_squat) (Diff: 9)
+└─ Bodyweight Squat (bodyweight_squat) [ALREADY LISTED]
+└─ Static Lunge (static_lunge) (Diff: 3)
+   └─ Walking Lunge (walking_lunge) (Diff: 6)
+      └─ Bulgarian Split Squat (bulgarian_split_squat) [ALREADY LISTED]
+└─ Step-Up (step_up) (Diff: 3)
+   └─ Bulgarian Split Squat (bulgarian_split_squat) [ALREADY LISTED]
+└─ Calf Raise (calf_raise) (Diff: 3)
+   └─ Jump Squat (jump_squat) (Diff: 6)
+      └─ Pistol Squat (pistol_squat) [ALREADY LISTED]
+└─ Glute Bridge (glute_bridge) (Diff: 3)
+   └─ Assisted Nordic Curl (nordic_curl_assisted) (Diff: 6)
+      └─ Nordic Curl (nordic_curl) (Diff: 9)
+
+PATTERN: CORE
+-------------
+└─ Crunch (crunch) (Diff: 2)
+   └─ Lying Knee Raises (lying_knee_raises) (Diff: 3)
+      └─ Hanging Knee Raises (hanging_knee_raises) (Diff: 6)
+         └─ Hanging Leg Raises (hanging_leg_raises) (Diff: 6)
+            └─ Toes-To-Bar (Partial) (toes_to_bar_partial) [Skill: toes_to_bar] (Diff: 6)
+               └─ Toes-To-Bar (toes_to_bar) [Skill: toes_to_bar] (Diff: 9)
+                  └─ Dragon Flag (Negative) (dragon_flag_negative) [Skill: dragon_flag] (Diff: 9)
+                     └─ Dragon Flag (dragon_flag_full) [Skill: dragon_flag] (Diff: 9)
+                  └─ Windshield Wipers (windshield_wipers_full) (Diff: 9)
+└─ Dead Bug (dead_bug) (Diff: 2)
+   └─ Hollow Hold (Basic) (hollow_hold_basic) (Diff: 3)
+      └─ Hollow Body Hold (hollow_body_hold) (Diff: 6)
+         └─ Tuck L-Sit (l_sit_tuck) [Skill: l_sit] (Diff: 6)
+            └─ L-Sit (l_sit_full) [Skill: l_sit] (Diff: 9)
+               └─ V-Sit (v_sit) [Skill: l_sit] (Diff: 9)
+└─ Plank (plank) (Diff: 3)
+   └─ Hollow Body Hold (hollow_body_hold) [ALREADY LISTED]
+└─ Side Plank (side_plank) (Diff: 3)
+   └─ Human Flag (human_flag) [Skill: human_flag] (Diff: 10)
+└─ Lying Knee Raises (lying_knee_raises) [ALREADY LISTED]
+└─ Hollow Hold (Basic) (hollow_hold_basic) [ALREADY LISTED]
+└─ Mountain Climber (mountain_climber) (Diff: 3)
+   └─ Hanging Knee Raises (hanging_knee_raises) [ALREADY LISTED]
+└─ L-Sit (Knee Tuck) (l_sit_knee_tuck) [Skill: l_sit] (Diff: 4)
+   └─ Tuck L-Sit (l_sit_tuck) [ALREADY LISTED]
+
+PATTERN: SKILL_FULL_BODY
+------------------------
+└─ Superman Hold (superman) (Diff: 3)
+   └─ Back Lever (back_lever) [Skill: back_lever] (Diff: 9)
+
+
+SKILL PROGRESSION TREE (By Skill)
+=================================
+
+SKILL: HANDSTAND
+----------------
+└─ Pike Push-Up (Beginner) (pike_push_up_beginner) (Diff: 3)
+   └─ Pike Push-Up (Advanced) (pike_push_up_advanced) (Diff: 6)
+      └─ Handstand Push-Up (handstand_push_up) (Diff: 10)
+      └─ Pike Push-Up (Elevated Feet) (pike_push_up_elevated_feet) (Diff: 7)
+      └─ Wall Handstand Hold (wall_handstand_hold) (Diff: 5)
+
+SKILL: PLANCHE
+--------------
+└─ Pseudo Planche Push-Up (pseudo_planche_push_up) (Diff: 6)
+   └─ Planche Lean (planche_lean) (Diff: 9)
+      └─ Tuck Planche (tuck_planche) (Diff: 9)
+         └─ Planche Push-Up (planche_push_up) (Diff: 10)
+
+SKILL: L_SIT
+------------
+└─ L-Sit (Knee Tuck) (l_sit_knee_tuck) (Diff: 4)
+   └─ Tuck L-Sit (l_sit_tuck) (Diff: 6)
+      └─ L-Sit (l_sit_full) (Diff: 9)
+         └─ V-Sit (v_sit) (Diff: 9)
+
+SKILL: DRAGON_FLAG
+------------------
+└─ Dragon Flag (Negative) (dragon_flag_negative) (Diff: 9)
+   └─ Dragon Flag (dragon_flag_full) (Diff: 9)
+
+SKILL: TOES_TO_BAR
+------------------
+└─ Toes-To-Bar (Partial) (toes_to_bar_partial) (Diff: 6)
+   └─ Toes-To-Bar (toes_to_bar) (Diff: 9)
+
+SKILL: FRONT_LEVER
+------------------
+└─ Tuck Front Lever (front_lever_tuck) (Diff: 6)
+   └─ Front Lever (front_lever) (Diff: 9)
+      └─ Front Lever Pull-Up (front_lever_pull_up) (Diff: 10)
+└─ Tucked Front Lever Raise (tucked_front_lever_raise) (Diff: 7)
+
+SKILL: MUSCLE_UP
+----------------
+└─ Muscle-Up (muscle_up) (Diff: 9)
+
+SKILL: BACK_LEVER
+-----------------
+└─ Skin the Cat (skin_the_cat) (Diff: 9)
+   └─ Back Lever (back_lever) (Diff: 9)
+
+SKILL: HUMAN_FLAG
+-----------------
+└─ Human Flag (human_flag) (Diff: 10)
+

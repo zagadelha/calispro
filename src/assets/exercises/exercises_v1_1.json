@@ -237,7 +237,9 @@
       ],
       "skill": null,
       "skill_stage": null,
-      "prerequisites": [],
+      "prerequisites": [
+        "towel_row_table"
+      ],
       "progresses_to": [
         "assisted_chin_up"
       ],
@@ -295,7 +297,7 @@
         "escápulas (estabilização)"
       ],
       "metric_type": "seconds",
-      "difficulty_score": 3,
+      "difficulty_score": 2,
       "equipment": [
         "bar"
       ],
@@ -303,7 +305,7 @@
       "skill_stage": null,
       "prerequisites": [],
       "progresses_to": [
-        "assisted_chin_up"
+        "scapular_retraction_bar"
       ],
       "default_prescription": {
         "sets": 3,
@@ -335,9 +337,11 @@
       ],
       "skill": null,
       "skill_stage": null,
-      "prerequisites": [],
+      "prerequisites": [
+        "dead_hang"
+      ],
       "progresses_to": [
-        "scapula_pull_ups"
+        "scapula_pull_up"
       ],
       "default_prescription": {
         "sets": 3,
@@ -878,7 +882,8 @@
         "push_up"
       ],
       "progresses_to": [
-        "archer_push_up"
+        "archer_push_up",
+        "pseudo_planche_push_up"
       ],
       "default_prescription": {
         "sets": 4,
@@ -951,7 +956,7 @@
         "decline_push_up"
       ],
       "progresses_to": [
-        "pseudo_planche_push_up"
+        "one_arm_push_up"
       ],
       "default_prescription": {
         "sets": 4,
@@ -1022,6 +1027,7 @@
       "skill": "planche",
       "skill_stage": null,
       "prerequisites": [
+        "decline_push_up",
         "pike_push_up_advanced"
       ],
       "progresses_to": [
@@ -1222,9 +1228,9 @@
       "fallback_media_search_url": "https://giphy.com/explore/pull-up-hold"
     },
     {
-      "id": "scapula_pull_ups",
-      "i18n_key": "scapula_pull_ups",
-      "name": "Scapular Pull-Ups",
+      "id": "scapula_pull_up",
+      "i18n_key": "scapula_pull_up",
+      "name": "Scapular Pull-Up",
       "level": "intermediate",
       "pattern": "pull",
       "primary_muscles": [
@@ -1468,7 +1474,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://www.inspireusafoundation.org/file/2022/08/self-assisted-inverse-leg-curl.gif"
+        "url": "/src/assets/exercises/Assisted-Nordic-Curl.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/nordic-curl"
     },
@@ -1720,7 +1726,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://burnfit.io/wp-content/uploads/2023/11/TOES_TO_BAR.gif"
+        "url": "/src/assets/exercises/Partial-Toes-To-Bar.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/toes-to-bar"
     },
@@ -2287,8 +2293,8 @@
         "rest_seconds": 120
       },
       "media": {
-        "type": "link",
-        "url": "https://www.kettlebellkings.com/cdn/shop/articles/nordic_curls.gif?v=1699444790&width=1024"
+        "type": "gif",
+        "url": "/src/assets/exercises/nordic-hamstring-curl-movement.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/nordic-curl"
     },
@@ -2492,8 +2498,8 @@
         "rest_seconds": 120
       },
       "media": {
-        "type": "link",
-        "url": "https://cdn.shopify.com/s/files/1/0701/9950/9207/files/Dragon_Flag.gif?v=1737008728"
+        "type": "image",
+        "url": "https://i.pinimg.com/736x/29/67/e0/2967e032f2a1697080af406a96c144fa.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dragon-flag"
     },
@@ -2670,8 +2676,8 @@
         "rest_seconds": 120
       },
       "media": {
-        "type": "link",
-        "url": "https://makeagif.com/i/E6vA4q"
+        "type": "gif",
+        "url": "/src/assets/exercises/Skin-The-Cat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/skin-the-cat"
     },
@@ -2742,7 +2748,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGxoNWkyeGN2ZnB3YzYwdzN5cWxvOHVoa3NnbGJmamdqaXhkenZ5aSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3o7TKF1fSIs1R19B8Q/giphy.gif"
+        "url": "https://liftmanual.com/wp-content/uploads/2023/04/hollow-rock.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/hollow-body-rock"
     },
@@ -2922,7 +2928,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeW50cGpoeWJqeXh6NnVscG5wdXZsNmJob3N2cnE3Z3FkZHNmeWFqYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oKIPa2TdahY8LAAxy/giphy.gif"
+        "url": "/src/assets/exercises/Cossack-Squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/squat"
     },
@@ -2957,7 +2963,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXFxbHlveGVqZmQ4eWpzZ3N4aWJ0ZjBmZ3k0anBsdHNpdmlhd3JsbyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3o7btPCcdNniyf0ArS/giphy.gif"
+        "url": "/src/assets/exercises/Archer-Squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/squat"
     },
@@ -2992,7 +2998,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzRsMjJmNGJoYmZkY3VxN2RwdWhmbGFndm8weGp6ZGdwcDVwY2x3ZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xT9IgN8YKRhByRJzMI/giphy.gif"
+        "url": "/src/assets/exercises/nordic-hamstring-curl-movement.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/nordic-curl"
     },
@@ -3025,8 +3031,8 @@
         "rest_seconds": 60
       },
       "media": {
-        "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzFna2RzbmRpYmxuZGZ4YnoyeGpxaTdtczRwZDEyYXBsenJ2eXRydSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oKIPnAiaMCws8nOsE/giphy.gif"
+        "type": "image",
+        "url": "https://experiencelife.lifetime.life/wp-content/uploads/2025/06/so25-bid-L-Sit-Tuck-Hold-1024x577.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/search/l-sit"
     },
@@ -3061,7 +3067,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXZ5Z3NidmZ6Z203dXlvNDI2N2tpNmt2NDBqZXhtZTBtZjVybzNkZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/6wLz7povE9WOMzcMU4/giphy.gif"
+        "url": "https://fitnessprogramer.com/wp-content/uploads/2021/06/Bench-Pike-Push-up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pike-pushup"
     },
@@ -3097,7 +3103,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnNqbWN6ODR0YWQyZm9vejB1bDFhb2pneGIyMzN4aHZjZndodm1pZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3pY8FQP9uMtDKXkYqX/giphy.gif"
+        "url": "https://fitnessvolt.com/wp-content/uploads/exercises/1080/close-grip-push-up-on-knees-2398.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pushup"
     },
@@ -3203,7 +3209,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXpndnZsNWRyb2J6aWh3ZDhkdnk3Y3pxand6a2lhNGVsNzZtdTZ4aSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l4FGuaTzZaRmQJKZW/giphy.gif"
+        "url": "https://www.workedoutfitness.com/static/images/tuck-front-lever-raise.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/front-lever"
     },
@@ -3239,43 +3245,9 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOW5scWEydnBhNnBqa3g5ZjhvNHp6ejFxMGd2MTdkb3R5dGV6Nmt1YSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l4FGGafcOHmrlQxG0/giphy.gif"
+        "url": "https://liftmanual.com/wp-content/uploads/2023/04/handstand-hold-on-wall.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/handstand"
-    },
-    {
-      "id": "scapular_pull_up",
-      "i18n_key": "scapular_pull_up",
-      "name": "Scapular Pull-Up",
-      "level": "beginner",
-      "pattern": "pull",
-      "primary_muscles": [
-        "dorsais",
-        "trapézio"
-      ],
-      "metric_type": "reps",
-      "difficulty_score": 2,
-      "equipment": [
-        "barra"
-      ],
-      "skill": null,
-      "skill_stage": null,
-      "prerequisites": [],
-      "progresses_to": [
-        "dead_hang",
-        "assisted_pull_up"
-      ],
-      "default_prescription": {
-        "sets": 3,
-        "reps_min": 8,
-        "reps_max": 12,
-        "rest_seconds": 60
-      },
-      "media": {
-        "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGV6OXczd2R5cHN3YXhxYm9uZXZvcGNkYjBwank2OGRhcnM3eGF5OSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/26n6WtXHvAjKKXy5q/giphy.gif"
-      },
-      "fallback_media_search_url": "https://giphy.com/search/scapular-pullup"
     },
     {
       "id": "assisted_pull_up",
@@ -3296,8 +3268,7 @@
       "skill": null,
       "skill_stage": null,
       "prerequisites": [
-        "dead_hang",
-        "scapular_pull_up"
+        "scapular_retraction_bar"
       ],
       "progresses_to": [
         "negative_pull_up"
@@ -3668,7 +3639,7 @@
         "pattern": "pull",
         "skill": null
       },
-      "scapula_pull_ups": {
+      "scapula_pull_up": {
         "level": "intermediate",
         "pattern": "pull",
         "skill": null

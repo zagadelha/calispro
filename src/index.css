@@ -803,6 +803,20 @@ p {
   min-height: 400px;
 }
 
+.skill-preview-image {
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  transition: transform var(--transition-base);
+}
+
+.skill-preview-image:hover {
+  transform: scale(1.01);
+}
+
 .workout-card {
   margin-bottom: var(--spacing-xl);
 }

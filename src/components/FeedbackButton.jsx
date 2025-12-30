@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import { getVirtualNow } from '../utils/timeTravel';
 
 const FeedbackButton = () => {
     const location = useLocation();
@@ -20,7 +21,7 @@ const FeedbackButton = () => {
     }
 
     const feedbackTypes = [
-        { id: 'bug', label: 'Reportar Bug', icon: Bug, color: '#ef4444' },
+        { id: 'bug', label: 'Reportar Erro', icon: Bug, color: '#ef4444' },
         { id: 'question', label: 'Dúvida', icon: HelpCircle, color: '#3b82f6' },
         { id: 'suggestion', label: 'Sugestão', icon: Lightbulb, color: '#f59e0b' },
         { id: 'contact', label: 'Contato', icon: Mail, color: '#10b981' }
@@ -44,7 +45,7 @@ const FeedbackButton = () => {
                 user_name: userProfile?.name || 'Usuário Anônimo',
                 type: feedbackType,
                 message: message,
-                created_at: new Date().toISOString(),
+                created_at: getVirtualNow().toISOString(),
                 status: 'pending'
             });
 

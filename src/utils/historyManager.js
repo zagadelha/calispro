@@ -6,9 +6,10 @@ import { db } from '../config/firebase';
  * Aggregates user history from completed workouts.
  * Returns a map compatible with progressionSystem.js.
  * @param {string} userId 
+ * @param {string} beforeDate - Optional. Only include workouts ON or BEFORE this date (YYYY-MM-DD).
  * @returns {Promise<object>} { [exerciseId]: { history: [{ date, reps, ... }] } }
  */
-export const getUserHistory = async (userId) => {
+export const getUserHistory = async (userId, beforeDate = null) => {
     try {
         console.log('[getUserHistory] Fetching for user:', userId);
 
@@ -22,9 +23,11 @@ export const getUserHistory = async (userId) => {
 
         const wSnap = await getDocs(q);
 
-        // Sort in memory instead
+        // Filter and Sort in memory instead
         const workouts = wSnap.docs
             .map(d => ({ id: d.id, ...d.data() }))
+            // Filter by date if provided (important for test environment/time travel)
+            .filter(w => !beforeDate || (w.date || '') <= beforeDate)
             .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
             .slice(0, 50); // Limit to last 50
 
@@ -62,7 +65,7 @@ export const getUserHistory = async (userId) => {
                     historyMap[exData.original_id].history.push({
                         date: workout.date,
                         reps: exData.performed_reps || exData.target_reps || 0, // Fallback to target if synced
-                        seconds: exData.performed_seconds || 0,
+                        seconds: exData.performed_seconds || exData.target_seconds || 0, // 🆕 ADDED FALLBACK FOR SECONDS
                         rpe: rpe,
                         goalMet: goalMet
                     });
@@ -72,11 +75,11 @@ export const getUserHistory = async (userId) => {
 
         await Promise.all(promises);
 
-        console.log(`[getUserHistory] Aggregated ${Object.keys(historyMap).length} unique exercises`);
+        /* console.log(`[getUserHistory] Aggregated ${Object.keys(historyMap).length} unique exercises`);
         console.log('[getUserHistory] Sample:', Object.keys(historyMap).slice(0, 5).map(id => ({
             id,
             sessions: historyMap[id].history.length
-        })));
+        }))); */
 
         return historyMap;
 

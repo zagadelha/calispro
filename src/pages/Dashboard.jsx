@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TrendingUp, User, LogOut } from 'lucide-react';
+import { TrendingUp, User, LogOut, BarChart2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { getTodayWorkout } from '../utils/workoutGenerator';
-import { generateSkillWorkout, getAllSkills, getUserSkillStage, calculateReadinessScore } from '../utils/progressionSystem';
+import { generateSkillWorkout, getAllSkills, getUserSkillStage, calculateReadinessScore, generatePatternWorkout, formatSkillName, getSkillRotation, exerciseMap } from '../utils/progressionSystem';
 import { doc, updateDoc, collection, addDoc, query, where, getDocs, deleteDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import logo from '../assets/logo2.png';
 import InstallButton from '../components/InstallButton';
-import { getVirtualDate, addDays, resetDate } from '../utils/timeTravel';
+import { getVirtualDate, getVirtualNow, addDays, resetDate } from '../utils/timeTravel';
 import { getUserHistory } from '../utils/historyManager';
 
 
@@ -20,6 +20,11 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [isWorkoutActive, setIsWorkoutActive] = useState(false);
     const [readiness, setReadiness] = useState(null);
+    const [showSpecialized, setShowSpecialized] = useState(false);
+    const [specializedMode, setSpecializedMode] = useState('skill'); // 'skill' or 'pattern'
+    const [selectedSkill, setSelectedSkill] = useState('');
+    const [selectedPattern, setSelectedPattern] = useState('push');
+    const [workoutLevel, setWorkoutLevel] = useState('beginner');
     const { currentUser, userProfile, logout } = useAuth();
     const navigate = useNavigate();
 
@@ -44,7 +49,7 @@ const Dashboard = () => {
                 if (workoutData.date && workoutData.date < today) {
                     await updateDoc(doc(db, 'workouts', docSnap.id), {
                         status: 'completed',
-                        completed_at: new Date().toISOString(),
+                        completed_at: getVirtualNow().toISOString(),
                         feedback_goal_met: true,
                         feedback_rpe: 3,
                         feedback_pain: 'Nenhuma'
@@ -90,8 +95,8 @@ const Dashboard = () => {
             await autoCompleteOldWorkouts(currentUser.uid);
 
             // 1. Always calculate Readiness first
-            const history = await getUserHistory(currentUser.uid);
-            const readinessData = calculateReadinessScore(history);
+            const history = await getUserHistory(currentUser.uid, getVirtualDate());
+            const readinessData = calculateReadinessScore(history, getVirtualDate());
             setReadiness(readinessData);
 
             // Pass history to generator to avoid re-fetching or empty logic
@@ -131,38 +136,94 @@ const Dashboard = () => {
         // setReadiness(readinessData); // Already set in loadData
 
         // Determine Target Skill
-        // ✅ NEW: Rotate skills based on workout count for variety
-        const skills = getAllSkills(); // ['handstand', 'planche', etc]
-        let targetSkill = 'handstand'; // Default
-
-        if (skills.length > 0) {
-            // Count total workout sessions from history
-            const totalWorkouts = Object.values(mockHistory).reduce((acc, exData) => {
-                const sessions = exData?.history?.length || 0;
-                return acc + sessions;
-            }, 0);
-
-            // Rotate skill every ~10 workouts to add variety
-            const skillIndex = Math.floor(totalWorkouts / 10) % skills.length;
-            targetSkill = skills[skillIndex];
-
-            console.log('[Skill Rotation]', {
-                totalWorkouts,
-                skillIndex,
-                selectedSkill: targetSkill,
-                allSkills: skills
-            });
-        }
+        // 🔄 PHASE 1: Rotate daily between Handstand, FL, BL, Planche
+        const targetSkill = getSkillRotation(mockHistory);
+        console.log('[generateDailyWorkout] Target skill (Fase 1):', targetSkill);
 
         console.log('[generateDailyWorkout] Target skill:', targetSkill);
         console.log('[generateDailyWorkout] Calling generateSkillWorkout...');
 
-        const genWorkout = generateSkillWorkout(targetSkill, mockHistory, userProfile?.equipment || []);
+        const genWorkout = generateSkillWorkout(targetSkill, mockHistory, userProfile?.equipment || [], getVirtualDate(), true);
 
         console.log('[generateDailyWorkout] Workout generated:', !!genWorkout);
         console.log('[generateDailyWorkout] Exercises:', genWorkout?.exercises?.length);
 
         setGeneratedWorkout(genWorkout);
+    };
+
+    const handleGenerateSpecializedWorkout = async () => {
+        setLoading(true);
+        try {
+            const history = await getUserHistory(currentUser.uid, getVirtualDate());
+            let genWorkout;
+
+            if (specializedMode === 'skill') {
+                if (!selectedSkill) {
+                    alert('Por favor, selecione uma habilidade.');
+                    setLoading(false);
+                    return;
+                }
+                genWorkout = generateSkillWorkout(selectedSkill, history, userProfile?.equipment || [], getVirtualDate(), false, workoutLevel);
+            } else {
+                genWorkout = generatePatternWorkout(selectedPattern, history, userProfile?.equipment || [], getVirtualDate(), workoutLevel);
+            }
+
+            if (genWorkout && genWorkout.exercises && genWorkout.exercises.length > 0) {
+                // Save and start immediately
+                await startSpecializedWorkout(genWorkout);
+            } else {
+                alert('Não foi possível gerar este treino com seu nível atual.');
+            }
+        } catch (err) {
+            console.error('Error generating specialized workout:', err);
+            alert('Erro ao gerar treino.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const startSpecializedWorkout = async (genWorkout) => {
+        try {
+            const workoutData = {
+                user_id: currentUser.uid,
+                plan_id: 'specialized_workout',
+                day_label: 'Extra',
+                name: genWorkout.name,
+                date: getVirtualDate(),
+                status: 'in_progress',
+                created_at: getVirtualNow().toISOString(),
+                started_at: getVirtualNow().toISOString(),
+                readiness_score: genWorkout.readiness_score,
+                skill_id: genWorkout.skill_id || null,
+                skill_media_url: genWorkout.skill_media_url || null
+            };
+
+            const workoutRef = await addDoc(collection(db, 'workouts'), workoutData);
+
+            const exercises = genWorkout.exercises || [];
+            for (let i = 0; i < exercises.length; i++) {
+                const ex = exercises[i];
+                await addDoc(collection(db, 'workout_exercises'), {
+                    workout_id: workoutRef.id,
+                    exercise_name: ex.exercise_name || ex.name,
+                    muscle_group: ex.muscle_group,
+                    target_sets: ex.target_sets,
+                    target_reps: ex.target_reps,
+                    target_seconds: ex.target_seconds || null,
+                    metric_type: ex.metric_type || 'reps',
+                    type: ex.type,
+                    original_id: ex.original_id,
+                    difficulty_score: ex.difficulty_score || 0,
+                    order_index: i,
+                    completed: false
+                });
+            }
+
+            navigate('/workout');
+        } catch (err) {
+            console.error("Error saving specialized workout:", err);
+            throw err;
+        }
     };
 
     const handleStartWorkout = async () => {
@@ -172,7 +233,7 @@ const Dashboard = () => {
                 if (workout.status === 'pending') {
                     await updateDoc(doc(db, 'workouts', workout.id), {
                         status: 'in_progress',
-                        started_at: new Date().toISOString()
+                        started_at: getVirtualNow().toISOString()
                     });
                 }
                 navigate('/workout');
@@ -193,9 +254,11 @@ const Dashboard = () => {
                     name: generatedWorkout.name,
                     date: getVirtualDate(),
                     status: 'in_progress',
-                    created_at: new Date().toISOString(),
-                    started_at: new Date().toISOString(),
-                    readiness_score: generatedWorkout.readiness_score
+                    created_at: getVirtualNow().toISOString(),
+                    started_at: getVirtualNow().toISOString(),
+                    readiness_score: generatedWorkout.readiness_score,
+                    skill_id: generatedWorkout.skill_id || null,
+                    skill_media_url: generatedWorkout.skill_media_url || null
                 };
 
                 const workoutRef = await addDoc(collection(db, 'workouts'), workoutData);
@@ -214,6 +277,7 @@ const Dashboard = () => {
                         metric_type: ex.metric_type || 'reps', // Default to reps
                         type: ex.type, // Store the type (Skill, Strength...)
                         original_id: ex.original_id, // Important for tracking
+                        difficulty_score: ex.difficulty_score || 0,
                         order_index: i,
                         completed: false
                     });
@@ -309,6 +373,10 @@ const Dashboard = () => {
                     <div className="flex justify-between items-center">
                         <img src={logo} alt="CalisPro" className="app-logo" />
                         <div className="flex items-center gap-md">
+                            <button onClick={() => navigate('/progress')} className="btn btn-secondary btn-sm flex items-center" title="Progresso">
+                                <BarChart2 size={18} className="mr-1" />
+                                <span className="btn-text">Progresso</span>
+                            </button>
                             <button onClick={() => navigate('/evolution')} className="btn btn-secondary btn-sm flex items-center" title="Evolução">
                                 <TrendingUp size={18} className="mr-1" />
                                 <span className="btn-text">Evolução</span>
@@ -335,7 +403,7 @@ const Dashboard = () => {
                                 Olá, {userProfile?.name?.split(' ')[0] || 'Atleta'}! 👋
                             </h2>
                             <p className="text-secondary">
-                                {format(new Date(), "EEEE, d 'de' MMMM", { locale: ptBR })}
+                                {format(getVirtualNow(), "EEEE, d 'de' MMMM", { locale: ptBR })}
                             </p>
                         </div>
                         {readiness && (
@@ -354,6 +422,11 @@ const Dashboard = () => {
                     </section>
 
                     {/* Today's Workout Card */}
+                    {displayWorkout && (
+                        <div className="mb-md">
+                            <h3 className="text-lg font-bold">Seu Plano de Treino</h3>
+                        </div>
+                    )}
                     {displayWorkout ? (
                         <section className="workout-section">
                             <div className="card workout-card animate-fadeIn">
@@ -373,9 +446,25 @@ const Dashboard = () => {
                                     </div>
                                 </div>
 
+                                {/* Skill Preview Image */}
+                                {displayWorkout.skill_media_url && (
+                                    <div className="skill-preview mb-lg">
+                                        <img
+                                            src={displayWorkout.skill_media_url}
+                                            alt={displayWorkout.name}
+                                            className="skill-preview-image"
+                                            onError={(e) => e.target.style.display = 'none'}
+                                        />
+                                    </div>
+                                )}
+
                                 {/* Exercise List Preview */}
                                 <div className="exercise-list mb-xl">
-                                    {displayWorkout.exercises?.map((exercise, index) => (
+                                    {[...(displayWorkout.exercises || [])].sort((a, b) => {
+                                        const scoreA = a.difficulty_score !== undefined ? a.difficulty_score : (exerciseMap.get(a.original_id)?.difficulty_score || 0);
+                                        const scoreB = b.difficulty_score !== undefined ? b.difficulty_score : (exerciseMap.get(b.original_id)?.difficulty_score || 0);
+                                        return scoreA - scoreB;
+                                    }).map((exercise, index) => (
                                         <div key={index} className="flex items-center gap-md py-3 border-b border-gray-800 last:border-0">
                                             <div className="w-8 h-8 rounded-full bg-tertiary flex items-center justify-center text-sm font-bold text-secondary">
                                                 {index + 1}
@@ -392,7 +481,12 @@ const Dashboard = () => {
                                                     )}
                                                 </div>
                                                 <p className="text-sm text-secondary">
-                                                    {exercise.target_sets} séries × {exercise.target_reps} reps
+                                                    {exercise.target_sets} séries × {
+                                                        exercise.prescription ||
+                                                        (exercise.metric_type === 'seconds' || (!exercise.metric_type && !exercise.target_reps && exercise.target_seconds) ?
+                                                            `${exercise.target_seconds || 0}s` :
+                                                            `${exercise.target_reps || exercise.reps || 0} reps`)
+                                                    }
                                                 </p>
                                             </div>
                                         </div>
@@ -422,6 +516,118 @@ const Dashboard = () => {
                             <p className="text-secondary">Aproveite seu descanso.</p>
                         </div>
                     )}
+
+                    {/* Specialized Workout Section */}
+                    {!isWorkoutActive && (!workout || workout.status !== 'completed') && (
+                        <section className="specialized-section mt-xl">
+                            <div className="card specialized-card overflow-hidden">
+                                <div className="flex justify-between items-center mb-md">
+                                    <h3 className="text-lg font-bold">Gerar Treino Livre</h3>
+                                    <button
+                                        onClick={() => setShowSpecialized(!showSpecialized)}
+                                        className="btn btn-secondary btn-sm"
+                                    >
+                                        {showSpecialized ? 'Ocultar' : 'Explorar'}
+                                    </button>
+                                </div>
+
+                                {showSpecialized ? (
+                                    <div className="animate-fadeIn">
+                                        <p className="text-secondary text-sm mb-lg">
+                                            Deseja focar em algo específico hoje? Escolha uma categoria ou habilidade.
+                                        </p>
+
+                                        <div className="flex gap-md mb-lg">
+                                            <button
+                                                onClick={() => setSpecializedMode('pattern')}
+                                                className={`btn btn-sm flex-1 ${specializedMode === 'pattern' ? 'btn-primary' : 'btn-outline'}`}
+                                            >
+                                                Categoria
+                                            </button>
+                                            <button
+                                                onClick={() => setSpecializedMode('skill')}
+                                                className={`btn btn-sm flex-1 ${specializedMode === 'skill' ? 'btn-primary' : 'btn-outline'}`}
+                                            >
+                                                Habilidade
+                                            </button>
+                                        </div>
+
+                                        {specializedMode === 'pattern' ? (
+                                            <div className="grid grid-2 gap-sm mb-lg">
+                                                {[
+                                                    { id: 'push', label: 'Empurrar', icon: '💪' },
+                                                    { id: 'pull', label: 'Puxar', icon: '🧗' },
+                                                    { id: 'legs', label: 'Pernas', icon: '🦵' },
+                                                    { id: 'core', label: 'Core', icon: '🧘' }
+                                                ].map(p => (
+                                                    <button
+                                                        key={p.id}
+                                                        onClick={() => setSelectedPattern(p.id)}
+                                                        className={`option-card p-md ${selectedPattern === p.id ? 'active' : ''}`}
+                                                    >
+                                                        <div className="text-xl mb-xs">{p.icon}</div>
+                                                        <div className="text-xs font-bold">{p.label}</div>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="form-group mb-lg">
+                                                <select
+                                                    value={selectedSkill}
+                                                    onChange={(e) => setSelectedSkill(e.target.value)}
+                                                    className="form-select"
+                                                >
+                                                    <option value="">Selecione uma habilidade...</option>
+                                                    {getAllSkills().map(skill => (
+                                                        <option key={skill} value={skill}>
+                                                            {formatSkillName(skill)}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        )}
+
+                                        <div className="mb-lg">
+                                            <p className="text-secondary text-xs mb-sm uppercase tracking-wider font-bold">Nível do Treino</p>
+                                            <div className="flex gap-sm">
+                                                {[
+                                                    { id: 'beginner', label: 'Iniciante' },
+                                                    { id: 'intermediate', label: 'Intermediário' },
+                                                    { id: 'advanced', label: 'Avançado' }
+                                                ].map(level => (
+                                                    <button
+                                                        key={level.id}
+                                                        onClick={() => setWorkoutLevel(level.id)}
+                                                        className={`btn btn-sm flex-1 ${workoutLevel === level.id ? 'btn-primary' : 'btn-outline'} text-xs py-2`}
+                                                    >
+                                                        {level.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            onClick={handleGenerateSpecializedWorkout}
+                                            className="btn btn-primary btn-full shadow-lg"
+                                        >
+                                            Gerar Treino ⚡
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="text-secondary text-sm flex flex-col gap-sm">
+                                        <div className="flex gap-sm">
+                                            <span>•</span>
+                                            <span>Gere treinos focados em habilidades ou categorias musculares específicas.</span>
+                                        </div>
+                                        <div className="flex gap-sm">
+                                            <span>•</span>
+                                            <span>Este treino não é programado e não será contabilizado na sua evolução.</span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                    )}
                 </div>
             </main>
 
@@ -447,6 +653,12 @@ const Dashboard = () => {
                             className="text-emerald-400 hover:text-emerald-300 underline"
                         >
                             Voltar para Hoje
+                        </button>
+                        <button
+                            onClick={() => navigate('/admin')}
+                            className="text-amber-400 hover:text-amber-300 underline font-bold"
+                        >
+                            📊 Painel Administrativo
                         </button>
 
                         {workout && workout.id && (

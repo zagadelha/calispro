@@ -7,6 +7,7 @@ import { db } from '../config/firebase';
 import bgEvolution from '../assets/bg-evolution.png'; // Imported new background
 
 import { getUserHistory } from '../utils/historyManager';
+import { getVirtualDate } from '../utils/timeTravel';
 
 const Evolution = () => {
     const [readiness, setReadiness] = useState(null);
@@ -24,10 +25,10 @@ const Evolution = () => {
             setLoading(true);
 
             // Fetch Real History
-            const userHistory = await getUserHistory(currentUser.uid);
+            const userHistory = await getUserHistory(currentUser.uid, getVirtualDate());
 
             // Calculate Readiness
-            const scoreData = calculateReadinessScore(userHistory);
+            const scoreData = calculateReadinessScore(userHistory, getVirtualDate());
             setReadiness(scoreData);
 
             // Calculate Skills
