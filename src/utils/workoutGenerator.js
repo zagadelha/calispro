@@ -197,8 +197,7 @@ export const generateWorkoutPlan = async (userId, profile) => {
     await setDoc(doc(db, 'users', userId), {
         current_plan_id: planRef.id,
         experience_level: experience_level,
-        goal: goal,
-        equipment: internalEquipment // Store mapped equipment
+        goal: goal
     }, { merge: true });
 
     return planRef.id;

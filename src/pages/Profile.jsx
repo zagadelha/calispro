@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { generateWorkoutPlan } from '../utils/workoutGenerator';
@@ -11,14 +11,40 @@ const Profile = () => {
     const [loading, setLoading] = useState(false);
     const [uploadingPhoto, setUploadingPhoto] = useState(false);
     const [formData, setFormData] = useState({
-        name: userProfile?.name || '',
-        experience_level: userProfile?.experience_level || '',
-        goal: userProfile?.goal || '',
-        days_per_week: userProfile?.days_per_week || '',
-        equipment: userProfile?.equipment || [],
-        limitations: userProfile?.limitations || ''
+        name: '',
+        experience_level: '',
+        goal: '',
+        days_per_week: '',
+        equipment: [],
+        limitations: ''
     });
     const navigate = useNavigate();
+
+    // Sync formData when userProfile is loaded or updated
+    useEffect(() => {
+        console.log('[Profile] Syncing formData with userProfile:', userProfile?.email);
+        if (userProfile && !editing) {
+            // Map internal IDs back to labels if necessary
+            const equipmentLabels = {
+                'none': 'Peso corporal',
+                'pull_up_bar': 'Barra fixa',
+                'dip_bars': 'Paralelas',
+                'resistance_bands': 'Elásticos'
+            };
+
+            const currentEquipment = Array.isArray(userProfile.equipment) ? userProfile.equipment : [];
+            const mappedEquipment = currentEquipment.map(e => equipmentLabels[e] || e);
+
+            setFormData({
+                name: userProfile.name || '',
+                experience_level: userProfile.experience_level || '',
+                goal: userProfile.goal || '',
+                days_per_week: userProfile.days_per_week || '',
+                equipment: mappedEquipment,
+                limitations: userProfile.limitations || ''
+            });
+        }
+    }, [userProfile, editing]);
 
     const handleChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -182,13 +208,11 @@ const Profile = () => {
                 if (count >= 500) await commitBatch();
             }
 
-            // Resetar perfil do usuário (campos de plano)
+            // Resetar perfil do usuário (campos de plano apenas)
             const userRef = doc(db, 'users', userId);
             batch.update(userRef, {
                 current_plan_id: null,
-                last_workout_date: null,
-                experience_level: null, // Resetar também para forçar novo onboarding/perfil se necessário
-                goal: null
+                last_workout_date: null
             });
             count++;
 
@@ -208,18 +232,18 @@ const Profile = () => {
     return (
         <div className="profile-container">
             {/* Header */}
-            <header className="profile-header">
+            <header className="page-header">
                 <div className="container">
-                    <div className="flex justify-between items-center">
+                    <div className="header-left">
                         <button
                             onClick={() => navigate('/dashboard')}
                             className="btn btn-secondary btn-sm"
                         >
                             ← Voltar
                         </button>
-                        <h2>Meu Perfil</h2>
-                        <div style={{ width: '80px' }}></div>
                     </div>
+                    <h2>Meu Perfil</h2>
+                    <div className="header-right"></div>
                 </div>
             </header>
 
@@ -258,7 +282,21 @@ const Profile = () => {
                                 />
                             </div>
                             <h3 className="mt-md">{userProfile?.name}</h3>
-                            <p className="text-secondary text-sm">{userProfile?.email}</p>
+                            <p className="text-secondary text-sm">
+                                {userProfile?.email}
+                                {currentUser?.email && userProfile?.email !== currentUser.email && (
+                                    <span
+                                        onClick={async () => {
+                                            if (confirm('Sincronizar e-mail com sua conta de login?')) {
+                                                await updateUserProfile(currentUser.uid, { email: currentUser.email });
+                                            }
+                                        }}
+                                        style={{ marginLeft: '8px', cursor: 'pointer', color: 'var(--primary)', textDecoration: 'underline' }}
+                                    >
+                                        (Corrigir)
+                                    </span>
+                                )}
+                            </p>
                         </div>
 
                         {/* Profile Form */}
@@ -288,7 +326,7 @@ const Profile = () => {
                                         <option value="Avançado">Avançado</option>
                                     </select>
                                 ) : (
-                                    <div className="form-value">{formData.experience_level}</div>
+                                    <div className="form-value">{formData.experience_level || 'Não definido'}</div>
                                 )}
                             </div>
 
@@ -307,7 +345,7 @@ const Profile = () => {
                                         <option value="Manutenção">Manutenção</option>
                                     </select>
                                 ) : (
-                                    <div className="form-value">{formData.goal}</div>
+                                    <div className="form-value">{formData.goal || 'Não definido'}</div>
                                 )}
                             </div>
 
@@ -326,7 +364,7 @@ const Profile = () => {
                                         <option value="5x+">5x+ por semana</option>
                                     </select>
                                 ) : (
-                                    <div className="form-value">{formData.days_per_week}</div>
+                                    <div className="form-value">{formData.days_per_week || 'Não definido'}</div>
                                 )}
                             </div>
 
@@ -347,7 +385,15 @@ const Profile = () => {
                                     </div>
                                 ) : (
                                     <div className="form-value">
-                                        {formData.equipment.join(', ') || 'Nenhum'}
+                                        {formData.equipment.map(e => {
+                                            const labels = {
+                                                'none': 'Peso corporal',
+                                                'pull_up_bar': 'Barra fixa',
+                                                'dip_bars': 'Paralelas',
+                                                'resistance_bands': 'Elásticos'
+                                            };
+                                            return labels[e] || e;
+                                        }).join(', ') || 'Nenhum'}
                                     </div>
                                 )}
                             </div>
@@ -420,6 +466,15 @@ const Profile = () => {
                                     >
                                         🗑️ Apagar Histórico de Treino
                                     </button>
+
+                                    <div className="mt-lg text-center">
+                                        <button
+                                            onClick={() => window.location.reload()}
+                                            className="text-secondary text-xs btn-link"
+                                        >
+                                            🔄 Forçar Atualização da Página
+                                        </button>
+                                    </div>
                                 </>
                             )}
                         </div>

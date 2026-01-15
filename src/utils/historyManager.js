@@ -53,8 +53,8 @@ export const getUserHistory = async (userId, beforeDate = null) => {
                     historyMap[exData.original_id] = { history: [] };
                 }
 
-                // If logged as completed OR parent workout is completed
-                if (exData.completed || workout.status === 'completed') {
+                // Only include if performance was actually recorded
+                if (exData.performed_reps > 0 || exData.performed_seconds > 0) {
                     // Determine values
                     // Use Per-Exercise RPE if exists, else Global Workout RPE, else 3 (default)
                     const rpe = exData.rpe || workout.feedback_rpe || 3;
@@ -64,8 +64,8 @@ export const getUserHistory = async (userId, beforeDate = null) => {
 
                     historyMap[exData.original_id].history.push({
                         date: workout.date,
-                        reps: exData.performed_reps || exData.target_reps || 0, // Fallback to target if synced
-                        seconds: exData.performed_seconds || exData.target_seconds || 0, // 🆕 ADDED FALLBACK FOR SECONDS
+                        reps: exData.performed_reps || 0,
+                        seconds: exData.performed_seconds || 0,
                         rpe: rpe,
                         goalMet: goalMet
                     });

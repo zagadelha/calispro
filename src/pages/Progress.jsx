@@ -201,18 +201,18 @@ const Progress = () => {
     return (
         <div className="progress-container">
             {/* Header */}
-            <header className="progress-header">
+            <header className="page-header">
                 <div className="container">
-                    <div className="flex justify-between items-center">
+                    <div className="header-left">
                         <button
                             onClick={() => navigate('/dashboard')}
                             className="btn btn-secondary btn-sm"
                         >
                             ← Voltar
                         </button>
-                        <h2>Meu Progresso</h2>
-                        <div style={{ width: '80px' }}></div>
                     </div>
+                    <h2>Meu Progresso</h2>
+                    <div className="header-right"></div>
                 </div>
             </header>
 

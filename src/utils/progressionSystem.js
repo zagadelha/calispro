@@ -50,6 +50,38 @@ export const isExerciseUnlocked = (exerciseId, masteredExerciseIds) => {
 };
 
 /**
+ * Recursively checks if an exercise's mastery is valid (i.e. all its prerequisites are also validly mastered).
+ * This prevents "island" mastery data (phantoms) from inflating the athlete score or unlocking advanced steps.
+ */
+export const isMasteryValid = (exerciseId, userHistory, memo = new Map()) => {
+    if (memo.has(exerciseId)) return memo.get(exerciseId);
+
+    const exercise = exerciseMap.get(exerciseId);
+    if (!exercise) return false;
+
+    const stats = userHistory[exerciseId];
+    // Basic consistency check (must have history and 2 valid sessions)
+    if (!stats || !checkMastery(exercise, stats)) {
+        memo.set(exerciseId, false);
+        return false;
+    }
+
+    // Root exercises (no prerequisites) are valid if mastered
+    if (!exercise.prerequisites || exercise.prerequisites.length === 0) {
+        memo.set(exerciseId, true);
+        return true;
+    }
+
+    // Advanced exercises are valid ONLY if ALL prerequisites are recursively valid
+    const allPrereqsValid = exercise.prerequisites.every(pId =>
+        isMasteryValid(pId, userHistory, memo)
+    );
+
+    memo.set(exerciseId, allPrereqsValid);
+    return allPrereqsValid;
+};
+
+/**
  * Checks if existing stats satisfy the mastery criteria.
  * Now requires consistency (2 sessions with RPE <= 4).
  * @param {object} exercise 
@@ -347,18 +379,19 @@ export const getSkillProgression = (userHistory) => {
     const skills = getAllSkills();
     const patterns = ['push', 'pull', 'legs', 'core'];
 
-    // Globally calculate mastered IDs once
-    const allMasteredIds = exercises
-        .filter(ex => checkMastery(ex, userHistory[ex.id]))
+    // Globally calculate VALIDLY mastered IDs once (recursive check)
+    const validMemo = new Map();
+    const allValidMasteredIds = exercises
+        .filter(ex => isMasteryValid(ex.id, userHistory, validMemo))
         .map(ex => ex.id);
 
     const getStatusForList = (name, list) => {
-        const mastered = list.filter(ex => allMasteredIds.includes(ex.id));
+        const mastered = list.filter(ex => allValidMasteredIds.includes(ex.id));
 
         // Find current stage (first unlocked non-mastered)
         const currentStage = list.find(ex => {
-            const unlocked = isExerciseUnlocked(ex.id, allMasteredIds);
-            const mastered = allMasteredIds.includes(ex.id);
+            const unlocked = isExerciseUnlocked(ex.id, allValidMasteredIds);
+            const mastered = allValidMasteredIds.includes(ex.id);
             return unlocked && !mastered;
         });
 
@@ -496,12 +529,17 @@ export const calculateReadinessScore = (userHistory, referenceDateStr = null) =>
     // Bonus: +2 points per day trained in last week, max +10
     const consistencyBonus = Math.min(10, recentDates.size * 2);
 
+    // 2. Identify all VALIDLY mastered IDs (recursive check)
+    const validMemo = new Map();
+    const validMasteredIds = exercises
+        .filter(ex => isMasteryValid(ex.id, userHistory, validMemo))
+        .map(ex => ex.id);
+
     // Helper: Max Mastered Difficulty
     const getMaxMasteredDifficulty = (categoryExercises) => {
         let maxDiff = 0;
         categoryExercises.forEach(ex => {
-            const stats = userHistory[ex.id];
-            if (stats && checkMastery(ex, stats)) {
+            if (validMasteredIds.includes(ex.id)) {
                 if (ex.difficulty_score > maxDiff) {
                     maxDiff = ex.difficulty_score;
                 }
@@ -778,15 +816,13 @@ export const generateSkillWorkout = (targetSkill, userHistory, availableEquipmen
         }
     }
 
-    // Identify user's mastered IDs 
+    // Identify user's VALIDLY mastered IDs (recursive check)
+    const validMemo = new Map();
     const masteredIds = exercises
-        .filter(ex => {
-            const stats = userHistory[ex.id];
-            return stats && checkMastery(ex, stats);
-        })
+        .filter(ex => isMasteryValid(ex.id, userHistory, validMemo))
         .map(ex => ex.id);
 
-    console.log('[Mastered] Total:', masteredIds.length, '/', exercises.length);
+    console.log('[Mastered] Total VALID:', masteredIds.length, '/', exercises.length);
     console.log('[Mastered] IDs:', masteredIds.slice(0, 10), masteredIds.length > 10 ? '...' : '');
 
     // Filter available exercises (Unlocked + Equipment)
@@ -988,11 +1024,10 @@ export const generatePatternWorkout = (pattern, userHistory, availableEquipment 
         );
     };
 
+    // Identify user's VALIDLY mastered IDs (recursive check)
+    const validMemo = new Map();
     const masteredIds = exercises
-        .filter(ex => {
-            const stats = userHistory[ex.id];
-            return stats && checkMastery(ex, stats);
-        })
+        .filter(ex => isMasteryValid(ex.id, userHistory, validMemo))
         .map(ex => ex.id);
 
     const getCandidates = (pat) => {

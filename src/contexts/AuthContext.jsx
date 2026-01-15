@@ -110,7 +110,23 @@ export const AuthProvider = ({ children }) => {
             setCurrentUser(user);
             if (user) {
                 console.log('[Auth] Session Email (Auth):', user.email, 'UID:', user.uid);
-                await loadUserProfile(user.uid);
+
+                // Fetch profile to check if email sync is needed
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    setUserProfile(data);
+
+                    // Auto-correct email mismatch
+                    if (user.email && data.email !== user.email) {
+                        console.log(`[Auth] Email mismatch detected! Firestore: ${data.email} | Auth: ${user.email}`);
+                        const updatedData = { email: user.email };
+                        await setDoc(doc(db, 'users', user.uid), updatedData, { merge: true });
+                        setUserProfile(prev => ({ ...prev, ...updatedData }));
+                    }
+                } else {
+                    setUserProfile(null);
+                }
             } else {
                 setUserProfile(null);
             }
