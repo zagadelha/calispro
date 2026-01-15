@@ -1,0 +1,496 @@
+{
+    "common": {
+        "next": "Próximo",
+        "back": "Voltar",
+        "finish": "Finalizar",
+        "loading": "Carregando...",
+        "error": "Erro",
+        "save": "Salvar",
+        "cancel": "Cancelar",
+        "delete": "Excluir",
+        "edit": "Editar",
+        "start": "Começar",
+        "beginner": "Iniciante",
+        "intermediate": "Intermediário",
+        "advanced": "Avançado",
+        "athlete": "Atleta",
+        "excellent": "Excelente",
+        "high": "Alto",
+        "medium": "Médio",
+        "low": "Baixo",
+        "strength": "Força",
+        "skill": "Habilidade",
+        "core": "Core",
+        "accessory": "Acessório",
+        "logout": "Sair",
+        "yes": "Sim",
+        "no": "Não",
+        "sets": "séries",
+        "score": "Score",
+        "push": "Empurrar",
+        "pull": "Puxar",
+        "legs": "Pernas",
+        "language": "Idioma"
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "evolution": "Evolução",
+        "profile": "Perfil",
+        "progress": "Progresso",
+        "logout": "Sair"
+    },
+    "landing": {
+        "title": "Transforme Seu Corpo com Calistenia",
+        "subtitle": "O aplicativo inteligente que guia sua jornada na calistenia, do primeiro exercício aos movimentos mais avançados",
+        "start_now": "Começar Agora",
+        "have_account": "Já Tenho Conta",
+        "what_is_calisthenics": "O que é Calistenia?",
+        "section_intro": "A calistenia é uma forma de treinamento que utiliza apenas o peso corporal para desenvolver força, flexibilidade, coordenação e resistência. Do grego \"kalos\" (beleza) e \"sthenos\" (força), esta arte milenar cria corpos fortes, ágeis e esteticamente harmoniosos.",
+        "why_calispro": "Por Que CalisPro?",
+        "why_calispro_intro": "Seu guia completo para dominar a calistenia, independente do seu nível",
+        "for_everyone": "Para Todos os Níveis",
+        "results_title": "Resultados Reais de Pessoas Reais",
+        "results_intro": "Veja as transformações incríveis alcançadas com treinos de calistenia",
+        "ready_to_start": "Pronto para Começar Sua Transformação?",
+        "ready_to_start_desc": "Junte-se a milhares de atletas que já estão transformando seus corpos com o CalisPro",
+        "create_free_account": "Criar Conta Grátis",
+        "rights_reserved": "© 2025 CalisPro. Todos os direitos reservados.",
+        "calisthenics_info": {
+            "more": "Ver Mais",
+            "calisthenics_concept": "A calistenia utiliza apenas o peso do corpo para criar força, equilíbrio e flexibilidade."
+        },
+        "transformations": {
+            "today": "Hoje",
+            "fat_burn": {
+                "title": "Queima de Gordura",
+                "desc": "De 95kg para 75kg em 6 meses"
+            },
+            "healthy_loss": {
+                "title": "Emagrecimento Saudável",
+                "desc": "De 78kg para 62kg em 5 meses"
+            },
+            "muscle_gain": {
+                "title": "Ganho de Massa Muscular",
+                "desc": "De 65kg para 78kg em 8 meses"
+            },
+            "complete": {
+                "title": "Transformação Completa",
+                "desc": "De 102kg para 85kg com ganho de força"
+            },
+            "definition_strength": {
+                "title": "Definição e Força",
+                "desc": "De 58kg para 63kg com muito mais músculo"
+            }
+        },
+        "benefits": {
+            "personalized": {
+                "title": "Treinos Personalizados",
+                "desc": "Planos de treino adaptados ao seu nível e objetivos individuais"
+            },
+            "tracking": {
+                "title": "Acompanhamento de Progresso",
+                "desc": "Monitore sua evolução com métricas detalhadas e gráficos intuitivos"
+            },
+            "intelligent": {
+                "title": "Progressão Inteligente",
+                "desc": "Sistema automático que ajusta a dificuldade conforme você evolui"
+            },
+            "library": {
+                "title": "Biblioteca de Exercícios",
+                "desc": "Centenas de exercícios com instruções detalhadas e demonstrações"
+            },
+            "flexible": {
+                "title": "Treinos Flexíveis",
+                "desc": "Adapte seus treinos ao tempo disponível, de 15 a 60 minutos"
+            },
+            "guides": {
+                "title": "Guias para Iniciantes",
+                "desc": "Comece do zero com orientações passo a passo para segurança"
+            }
+        },
+        "info": {
+            "strength": {
+                "title": "Força Funcional",
+                "desc": "Desenvolva força real aplicável ao dia a dia, não apenas músculos isolados. Pense em carregar objetos pesados com facilidade."
+            },
+            "flexibility": {
+                "title": "Flexibilidade Total",
+                "desc": "Treine em qualquer lugar, parque, casa ou academia. A liberdade de se mover sem amarras."
+            },
+            "balanced": {
+                "title": "Corpo Equilibrado",
+                "desc": "Construa um físico harmonioso trabalhando todo o corpo de forma integrada e estável."
+            },
+            "challenging": {
+                "title": "Sempre Desafiador",
+                "desc": "Progressões infinitas, do básico ao avançado, sempre há um novo desafio para superar."
+            }
+        },
+        "levels": {
+            "beginner": {
+                "title": "Começando do Zero",
+                "desc": "Sem experiência? Sem problema! Nosso sistema começa com exercícios básicos e te guia com segurança pelos fundamentos da calistenia.",
+                "f1": "Exercícios básicos e seguros",
+                "f2": "Instrução passo a passo",
+                "f3": "Progressão gradual e controlada",
+                "f4": "Foco em técnica e postura"
+            },
+            "intermediate": {
+                "title": "Evoluindo Constantemente",
+                "desc": "Já tem uma base? Acelere seu progresso com treinos desafiadores que expandem seus limites de forma inteligente.",
+                "f1": "Variações mais complexas",
+                "f2": "Combinações dinâmicas",
+                "f3": "Treinos de resistência",
+                "f4": "Preparação para skills avançadas"
+            },
+            "advanced": {
+                "title": "Dominando Skills",
+                "desc": "Busca dominar movimentos impressionantes? Treine skills complexas como muscle-ups, handstands, front lever e muito mais.",
+                "f1": "Skills avançadas",
+                "f2": "Progressões específicas",
+                "f3": "Treinos de alta intensidade",
+                "f4": "Refinamento de técnica"
+            }
+        },
+        "cta": {
+            "ready": "Tudo pronto por hoje!",
+            "description": "Seu próximo treino será gerado automaticamente."
+        }
+    },
+    "onboarding": {
+        "setup_profile": "Configure seu Perfil",
+        "step_of": "Passo {{step}} de 3",
+        "step1_title": "Qual seu nível e objetivo?",
+        "experience_level": "Nível de Experiência",
+        "experience": "Experiência",
+        "main_goal": "Objetivo Principal",
+        "goals": {
+            "strength": "Ganhar força",
+            "hypertrophy": "Hipertrofia",
+            "definition": "Definição",
+            "maintenance": "Manutenção"
+        },
+        "step2_title": "Frequência e Equipamentos",
+        "times_per_week": "Quantas vezes por semana?",
+        "available_equipment": "Equipamentos Disponíveis",
+        "equipment_list": {
+            "bodyweight": "Peso corporal",
+            "pullup_bar": "Barra fixa",
+            "dip_bars": "Paralelas",
+            "bands": "Elásticos"
+        },
+        "step3_title": "Alguma restrição física?",
+        "limitations_label": "Restrições ou Lesões (opcional)",
+        "limitations_placeholder": "Ex: dor no ombro direito, problema no joelho...",
+        "limitations_desc": "Isso nos ajuda a personalizar seu treino e evitar exercícios inadequados",
+        "creating_plan": "Criando plano..."
+    },
+    "profile": {
+        "title": "Meu Perfil",
+        "name": "Nome",
+        "experience": "Nível de Experiência",
+        "goal": "Objetivo Principal",
+        "frequency": "Frequência Semanal",
+        "equipment": "Equipamentos Disponíveis",
+        "limitations": "Restrições Físicas",
+        "edit_profile": "Editar Perfil",
+        "recalculate": "Recalcular Plano de Treino",
+        "delete_history": "Apagar Histórico de Treino",
+        "force_refresh": "Forçar Atualização da Página",
+        "select": "Selecione...",
+        "per_week": "por semana",
+        "none": "Nenhum",
+        "success_update": "Perfil atualizado com sucesso!",
+        "error_update": "Erro ao atualizar perfil",
+        "recalculate_confirm": "Isso irá gerar um novo plano de treino. Deseja continuar?",
+        "plan_generated": "Novo plano de treino gerado!",
+        "delete_confirm1": "⚠️ ATENÇÃO: Isso irá apagar TODO o seu histórico de treinos, recordes e evolução. Esta ação NÃO pode ser desfeita e você perderá todo o seu progresso.",
+        "delete_confirm2": "Você tem CERTEZA absoluta? Todos os seus dados de progresso sumirão para sempre."
+    },
+    "dashboard": {
+        "welcome": "Olá, {{name}}!",
+        "today_workout": "Treino de Hoje",
+        "no_workout": "Nenhum treino para hoje",
+        "generate_extra": "Gerar Treino Extra",
+        "view_all": "Ver todos",
+        "objective_prefix": "Objetivo",
+        "focus_prefix": "Foco em",
+        "start_workout": "Iniciar Treino",
+        "continue_workout": "Continuar Treino",
+        "workout_done": "Treino Concluído",
+        "next_workout": "Próximo Treino",
+        "readiness_score": "Score de Prontidão",
+        "off_plan_title": "Treino fora do plano",
+        "off_plan_desc": "Gere um treino avulso baseado em categoria ou habilidade",
+        "by_category": "Categoria",
+        "by_skill": "Habilidade",
+        "generate_now": "Gerar Treino Agora",
+        "off_plan_note1": "Gere treinos focados em habilidades ou categorias musculares específicas.",
+        "off_plan_note2": "Este treino não é programado e não será contabilizado na sua evolução."
+    },
+    "exercises": {
+        "push_up": "Flexão de Braços",
+        "push_up_knee": "Flexão de Joelhos",
+        "incline_push_up": "Flexão Inclinada",
+        "diamond_push_up_light": "Flexão Diamante",
+        "wide_grip_push_up": "Flexão Aberta",
+        "pike_push_up_beginner": "Pike Push-Up (Iniciante)",
+        "australian_row": "Remada Invertida",
+        "towel_row_table": "Remada na Toalha/Mesa",
+        "dead_hang": "Suspensão na Barra",
+        "scapular_retraction_bar": "Retração Escapular na Barra",
+        "assisted_chin_up": "Chin-Up Assistido",
+        "bodyweight_squat": "Agachamento Livre",
+        "partial_squat": "Agachamento Parcial",
+        "static_lunge": "Afundo Estático",
+        "step_up": "Step-Up",
+        "calf_raise": "Elevação de Panturrilha",
+        "glute_bridge": "Elevação de Quadril",
+        "plank": "Prancha Abdominal",
+        "side_plank": "Prancha Lateral",
+        "crunch": "Abdominal Crunch",
+        "lying_knee_raises": "Elevação de Joelhos Deitado",
+        "dead_bug": "Dead Bug",
+        "hollow_hold_basic": "Hollow Hold (Básico)",
+        "mountain_climber": "Mountain Climber",
+        "superman": "Superman",
+        "decline_push_up": "Flexão Declinada",
+        "explosive_push_up": "Flexão Explosiva",
+        "archer_push_up": "Flexão Arqueiro",
+        "dips_parallel": "Paralelas",
+        "pseudo_planche_push_up": "Pseudo Planche Push-Up",
+        "pike_push_up_advanced": "Pike Push-Up (Avançado)",
+        "pull_up": "Pull-Up",
+        "chin_up": "Chin-Up",
+        "commando_pull_up": "Pull-Up Comando",
+        "isometric_90_deg": "Pull-Up Hold (90°)",
+        "scapula_pull_up": "Pull-Up Escapular",
+        "bulgarian_split_squat": "Agachamento Búlgaro",
+        "walking_lunge": "Afundo Caminhando",
+        "assisted_pistol_squat": "Pistol Squat Assistido",
+        "jump_squat": "Agachamento com Salto",
+        "box_jump": "Salto na Caixa",
+        "nordic_curl_assisted": "Flexão Nórdica Assistida",
+        "hanging_knee_raises": "Elevação de Joelhos na Barra",
+        "hanging_leg_raises": "Elevação de Pernas na Barra",
+        "l_sit_tuck": "Tuck L-Sit",
+        "hollow_body_hold": "Hollow Body Hold",
+        "dragon_flag_negative": "Dragon Flag (Negativa)",
+        "windshield_wipers_partial": "Windshield Wipers (Parcial)",
+        "toes_to_bar_partial": "Toes-to-Bar (Parcial)",
+        "front_lever_tuck": "Tuck Front Lever",
+        "handstand_push_up": "Handstand Push-Up",
+        "one_arm_push_up": "Flexão com Um Braço",
+        "planche_lean": "Planche Lean",
+        "tuck_planche": "Tuck Planche",
+        "planche_push_up": "Planche Push-Up",
+        "korean_dips": "Korean Dips",
+        "muscle_up": "Muscle-Up",
+        "explosive_pull_up": "Pull-Up Explosivo",
+        "one_arm_pull_up_progression": "Pull-Up com Um Braço (Progressão)",
+        "typewriter_pull_up": "Typewriter Pull-Up",
+        "front_lever_pull_up": "Front Lever Pull-Up",
+        "ice_cream_makers": "Ice Cream Makers",
+        "pistol_squat": "Pistol Squat",
+        "shrimp_squat": "Shrimp Squat",
+        "nordic_curl": "Flexão Nórdica",
+        "jump_pistol_squat": "Pistol Squat com Salto",
+        "sissy_squat": "Sissy Squat",
+        "single_leg_box_jump": "Salto na Caixa Unilateral",
+        "l_sit_full": "L-Sit",
+        "v_sit": "V-Sit",
+        "dragon_flag_full": "Dragon Flag",
+        "windshield_wipers_full": "Windshield Wipers",
+        "toes_to_bar": "Toes-to-Bar",
+        "front_lever": "Front Lever",
+        "back_lever": "Back Lever",
+        "skin_the_cat": "Skin the Cat",
+        "human_flag": "Human Flag",
+        "hollow_body_rock": "Hollow Body Rock",
+        "ab_wheel_rollout_knees": "Ab Wheel (Joelhos)",
+        "archer_pull_up": "Archer Pull-Up",
+        "wide_grip_pull_up": "Wide Grip Pull-Up",
+        "cossack_squat": "Agachamento Cossaco",
+        "archer_squat": "Agachamento Arqueiro",
+        "nordic_curl_eccentric": "Flexão Nórdica (Excêntrica)",
+        "l_sit_knee_tuck": "L-Sit (Knee Tuck)",
+        "pike_push_up_elevated_feet": "Pike Push-Up (Pés Elevados)",
+        "close_grip_push_up": "Flexão Fechada",
+        "negative_pull_up": "Pull-Up Negativo",
+        "tucked_front_lever_raise": "Tucked Front Lever Raise",
+        "wall_handstand_hold": "Handstand na Parede",
+        "assisted_pull_up": "Pull-Up Assistido",
+        "chest_to_bar_pull_up": "Chest-to-Bar Pull-Up",
+        "weighted_pull_up": "Pull-Up com Carga",
+        "one_arm_pull_up_assisted": "Pull-Up com Um Braço Assistido",
+        "one_arm_pull_up": "Pull-Up com Um Braço",
+        "dip": "Mergulho (Dips)"
+    },
+    "evolution": {
+        "title": "Minha Evolução",
+        "total_score": "Pontuação Total",
+        "athlete_balance": "Equilíbrio Atleta",
+        "athlete_level": "Nível do Atleta",
+        "skills": "Habilidades",
+        "completed": "Concluídas",
+        "in_focus": "Em Foco",
+        "technical_mastery": "Domínio Técnico",
+        "current_focus": "FOCO ATUAL",
+        "locked": "BLOQUEADO",
+        "max_achievement": "CONQUISTA MÁXIMA",
+        "pr": "Personal Record",
+        "objective": "Objetivo",
+        "mastery": "Domínio",
+        "result": "Resultado",
+        "completed_msg": "Concluído",
+        "requirements_msg": "Requisitos",
+        "ready_msg": "Pronto!",
+        "evolution_msg": "evoluindo",
+        "skills_list": {
+            "handstand": "Handstand",
+            "front_lever": "Front Lever",
+            "back_lever": "Back Lever",
+            "planche": "Planche",
+            "l_sit": "L-Sit",
+            "muscle_up": "Muscle-Up",
+            "toes_to_bar": "Toes-to-Bar",
+            "dragon_flag": "Dragon Flag",
+            "human_flag": "Human Flag",
+            "base_push": "Empurrar (Base)",
+            "base_pull": "Puxar (Base)",
+            "base_legs": "Pernas (Base)",
+            "base_core": "Core (Base)"
+        }
+    },
+    "progression": {
+        "regress": "O desafio está alto. Que tal recuar um degrau para ganhar impulso? 🛡️",
+        "promote": "Sensacional! {{name}} dominado. Próximo desafio: {{nextName}}! 🚀",
+        "maintain_max": "Você é uma lenda! Zerou a progressão de {{name}}. 🏆",
+        "maintain_progress": "Boa consistência! Faltam apenas alguns detalhes para o próximo nível. 🔥",
+        "maintain_start": "Começo sólido! Continue praticando para ganhar força. 💪"
+    },
+    "progress": {
+        "title": "Meu Progresso",
+        "streak": "Dias Consecutivos",
+        "total_workouts": "Treinos Totais",
+        "this_week": "Esta Semana",
+        "this_month": "Este Mês",
+        "workouts_by_month": "Treinos por Mês",
+        "workouts_by_category": "Treinos por Categoria",
+        "no_workouts": "Nenhum treino concluído ainda",
+        "no_workouts_desc": "Complete seu primeiro treino para ver seu progresso aqui!"
+    },
+    "workout_execution": {
+        "title": "Execução do Treino",
+        "warmup_suggestion": "Sugestão de Aquecimento",
+        "warmup_desc": "Recomendado para prevenir lesões e preparar suas articulações para o treino de hoje.",
+        "skip": "Pular",
+        "ready_to_start": "Tudo Pronto, Começar Treino!",
+        "exercises_title": "Exercícios do Treino",
+        "reps_performed": "Reps Realizados",
+        "seconds_performed": "Segundos Realizados",
+        "feedback_title": "Feedback do Treino",
+        "mandatory": "Obrigatório",
+        "goal_met": "1. Meta do treino atingida?",
+        "general_difficulty": "2. Dificuldade Geral (1-5)",
+        "pain_discomfort": "3. Dor ou Desconforto?",
+        "very_easy": "Muito Fácil",
+        "exhaustive": "Exaustivo",
+        "none": "Nenhuma",
+        "mild": "Leve",
+        "moderate": "Moderada+",
+        "finish_workout": "Finalizar Treino",
+        "complete_feedback_warning": "Preencha todo o feedback para finalizar o treino",
+        "performance_warning": "Por favor, preencha os dados de performance para todos os exercícios.",
+        "warmup_steps": {
+            "wrist": {
+                "title": "Pulso",
+                "info": "Círculos (30s)",
+                "desc": "Entrelace os dedos e gire os punhos em círculos lentos. Mude o sentido após 15s."
+            },
+            "arms": {
+                "title": "Braços",
+                "info": "Círculos (10x)",
+                "desc": "Com braços esticados, descreva círculos amplos: 10 para frente e 10 para trás."
+            },
+            "spine": {
+                "title": "Coluna",
+                "info": "Cat-Cow (10x)",
+                "desc": "Em 4 apoios, alterne entre arquear as costas para cima e para baixo respirando calmamente."
+            },
+            "scapula": {
+                "title": "Escápulas",
+                "info": "Ativação (10x)",
+                "desc": "Na prancha alta, afaste e junte as escápulas sem dobrar os cotovelos."
+            },
+            "legs": {
+                "title": "Pernas",
+                "info": "Agachamento (15x)",
+                "desc": "Agache mantendo calcanhares no chão e peito aberto. Suba de forma controlada."
+            },
+            "cardio": {
+                "title": "Cardio",
+                "info": "Polichinelos (30s)",
+                "desc": "Salte afastando braços e pernas simultaneamente para aquecer o corpo todo."
+            }
+        }
+    },
+    "stats": {
+        "title": "Estatísticas",
+        "workouts_done": "Treinos realizados",
+        "streak": "Sequência atual",
+        "days": "dias"
+    },
+    "auth": {
+        "login_title": "Entrar",
+        "signup_title": "Criar Conta",
+        "email_label": "Email",
+        "password_label": "Senha",
+        "name_label": "Nome",
+        "confirm_password_label": "Confirmar Senha",
+        "login_button": "Entrar",
+        "logging_in": "Entrando...",
+        "signup_button": "Criar Conta",
+        "signing_up": "Criando conta...",
+        "google_continue": "Continuar com Google",
+        "no_account": "Não tem uma conta?",
+        "have_account": "Já tem uma conta?",
+        "login_link": "Entrar",
+        "signup_link": "Cadastre-se",
+        "login_subtitle": "Seu guia do iniciante ao avançado na Calistenia.",
+        "signup_subtitle": "Crie sua conta e comece hoje",
+        "errors": {
+            "fill_all": "Por favor, preencha todos os campos",
+            "passwords_dont_match": "As senhas não coincidem",
+            "password_too_short": "A senha deve ter pelo menos 6 caracteres",
+            "invalid_email": "Email inválido",
+            "user_not_found": "Email ou senha incorretos",
+            "email_in_use": "Este email já está em uso",
+            "weak_password": "Senha muito fraca",
+            "general_error": "Erro ao processar. Tente novamente."
+        }
+    },
+    "support": {
+        "title": "Fale Conosco",
+        "button_title": "Enviar Feedback",
+        "help_label": "Como podemos ajudar?",
+        "message_label": "Sua mensagem",
+        "placeholder": "Descreva sua dúvida, bug, sugestão ou mensagem...",
+        "submit": "Enviar Mensagem",
+        "sending": "Enviando...",
+        "types": {
+            "bug": "Reportar Erro",
+            "question": "Dúvida",
+            "suggestion": "Sugestão",
+            "contact": "Contato"
+        },
+        "success": {
+            "title": "Obrigado!",
+            "message": "Sua mensagem foi enviada com sucesso."
+        },
+        "errors": {
+            "fill_all": "Por favor, selecione um tipo e escreva sua mensagem.",
+            "submit_error": "Erro ao enviar feedback. Tente novamente."
+        }
+    }
+}

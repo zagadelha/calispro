@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { generateWorkoutPlan } from '../utils/workoutGenerator';
 import { collection, query, where, getDocs, writeBatch, doc } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import Header from '../components/Header';
 
 const Profile = () => {
+    const { t } = useTranslation();
     const { currentUser, userProfile, updateUserProfile, uploadProfilePhoto } = useAuth();
     const [editing, setEditing] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -64,28 +67,28 @@ const Profile = () => {
             setLoading(true);
             await updateUserProfile(currentUser.uid, formData);
             setEditing(false);
-            alert('Perfil atualizado com sucesso!');
+            alert(t('profile.success_update'));
         } catch (err) {
             console.error('Error updating profile:', err);
-            alert('Erro ao atualizar perfil');
+            alert(t('profile.error_update'));
         } finally {
             setLoading(false);
         }
     };
 
     const handleRecalculatePlan = async () => {
-        if (!confirm('Isso irá gerar um novo plano de treino. Deseja continuar?')) {
+        if (!confirm(t('profile.recalculate_confirm'))) {
             return;
         }
 
         try {
             setLoading(true);
             await generateWorkoutPlan(currentUser.uid, formData);
-            alert('Novo plano de treino gerado!');
+            alert(t('profile.plan_generated'));
             navigate('/dashboard');
         } catch (err) {
             console.error('Error generating plan:', err);
-            alert('Erro ao gerar novo plano');
+            alert(t('profile.error_update')); // Reusing error update for now
         } finally {
             setLoading(false);
         }
@@ -97,13 +100,13 @@ const Profile = () => {
 
         // Validate file type
         if (!file.type.startsWith('image/')) {
-            alert('Por favor, selecione uma imagem válida');
+            alert(t('profile.error_update')); // Better error needed in JSON
             return;
         }
 
         // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
-            alert('A imagem deve ter no máximo 5MB');
+            alert(t('profile.error_update'));
             return;
         }
 
@@ -112,17 +115,17 @@ const Profile = () => {
             await uploadProfilePhoto(currentUser.uid, file);
         } catch (err) {
             console.error('Error uploading photo:', err);
-            alert('Erro ao fazer upload da foto');
+            alert(t('profile.error_update'));
         } finally {
             setUploadingPhoto(false);
         }
     };
 
     const handleDeleteHistory = async () => {
-        const confirm1 = confirm('⚠️ ATENÇÃO: Isso irá apagar TODO o seu histórico de treinos, recordes e evolução. Esta ação NÃO pode ser desfeita e você perderá todo o seu progresso.');
+        const confirm1 = confirm(t('profile.delete_confirm1'));
         if (!confirm1) return;
 
-        const confirm2 = confirm('Você tem CERTEZA absoluta? Todos os seus dados de progresso sumirão para sempre.');
+        const confirm2 = confirm(t('profile.delete_confirm2'));
         if (!confirm2) return;
 
         try {
@@ -232,20 +235,7 @@ const Profile = () => {
     return (
         <div className="profile-container">
             {/* Header */}
-            <header className="page-header">
-                <div className="container">
-                    <div className="header-left">
-                        <button
-                            onClick={() => navigate('/dashboard')}
-                            className="btn btn-secondary btn-sm"
-                        >
-                            ← Voltar
-                        </button>
-                    </div>
-                    <h2>Meu Perfil</h2>
-                    <div className="header-right"></div>
-                </div>
-            </header>
+            <Header />
 
             {/* Main Content */}
             <main className="profile-main">
@@ -302,7 +292,7 @@ const Profile = () => {
                         {/* Profile Form */}
                         <div className="profile-form">
                             <div className="form-group">
-                                <label className="form-label">Nome</label>
+                                <label className="form-label">{t('profile.name')}</label>
                                 <input
                                     type="text"
                                     className="form-input"
@@ -313,73 +303,91 @@ const Profile = () => {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Nível de Experiência</label>
+                                <label className="form-label">{t('profile.experience')}</label>
                                 {editing ? (
                                     <select
                                         className="form-select"
                                         value={formData.experience_level}
                                         onChange={(e) => handleChange('experience_level', e.target.value)}
                                     >
-                                        <option value="">Selecione...</option>
-                                        <option value="Iniciante">Iniciante</option>
-                                        <option value="Intermediário">Intermediário</option>
-                                        <option value="Avançado">Avançado</option>
+                                        <option value="">{t('profile.select')}</option>
+                                        <option value="Iniciante">{t('common.beginner')}</option>
+                                        <option value="Intermediário">{t('common.intermediate')}</option>
+                                        <option value="Avançado">{t('common.advanced')}</option>
                                     </select>
                                 ) : (
-                                    <div className="form-value">{formData.experience_level || 'Não definido'}</div>
+                                    <div className="form-value">
+                                        {formData.experience_level === 'Iniciante' && t('common.beginner')}
+                                        {formData.experience_level === 'Intermediário' && t('common.intermediate')}
+                                        {formData.experience_level === 'Avançado' && t('common.advanced')}
+                                        {!formData.experience_level && t('profile.none')}
+                                    </div>
                                 )}
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Objetivo Principal</label>
+                                <label className="form-label">{t('profile.goal')}</label>
                                 {editing ? (
                                     <select
                                         className="form-select"
                                         value={formData.goal}
                                         onChange={(e) => handleChange('goal', e.target.value)}
                                     >
-                                        <option value="">Selecione...</option>
-                                        <option value="Ganhar força">Ganhar força</option>
-                                        <option value="Hipertrofia">Hipertrofia</option>
-                                        <option value="Definição">Definição</option>
-                                        <option value="Manutenção">Manutenção</option>
+                                        <option value="">{t('profile.select')}</option>
+                                        <option value="Ganhar força">{t('onboarding.goals.strength')}</option>
+                                        <option value="Hipertrofia">{t('onboarding.goals.hypertrophy')}</option>
+                                        <option value="Definição">{t('onboarding.goals.definition')}</option>
+                                        <option value="Manutenção">{t('onboarding.goals.maintenance')}</option>
                                     </select>
                                 ) : (
-                                    <div className="form-value">{formData.goal || 'Não definido'}</div>
+                                    <div className="form-value">
+                                        {formData.goal === 'Ganhar força' && t('onboarding.goals.strength')}
+                                        {formData.goal === 'Hipertrofia' && t('onboarding.goals.hypertrophy')}
+                                        {formData.goal === 'Definição' && t('onboarding.goals.definition')}
+                                        {formData.goal === 'Manutenção' && t('onboarding.goals.maintenance')}
+                                        {!formData.goal && t('profile.none')}
+                                    </div>
                                 )}
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Frequência Semanal</label>
+                                <label className="form-label">{t('profile.frequency')}</label>
                                 {editing ? (
                                     <select
                                         className="form-select"
                                         value={formData.days_per_week}
                                         onChange={(e) => handleChange('days_per_week', e.target.value)}
                                     >
-                                        <option value="">Selecione...</option>
-                                        <option value="2x">2x por semana</option>
-                                        <option value="3x">3x por semana</option>
-                                        <option value="4x">4x por semana</option>
-                                        <option value="5x+">5x+ por semana</option>
+                                        <option value="">{t('profile.select')}</option>
+                                        <option value="2x">2x {t('profile.per_week')}</option>
+                                        <option value="3x">3x {t('profile.per_week')}</option>
+                                        <option value="4x">4x {t('profile.per_week')}</option>
+                                        <option value="5x+">5x+ {t('profile.per_week')}</option>
                                     </select>
                                 ) : (
-                                    <div className="form-value">{formData.days_per_week || 'Não definido'}</div>
+                                    <div className="form-value">
+                                        {formData.days_per_week ? `${formData.days_per_week} ${t('profile.per_week')}` : t('profile.none')}
+                                    </div>
                                 )}
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Equipamentos Disponíveis</label>
+                                <label className="form-label">{t('profile.equipment')}</label>
                                 {editing ? (
                                     <div className="checkbox-grid">
-                                        {['Peso corporal', 'Barra fixa', 'Paralelas', 'Elásticos'].map(equipment => (
-                                            <label key={equipment} className="form-checkbox">
+                                        {[
+                                            { id: 'Peso corporal', label: t('onboarding.equipment_list.bodyweight') },
+                                            { id: 'Barra fixa', label: t('onboarding.equipment_list.pullup_bar') },
+                                            { id: 'Paralelas', label: t('onboarding.equipment_list.dip_bars') },
+                                            { id: 'Elásticos', label: t('onboarding.equipment_list.bands') }
+                                        ].map(item => (
+                                            <label key={item.id} className="form-checkbox">
                                                 <input
                                                     type="checkbox"
-                                                    checked={formData.equipment.includes(equipment)}
-                                                    onChange={() => handleEquipmentToggle(equipment)}
+                                                    checked={formData.equipment.includes(item.id)}
+                                                    onChange={() => handleEquipmentToggle(item.id)}
                                                 />
-                                                <span>{equipment}</span>
+                                                <span>{item.label}</span>
                                             </label>
                                         ))}
                                     </div>
@@ -387,19 +395,23 @@ const Profile = () => {
                                     <div className="form-value">
                                         {formData.equipment.map(e => {
                                             const labels = {
-                                                'none': 'Peso corporal',
-                                                'pull_up_bar': 'Barra fixa',
-                                                'dip_bars': 'Paralelas',
-                                                'resistance_bands': 'Elásticos'
+                                                'Peso corporal': t('onboarding.equipment_list.bodyweight'),
+                                                'Barra fixa': t('onboarding.equipment_list.pullup_bar'),
+                                                'Paralelas': t('onboarding.equipment_list.dip_bars'),
+                                                'Elásticos': t('onboarding.equipment_list.bands'),
+                                                'none': t('onboarding.equipment_list.bodyweight'),
+                                                'pull_up_bar': t('onboarding.equipment_list.pullup_bar'),
+                                                'dip_bars': t('onboarding.equipment_list.dip_bars'),
+                                                'resistance_bands': t('onboarding.equipment_list.bands')
                                             };
                                             return labels[e] || e;
-                                        }).join(', ') || 'Nenhum'}
+                                        }).join(', ') || t('profile.none')}
                                     </div>
                                 )}
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Restrições Físicas</label>
+                                <label className="form-label">{t('profile.limitations')}</label>
                                 {editing ? (
                                     <textarea
                                         className="form-textarea"
@@ -409,7 +421,7 @@ const Profile = () => {
                                     />
                                 ) : (
                                     <div className="form-value">
-                                        {formData.limitations || 'Nenhuma'}
+                                        {formData.limitations || t('profile.none')}
                                     </div>
                                 )}
                             </div>
@@ -434,14 +446,14 @@ const Profile = () => {
                                         className="btn btn-secondary flex-1"
                                         disabled={loading}
                                     >
-                                        Cancelar
+                                        {t('common.cancel')}
                                     </button>
                                     <button
                                         onClick={handleSave}
                                         className="btn btn-primary flex-1"
                                         disabled={loading}
                                     >
-                                        {loading ? 'Salvando...' : 'Salvar'}
+                                        {loading ? t('common.loading') : t('common.save')}
                                     </button>
                                 </div>
                             ) : (
@@ -450,21 +462,21 @@ const Profile = () => {
                                         onClick={() => setEditing(true)}
                                         className="btn btn-primary btn-full mb-md"
                                     >
-                                        ✏️ Editar Perfil
+                                        ✏️ {t('profile.edit_profile')}
                                     </button>
                                     <button
                                         onClick={handleRecalculatePlan}
                                         className="btn btn-secondary btn-full mb-md"
                                         disabled={loading}
                                     >
-                                        🔄 Recalcular Plano de Treino
+                                        🔄 {t('profile.recalculate')}
                                     </button>
                                     <button
                                         onClick={handleDeleteHistory}
                                         className="btn btn-error btn-full"
                                         disabled={loading}
                                     >
-                                        🗑️ Apagar Histórico de Treino
+                                        🗑️ {t('profile.delete_history')}
                                     </button>
 
                                     <div className="mt-lg text-center">
@@ -472,7 +484,7 @@ const Profile = () => {
                                             onClick={() => window.location.reload()}
                                             className="text-secondary text-xs btn-link"
                                         >
-                                            🔄 Forçar Atualização da Página
+                                            🔄 {t('profile.force_refresh')}
                                         </button>
                                     </div>
                                 </>

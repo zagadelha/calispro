@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 
 import logo from '../assets/logo2.png';
 import InstallButton from '../components/InstallButton';
+import LanguageSelector from '../components/LanguageSelector';
 
 
 const Login = () => {
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -18,7 +21,7 @@ const Login = () => {
         e.preventDefault();
 
         if (!email || !password) {
-            setError('Por favor, preencha todos os campos');
+            setError(t('auth.errors.fill_all'));
             return;
         }
 
@@ -30,11 +33,11 @@ const Login = () => {
         } catch (err) {
             console.error(err);
             if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-                setError('Email ou senha incorretos');
+                setError(t('auth.errors.user_not_found'));
             } else if (err.code === 'auth/invalid-email') {
-                setError('Email inválido');
+                setError(t('auth.errors.invalid_email'));
             } else {
-                setError('Erro ao fazer login. Tente novamente.');
+                setError(t('auth.errors.general_error'));
             }
         } finally {
             setLoading(false);
@@ -49,7 +52,7 @@ const Login = () => {
             navigate('/dashboard');
         } catch (err) {
             console.error(err);
-            setError('Erro ao fazer login com Google. Tente novamente.');
+            setError(t('auth.errors.general_error'));
         } finally {
             setLoading(false);
         }
@@ -57,11 +60,12 @@ const Login = () => {
 
     return (
         <div className="auth-container">
+            <LanguageSelector floating />
             <div className="container container-sm">
                 <div className="auth-card card animate-fadeIn">
                     <div className="auth-header text-center mb-xl">
                         <img src={logo} alt="CalisPro" className="auth-logo mb-md" />
-                        <p className="text-secondary">Seu guia do iniciante ao avançado na Calistenia.</p>
+                        <p className="text-secondary">{t('auth.login_subtitle')}</p>
                         <div className="mt-md">
                             <InstallButton className="btn-sm btn-outline" />
                         </div>
@@ -75,7 +79,7 @@ const Login = () => {
 
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label className="form-label">Email</label>
+                            <label className="form-label">{t('auth.email_label')}</label>
                             <input
                                 type="email"
                                 className="form-input"
@@ -87,7 +91,7 @@ const Login = () => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-label">Senha</label>
+                            <label className="form-label">{t('auth.password_label')}</label>
                             <input
                                 type="password"
                                 className="form-input"
@@ -103,7 +107,7 @@ const Login = () => {
                             className="btn btn-primary btn-full mb-lg"
                             disabled={loading}
                         >
-                            {loading ? 'Entrando...' : 'Entrar'}
+                            {loading ? t('auth.logging_in') : t('auth.login_button')}
                         </button>
                     </form>
 
@@ -120,13 +124,13 @@ const Login = () => {
                             <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707 0-.593.102-1.17.282-1.709V4.958H.957C.347 6.173 0 7.548 0 9c0 1.452.348 2.827.957 4.042l3.007-2.335z" />
                             <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" />
                         </svg>
-                        Continuar com Google
+                        {t('auth.google_continue')}
                     </button>
 
                     <p className="text-center text-secondary">
-                        Não tem uma conta?{' '}
+                        {t('auth.no_account')}{' '}
                         <Link to="/signup" className="link-primary">
-                            Cadastre-se
+                            {t('auth.signup_link')}
                         </Link>
                     </p>
                 </div>

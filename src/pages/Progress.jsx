@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subMonths, eachMonthOfInterval } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { ptBR, es, enUS } from 'date-fns/locale';
 import { getVirtualNow } from '../utils/timeTravel';
+import Header from '../components/Header';
 import {
     BarChart,
     Bar,
@@ -18,7 +20,15 @@ import {
     LabelList
 } from 'recharts';
 
+const localesMap = {
+    pt: ptBR,
+    en: enUS,
+    es: es
+};
+
 const Progress = () => {
+    const { t, i18n } = useTranslation();
+    const currentLocale = localesMap[i18n.language.split('-')[0]] || ptBR;
     const [workouts, setWorkouts] = useState([]);
     const [stats, setStats] = useState({
         thisWeek: 0,
@@ -67,8 +77,8 @@ const Progress = () => {
 
             // Calculate stats
             const now = getVirtualNow();
-            const weekStart = startOfWeek(now, { locale: ptBR });
-            const weekEnd = endOfWeek(now, { locale: ptBR });
+            const weekStart = startOfWeek(now, { locale: currentLocale });
+            const weekEnd = endOfWeek(now, { locale: currentLocale });
             const monthStart = startOfMonth(now);
             const monthEnd = endOfMonth(now);
 
@@ -135,36 +145,32 @@ const Progress = () => {
                 }).length;
 
                 return {
-                    name: format(monthDate, 'MMM', { locale: ptBR }).replace(/^\w/, c => c.toUpperCase()),
+                    name: format(monthDate, 'MMM', { locale: currentLocale }).replace(/^\w/, c => c.toUpperCase()),
                     count
                 };
             });
             setChartData(chartDataFormatted);
 
             // Generate category/skill data
-            const categoryLabels = {
-                'handstand': 'Handstand',
-                'front_lever': 'Front Lever',
-                'back_lever': 'Back Lever',
-                'planche': 'Planche',
-                'push': 'Empurrar',
-                'pull': 'Puxar',
-                'legs': 'Pernas',
-                'core': 'Core',
-                'muscle_up': 'Muscle Up'
-            };
-
             const catCounts = {};
             workoutData.forEach(w => {
-                let category = 'Outros';
+                let category = t('common.accessory');
                 if (w.skill_id) {
-                    category = categoryLabels[w.skill_id] || w.skill_id.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
+                    // Normalize skill_id for base categories
+                    let skillKey = w.skill_id;
+                    if (skillKey.startsWith('base_')) {
+                        const base = skillKey.replace('base_', '');
+                        const keyMap = { push: 'push', pull: 'pull', legs: 'legs', core: 'core' };
+                        category = t(`common.${keyMap[base] || base}`);
+                    } else {
+                        category = t(`dashboard.evolution.skills_list.${skillKey}`, { defaultValue: skillKey.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase()) });
+                    }
                 } else if (w.name) {
                     const nameLower = w.name.toLowerCase();
-                    if (nameLower.includes('empurrar')) category = 'Empurrar';
-                    else if (nameLower.includes('puxar')) category = 'Puxar';
-                    else if (nameLower.includes('pernas')) category = 'Pernas';
-                    else if (nameLower.includes('core')) category = 'Core';
+                    if (nameLower.includes('empurrar') || nameLower.includes('push')) category = t('common.push');
+                    else if (nameLower.includes('puxar') || nameLower.includes('pull')) category = t('common.pull');
+                    else if (nameLower.includes('pernas') || nameLower.includes('legs')) category = t('common.legs');
+                    else if (nameLower.includes('core')) category = t('common.core');
                     else if (nameLower.includes('handstand')) category = 'Handstand';
                     else if (nameLower.includes('front lever')) category = 'Front Lever';
                     else if (nameLower.includes('back lever')) category = 'Back Lever';
@@ -201,20 +207,7 @@ const Progress = () => {
     return (
         <div className="progress-container">
             {/* Header */}
-            <header className="page-header">
-                <div className="container">
-                    <div className="header-left">
-                        <button
-                            onClick={() => navigate('/dashboard')}
-                            className="btn btn-secondary btn-sm"
-                        >
-                            ← Voltar
-                        </button>
-                    </div>
-                    <h2>Meu Progresso</h2>
-                    <div className="header-right"></div>
-                </div>
-            </header>
+            <Header />
 
             {/* Main Content */}
             <main className="progress-main">
@@ -225,25 +218,25 @@ const Progress = () => {
                             <div className="stat-card-large card">
                                 <div className="stat-icon-large">🔥</div>
                                 <div className="stat-value-large">{stats.streak}</div>
-                                <div className="stat-label-large">Dias Consecutivos</div>
+                                <div className="stat-label-large">{t('progress.streak')}</div>
                             </div>
 
                             <div className="stat-card-large card">
                                 <div className="stat-icon-large">⭐</div>
                                 <div className="stat-value-large">{stats.total}</div>
-                                <div className="stat-label-large">Treinos Totais</div>
+                                <div className="stat-label-large">{t('progress.total_workouts')}</div>
                             </div>
 
                             <div className="stat-card-large card">
                                 <div className="stat-icon-large">📅</div>
                                 <div className="stat-value-large">{stats.thisWeek}</div>
-                                <div className="stat-label-large">Esta Semana</div>
+                                <div className="stat-label-large">{t('progress.this_week')}</div>
                             </div>
 
                             <div className="stat-card-large card">
                                 <div className="stat-icon-large">📊</div>
                                 <div className="stat-value-large">{stats.thisMonth}</div>
-                                <div className="stat-label-large">Este Mês</div>
+                                <div className="stat-label-large">{t('progress.this_month')}</div>
                             </div>
                         </div>
                     </section>
@@ -251,15 +244,15 @@ const Progress = () => {
                     {/* Monthly Progress Chart */}
                     <section className="history-section animate-fadeIn mb-xl">
                         <div className="card">
-                            <h3 className="mb-lg">Treinos por Mês</h3>
+                            <h3 className="mb-lg">{t('progress.workouts_by_month')}</h3>
 
                             {workouts.length === 0 ? (
                                 <div className="text-center">
                                     <div className="empty-state">
                                         <div className="empty-icon">�</div>
-                                        <h4 className="mb-sm">Nenhum treino concluído ainda</h4>
+                                        <h4 className="mb-sm">{t('progress.no_workouts')}</h4>
                                         <p className="text-secondary">
-                                            Complete seu primeiro treino para ver seu progresso aqui!
+                                            {t('progress.no_workouts_desc')}
                                         </p>
                                     </div>
                                 </div>
@@ -308,7 +301,7 @@ const Progress = () => {
                                                     boxShadow: 'var(--shadow-lg)'
                                                 }}
                                                 itemStyle={{ color: 'white', fontWeight: 'bold' }}
-                                                formatter={(value) => [`${value} treinos`, 'Quantidade']}
+                                                formatter={(value) => [`${value} ${t('nav.progress').toLowerCase()}`, t('dashboard.stats.workouts_done')]}
                                                 labelStyle={{ marginBottom: '4px', color: 'var(--text-secondary)' }}
                                             />
                                             <Bar
@@ -341,13 +334,13 @@ const Progress = () => {
                     {/* Workout Distribution Chart (Category/Skill) */}
                     <section className="history-section animate-fadeIn mt-xl">
                         <div className="card">
-                            <h3 className="mb-lg">Treinos por Categoria</h3>
+                            <h3 className="mb-lg">{t('progress.workouts_by_category')}</h3>
 
                             {workouts.length === 0 ? (
                                 <div className="text-center">
                                     <div className="empty-state">
                                         <div className="empty-icon">📊</div>
-                                        <h4 className="mb-sm">Sem dados suficientes</h4>
+                                        <h4 className="mb-sm">{t('progress.no_workouts')}</h4>
                                     </div>
                                 </div>
                             ) : (
@@ -377,7 +370,7 @@ const Progress = () => {
                                                     boxShadow: 'var(--shadow-lg)'
                                                 }}
                                                 itemStyle={{ color: 'white', fontWeight: 'bold' }}
-                                                formatter={(value) => [`${value} treinos`, 'Total']}
+                                                formatter={(value) => [`${value} ${t('nav.progress').toLowerCase()}`, t('dashboard.stats.total_time').split(' ')[0]]}
                                             />
                                             <Bar
                                                 dataKey="count"

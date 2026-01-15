@@ -11,18 +11,26 @@ export const exerciseMap = new Map(exercises.map(ex => [ex.id, ex]));
  * @param {string} skillName - The skill name in database format
  * @returns {string} - Formatted skill name for display
  */
+import i18n from '../i18n';
+
 export const formatSkillName = (skillName) => {
     if (!skillName) return '';
 
     if (skillName.startsWith('base_')) {
         const base = skillName.replace('base_', '');
-        const trans = { push: 'Flexões (Empurrar)', pull: 'Barras (Puxar)', legs: 'Pernas', core: 'Core' };
-        return trans[base] || base;
+        // Map internal base categories to translation keys
+        const keyMap = { push: 'push', pull: 'pull', legs: 'legs', core: 'core' };
+        const key = keyMap[base] || base;
+        return i18n.t(`common.${key}`);
     }
 
-    // Split by underscore, capitalize each part, join with hyphen
-    return skillName
-        .split('_')
+    // Attempt to translate skill name if a key exists, otherwise format string
+    // Skills like 'handstand', 'front_lever'
+    const translated = i18n.t(`evolution.skills_list.${skillName}`, { defaultValue: null });
+    if (translated) return translated;
+
+    const parts = skillName.split('_');
+    return parts
         .map(part => part.charAt(0).toUpperCase() + part.slice(1))
         .join('-');
 };
@@ -156,7 +164,7 @@ export const evaluateProgression = (exerciseId, performance) => {
             return {
                 action: 'regress',
                 nextExerciseId: null,
-                message: `O desafio está alto. Que tal recuar um degrau para ganhar impulso? 🛡️`
+                message: i18n.t('progression.regress')
             };
         }
     }
@@ -166,16 +174,18 @@ export const evaluateProgression = (exerciseId, performance) => {
         if (progresses_to && progresses_to.length > 0) {
             const nextId = progresses_to[0];
             const nextExercise = exerciseMap.get(nextId);
+            const nextName = nextExercise ? i18n.t(`dashboard.exercises.${nextId}`, { defaultValue: nextExercise.name }) : i18n.t('common.advanced');
+
             return {
                 action: 'promote',
                 nextExerciseId: nextId,
-                message: `Sensacional! ${name} dominado. Próximo desafio: ${nextExercise ? nextExercise.name : 'Nível Superior'}! 🚀`
+                message: i18n.t('progression.promote', { name: i18n.t(`dashboard.exercises.${exerciseId}`, { defaultValue: name }), nextName })
             };
         } else {
             return {
                 action: 'maintain',
                 nextExerciseId: null,
-                message: `Você é uma lenda! Zerou a progressão de ${name}. 🏆`
+                message: i18n.t('progression.maintain_max', { name: i18n.t(`dashboard.exercises.${exerciseId}`, { defaultValue: name }) })
             };
         }
     }
@@ -185,14 +195,14 @@ export const evaluateProgression = (exerciseId, performance) => {
         return {
             action: 'maintain',
             nextExerciseId: null,
-            message: `Boa consistência! Faltam apenas alguns detalhes para o próximo nível. 🔥`
+            message: i18n.t('progression.maintain_progress')
         };
     }
 
     return {
         action: 'maintain',
         nextExerciseId: null,
-        message: `Começo sólido! Continue praticando para ganhar força. 💪`
+        message: i18n.t('progression.maintain_start')
     };
 };
 
@@ -982,7 +992,7 @@ export const generateSkillWorkout = (targetSkill, userHistory, availableEquipmen
     };
 
     return {
-        name: isPhase1 ? `Objetivo: ${skillNameForTitle}` : `Foco em ${skillNameForTitle}`,
+        name: isPhase1 ? `${i18n.t('dashboard.objective_prefix')}: ${skillNameForTitle}` : `${i18n.t('dashboard.focus_prefix')}: ${skillNameForTitle}`,
         description: typeLabel,
         skill_id: targetSkill,
         skill_media_url: getSkillMediaUrl(targetSkill),

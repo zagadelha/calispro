@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { getTodayWorkout } from '../utils/workoutGenerator';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -8,6 +9,7 @@ import { getVirtualNow } from '../utils/timeTravel';
 import exercisesData from '../assets/exercises/exercises_v1_1.json';
 
 const WorkoutExecution = () => {
+    const { t } = useTranslation();
     // Normalization helper handles accents and case
     const normalize = (str) => {
         if (!str) return '';
@@ -61,40 +63,40 @@ const WorkoutExecution = () => {
 
     const WARMUP_STEPS = [
         {
-            title: 'Pulso',
-            info: 'Círculos (30s)',
+            title: t('workout_execution.warmup_steps.wrist.title'),
+            info: t('workout_execution.warmup_steps.wrist.info'),
             icon: '🔄',
-            description: 'Entrelace os dedos e gire os punhos em círculos lentos. Mude o sentido após 15s.'
+            description: t('workout_execution.warmup_steps.wrist.desc')
         },
         {
-            title: 'Braços',
-            info: 'Círculos (10x)',
+            title: t('workout_execution.warmup_steps.arms.title'),
+            info: t('workout_execution.warmup_steps.arms.info'),
             icon: '🙆',
-            description: 'Com braços esticados, descreva círculos amplos: 10 para frente e 10 para trás.'
+            description: t('workout_execution.warmup_steps.arms.desc')
         },
         {
-            title: 'Coluna',
-            info: 'Cat-Cow (10x)',
+            title: t('workout_execution.warmup_steps.spine.title'),
+            info: t('workout_execution.warmup_steps.spine.info'),
             icon: '🐈',
-            description: 'Em 4 apoios, alterne entre arquear as costas para cima e para baixo respirando calmamente.'
+            description: t('workout_execution.warmup_steps.spine.desc')
         },
         {
-            title: 'Escápulas',
-            info: 'Ativação (10x)',
+            title: t('workout_execution.warmup_steps.scapula.title'),
+            info: t('workout_execution.warmup_steps.scapula.info'),
             icon: '🛡️',
-            description: 'Na prancha alta, afaste e junte as escápulas sem dobrar os cotovelos.'
+            description: t('workout_execution.warmup_steps.scapula.desc')
         },
         {
-            title: 'Pernas',
-            info: 'Agachamento (15x)',
+            title: t('workout_execution.warmup_steps.legs.title'),
+            info: t('workout_execution.warmup_steps.legs.info'),
             icon: '🦵',
-            description: 'Agache mantendo calcanhares no chão e peito aberto. Suba de forma controlada.'
+            description: t('workout_execution.warmup_steps.legs.desc')
         },
         {
-            title: 'Cardio',
-            info: 'Polichinelos (30s)',
+            title: t('workout_execution.warmup_steps.cardio.title'),
+            info: t('workout_execution.warmup_steps.cardio.info'),
             icon: '⚡',
-            description: 'Salte afastando braços e pernas simultaneamente para aquecer o corpo todo.'
+            description: t('workout_execution.warmup_steps.cardio.desc')
         }
     ];
 
@@ -262,15 +264,15 @@ const WorkoutExecution = () => {
 
     const handleFinishWorkout = async () => {
         // Validar se performance está completa
-        const perfCheck = isPerformanceComplete();
+        const perfCheck = isPerformanceCheck = isPerformanceComplete();
         if (!perfCheck.complete) {
-            alert('⚠️ Por favor, preencha os dados de performance (reps ou segundos) para todos os exercícios antes de finalizar o treino.');
+            alert(`⚠️ ${t('workout_execution.performance_warning')}`);
             return;
         }
 
         // Validar se o feedback está completo
         if (!isFeedbackComplete()) {
-            alert('Por favor, preencha todo o feedback do treino antes de finalizar.');
+            alert(t('workout_execution.complete_feedback_warning'));
             return;
         }
 
@@ -302,7 +304,7 @@ const WorkoutExecution = () => {
             navigate('/dashboard');
         } catch (err) {
             console.error('Error finishing workout:', err);
-            alert('Erro ao finalizar treino');
+            alert(t('common.error'));
         }
     };
 
@@ -323,7 +325,7 @@ const WorkoutExecution = () => {
             <header className="workout-header">
                 <div className="container">
                     <div className="flex justify-between items-center">
-                        <button onClick={() => navigate('/dashboard')} className="btn btn-secondary btn-sm">← Voltar</button>
+                        <button onClick={() => navigate('/dashboard')} className="btn btn-secondary btn-sm">← {t('common.back')}</button>
                         <h2 className="workout-title">{workout.name}</h2>
                         <div className="workout-progress-badge">{completedCount}/{exercises.length}</div>
                     </div>
@@ -347,19 +349,19 @@ const WorkoutExecution = () => {
                                 <div className="flex justify-between items-center mb-md">
                                     <div className="flex items-center gap-sm">
                                         <span className="text-2xl">🔥</span>
-                                        <h3 className="m-0">Sugestão de Aquecimento</h3>
+                                        <h3 className="m-0">{t('workout_execution.warmup_suggestion')}</h3>
                                     </div>
                                     <button
                                         onClick={() => setShowWarmup(false)}
                                         className="btn btn-sm btn-outline"
                                         style={{ padding: '4px 12px', fontSize: '0.75rem' }}
                                     >
-                                        Pular
+                                        {t('workout_execution.skip')}
                                     </button>
                                 </div>
 
                                 <p className="text-secondary text-sm mb-lg">
-                                    Recomendado para prevenir lesões e preparar suas articulações para o treino de hoje.
+                                    {t('workout_execution.warmup_desc')}
                                 </p>
 
                                 {/* Visual Demo GIF */}
@@ -418,7 +420,7 @@ const WorkoutExecution = () => {
                                     className="btn btn-primary btn-full"
                                     style={{ background: 'var(--primary-gradient)' }}
                                 >
-                                    Tudo Pronto, Começar Treino! 🚀
+                                    {t('workout_execution.ready_to_start')} 🚀
                                 </button>
                             </div>
                         </section>
@@ -427,7 +429,7 @@ const WorkoutExecution = () => {
                     {!showWarmup && (
                         <>
                             <section className="exercises-section mb-xl">
-                                <h3 className="mb-lg">Exercícios do Treino</h3>
+                                <h3 className="mb-lg">{t('workout_execution.exercises_title')}</h3>
                                 <div className="exercise-list-execution">
                                     {exercises.map((exercise) => (
                                         <div key={exercise.id} className={`exercise-card card ${exercise.completed ? 'completed' : ''}`}>
@@ -440,9 +442,9 @@ const WorkoutExecution = () => {
                                                         {exercise.completed && '✓'}
                                                     </button>
                                                     <div className="exercise-details flex-1 min-w-0">
-                                                        <h4 className="exercise-name">{exercise.exercise_name}</h4>
+                                                        <h4 className="exercise-name">{t(`dashboard.exercises.${exercise.original_id}`, { defaultValue: exercise.exercise_name })}</h4>
                                                         <p className="exercise-meta text-secondary text-sm">
-                                                            {exercise.muscle_group} • Meta: {exercise.target_sets}x{exercise.prescription || (exercise.metric_type === 'reps' ? exercise.target_reps : `${exercise.target_seconds}s`)}
+                                                            {t(`onboarding.equipment_list.${exercise.muscle_group}`, { defaultValue: exercise.muscle_group })} • {t('onboarding.setup_goal')}: {exercise.target_sets}x{exercise.prescription || (exercise.metric_type === 'reps' ? exercise.target_reps : `${exercise.target_seconds}s`)}
                                                         </p>
                                                         {/* GIF Display */}
                                                         {!exercise.completed && getExerciseGif(exercise.original_id, exercise.exercise_name) && (
@@ -467,7 +469,7 @@ const WorkoutExecution = () => {
                                                     <div className="mt-sm p-3 bg-tertiary rounded flex items-center justify-between gap-md animate-fadeIn">
                                                         <div className="flex-1">
                                                             <label className="text-xs text-secondary mb-1 block">
-                                                                {exercise.metric_type === 'reps' ? 'Reps Realizados' : 'Segundos Realizados'}
+                                                                {exercise.metric_type === 'reps' ? t('workout_execution.reps_performed') : t('workout_execution.seconds_performed')}
                                                                 <span className="text-red-500 ml-1">*</span>
                                                             </label>
                                                             <input
@@ -494,28 +496,28 @@ const WorkoutExecution = () => {
                             <section className="feedback-section mb-xl">
                                 <div className="card animate-fadeIn">
                                     <div className="flex items-center justify-between mb-md">
-                                        <h3>Feedback do Treino</h3>
-                                        <span className="font-semibold" style={{ color: '#ff6b6b', fontSize: '0.65rem', whiteSpace: 'nowrap' }}>* Obrigatório</span>
+                                        <h3>{t('workout_execution.feedback_title')}</h3>
+                                        <span className="font-semibold" style={{ color: '#ff6b6b', fontSize: '0.65rem', whiteSpace: 'nowrap' }}>* {t('workout_execution.mandatory')}</span>
                                     </div>
 
                                     {/* Q1: Goal Met */}
                                     <div className="mb-lg">
-                                        <label className="block text-sm font-bold text-secondary mb-2">1. Meta do treino atingida?</label>
+                                        <label className="block text-sm font-bold text-secondary mb-2">{t('workout_execution.goal_met')}</label>
                                         <div className="flex gap-md">
                                             <button
                                                 onClick={() => handleFeedbackChange('goalMet', true)}
                                                 className={`btn flex-1 ${feedback.goalMet === true ? 'btn-success' : 'btn-outline'}`}
-                                            >Sim 👍</button>
+                                            >{t('common.yes')} 👍</button>
                                             <button
                                                 onClick={() => handleFeedbackChange('goalMet', false)}
                                                 className={`btn flex-1 ${feedback.goalMet === false ? 'btn-error' : 'btn-outline'}`}
-                                            >Não 👎</button>
+                                            >{t('common.no')} 👎</button>
                                         </div>
                                     </div>
 
                                     {/* Q2: Difficulty 1-5 */}
                                     <div className="mb-lg">
-                                        <label className="block text-sm font-bold text-secondary mb-2">2. Dificuldade Geral (1-5)</label>
+                                        <label className="block text-sm font-bold text-secondary mb-2">{t('workout_execution.general_difficulty')}</label>
                                         <div className="difficulty-btn-container">
                                             {[1, 2, 3, 4, 5].map(rating => (
                                                 <button
@@ -528,27 +530,27 @@ const WorkoutExecution = () => {
                                             ))}
                                         </div>
                                         <div className="flex justify-between text-xs text-secondary mt-2 px-1">
-                                            <span>Muito Fácil</span>
-                                            <span>Exaustivo</span>
+                                            <span>{t('workout_execution.very_easy')}</span>
+                                            <span>{t('workout_execution.exhaustive')}</span>
                                         </div>
                                     </div>
 
                                     {/* Q3: Pain */}
                                     <div className="mb-sm">
-                                        <label className="block text-sm font-bold text-secondary mb-2">3. Dor ou Desconforto?</label>
+                                        <label className="block text-sm font-bold text-secondary mb-2">{t('workout_execution.pain_discomfort')}</label>
                                         <div className="pain-btn-container">
                                             <button
                                                 onClick={() => handleFeedbackChange('pain', 'none')}
                                                 className={`pain-btn pain-none ${feedback.pain === 'none' ? 'selected' : ''}`}
-                                            >Nenhuma</button>
+                                            >{t('workout_execution.none')}</button>
                                             <button
                                                 onClick={() => handleFeedbackChange('pain', 'mild')}
                                                 className={`pain-btn pain-mild ${feedback.pain === 'mild' ? 'selected' : ''}`}
-                                            >Leve</button>
+                                            >{t('workout_execution.mild')}</button>
                                             <button
                                                 onClick={() => handleFeedbackChange('pain', 'moderate')}
                                                 className={`pain-btn pain-moderate ${feedback.pain === 'moderate' ? 'selected' : ''}`}
-                                            >Moderada+</button>
+                                            >{t('workout_execution.moderate')}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -559,11 +561,11 @@ const WorkoutExecution = () => {
                                 className="btn btn-primary btn-full btn-lg"
                                 disabled={completedCount === 0 || !isFeedbackComplete()}
                             >
-                                ✅ Finalizar Treino
+                                ✅ {t('workout_execution.finish_workout')}
                             </button>
                             {!isFeedbackComplete() && completedCount > 0 && (
                                 <p className="text-center text-error text-sm mt-md">
-                                    ⚠️ Preencha todo o feedback para finalizar o treino
+                                    ⚠️ {t('workout_execution.complete_feedback_warning')}
                                 </p>
                             )}
                         </>

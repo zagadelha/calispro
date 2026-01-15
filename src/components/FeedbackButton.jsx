@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { MessageCircle, X, Send, Bug, Lightbulb, HelpCircle, Mail } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { getVirtualNow } from '../utils/timeTravel';
 
 const FeedbackButton = () => {
+    const { t } = useTranslation();
     const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
     const [feedbackType, setFeedbackType] = useState('');
@@ -21,17 +23,17 @@ const FeedbackButton = () => {
     }
 
     const feedbackTypes = [
-        { id: 'bug', label: 'Reportar Erro', icon: Bug, color: '#ef4444' },
-        { id: 'question', label: 'Dúvida', icon: HelpCircle, color: '#3b82f6' },
-        { id: 'suggestion', label: 'Sugestão', icon: Lightbulb, color: '#f59e0b' },
-        { id: 'contact', label: 'Contato', icon: Mail, color: '#10b981' }
+        { id: 'bug', label: t('support.types.bug'), icon: Bug, color: '#ef4444' },
+        { id: 'question', label: t('support.types.question'), icon: HelpCircle, color: '#3b82f6' },
+        { id: 'suggestion', label: t('support.types.suggestion'), icon: Lightbulb, color: '#f59e0b' },
+        { id: 'contact', label: t('support.types.contact'), icon: Mail, color: '#10b981' }
     ];
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!feedbackType || !message.trim()) {
-            alert('Por favor, selecione um tipo e escreva sua mensagem.');
+            alert(t('support.errors.fill_all'));
             return;
         }
 
@@ -42,7 +44,7 @@ const FeedbackButton = () => {
             await addDoc(collection(db, 'feedback'), {
                 user_id: currentUser?.uid || 'anonymous',
                 user_email: currentUser?.email || 'N/A',
-                user_name: userProfile?.name || 'Usuário Anônimo',
+                user_name: userProfile?.name || t('common.athlete'),
                 type: feedbackType,
                 message: message,
                 created_at: getVirtualNow().toISOString(),
@@ -58,7 +60,7 @@ const FeedbackButton = () => {
             }, 2000);
         } catch (error) {
             console.error('Error submitting feedback:', error);
-            alert('Erro ao enviar feedback. Tente novamente.');
+            alert(t('support.errors.submit_error'));
         } finally {
             setLoading(false);
         }
@@ -77,8 +79,8 @@ const FeedbackButton = () => {
             <button
                 onClick={() => setIsOpen(true)}
                 className="feedback-floating-btn"
-                title="Enviar Feedback"
-                aria-label="Enviar Feedback"
+                title={t('support.button_title')}
+                aria-label={t('support.button_title')}
             >
                 <MessageCircle size={24} />
             </button>
@@ -91,12 +93,12 @@ const FeedbackButton = () => {
                         <div className="feedback-modal-header">
                             <h3 className="feedback-modal-title">
                                 <MessageCircle size={24} />
-                                Fale Conosco
+                                {t('support.title')}
                             </h3>
                             <button
                                 onClick={handleClose}
                                 className="feedback-close-btn"
-                                aria-label="Fechar"
+                                aria-label={t('common.cancel')}
                             >
                                 <X size={20} />
                             </button>
@@ -106,15 +108,15 @@ const FeedbackButton = () => {
                             // Success State
                             <div className="feedback-success">
                                 <div className="feedback-success-icon">✓</div>
-                                <h4>Obrigado!</h4>
-                                <p>Sua mensagem foi enviada com sucesso.</p>
+                                <h4>{t('support.success.title')}</h4>
+                                <p>{t('support.success.message')}</p>
                             </div>
                         ) : (
                             // Form
                             <form onSubmit={handleSubmit} className="feedback-form">
                                 {/* Type Selection */}
                                 <div className="form-group">
-                                    <label className="form-label">Como podemos ajudar?</label>
+                                    <label className="form-label">{t('support.help_label')}</label>
                                     <div className="feedback-type-grid">
                                         {feedbackTypes.map((type) => {
                                             const Icon = type.icon;
@@ -138,10 +140,10 @@ const FeedbackButton = () => {
 
                                 {/* Message */}
                                 <div className="form-group">
-                                    <label className="form-label">Sua mensagem</label>
+                                    <label className="form-label">{t('support.message_label')}</label>
                                     <textarea
                                         className="form-textarea"
-                                        placeholder="Descreva sua dúvida, bug, sugestão ou mensagem..."
+                                        placeholder={t('support.placeholder')}
                                         value={message}
                                         onChange={(e) => setMessage(e.target.value)}
                                         rows={5}
@@ -158,12 +160,12 @@ const FeedbackButton = () => {
                                     {loading ? (
                                         <>
                                             <div className="btn-spinner"></div>
-                                            Enviando...
+                                            {t('support.sending')}
                                         </>
                                     ) : (
                                         <>
                                             <Send size={18} />
-                                            Enviar Mensagem
+                                            {t('support.submit')}
                                         </>
                                     )}
                                 </button>

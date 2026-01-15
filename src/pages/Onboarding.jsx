@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import LanguageSelector from '../components/LanguageSelector';
 import { generateWorkoutPlan } from '../utils/workoutGenerator';
 
 const Onboarding = () => {
+    const { t } = useTranslation();
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         experience_level: '',
@@ -71,10 +74,11 @@ const Onboarding = () => {
 
     return (
         <div className="onboarding-container">
+            <LanguageSelector floating />
             <div className="container container-sm">
                 <div className="card animate-fadeIn">
                     <div className="onboarding-header mb-xl">
-                        <h2 className="text-center gradient-text">Configure seu Perfil</h2>
+                        <h2 className="text-center gradient-text">{t('onboarding.setup_profile')}</h2>
                         <div className="progress-bar">
                             <div
                                 className="progress-fill"
@@ -82,44 +86,44 @@ const Onboarding = () => {
                             />
                         </div>
                         <p className="text-center text-secondary text-sm mt-md">
-                            Passo {step} de 3
+                            {t('onboarding.step_of', { step })}
                         </p>
                     </div>
 
                     {/* Step 1: Experience & Goal */}
                     {step === 1 && (
                         <div className="onboarding-step animate-fadeIn">
-                            <h3 className="mb-lg">Qual seu nível e objetivo?</h3>
+                            <h3 className="mb-lg">{t('onboarding.step1_title')}</h3>
 
                             <div className="form-group">
-                                <label className="form-label">Nível de Experiência</label>
+                                <label className="form-label">{t('onboarding.experience_level')}</label>
                                 <div className="option-grid">
-                                    {['Iniciante', 'Intermediário', 'Avançado'].map(level => (
+                                    {[
+                                        { id: 'Iniciante', label: t('common.beginner'), icon: '🌱' },
+                                        { id: 'Intermediário', label: t('common.intermediate'), icon: '💪' },
+                                        { id: 'Avançado', label: t('common.advanced'), icon: '🔥' }
+                                    ].map(level => (
                                         <button
-                                            key={level}
+                                            key={level.id}
                                             type="button"
-                                            className={`option-card ${formData.experience_level === level ? 'active' : ''}`}
-                                            onClick={() => handleChange('experience_level', level)}
+                                            className={`option-card ${formData.experience_level === level.id ? 'active' : ''}`}
+                                            onClick={() => handleChange('experience_level', level.id)}
                                         >
-                                            <div className="option-icon">
-                                                {level === 'Iniciante' && '🌱'}
-                                                {level === 'Intermediário' && '💪'}
-                                                {level === 'Avançado' && '🔥'}
-                                            </div>
-                                            <div className="option-label">{level}</div>
+                                            <div className="option-icon">{level.icon}</div>
+                                            <div className="option-label">{level.label}</div>
                                         </button>
                                     ))}
                                 </div>
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Objetivo Principal</label>
+                                <label className="form-label">{t('onboarding.main_goal')}</label>
                                 <div className="option-grid">
                                     {[
-                                        { value: 'Ganhar força', icon: '💪' },
-                                        { value: 'Hipertrofia', icon: '🏋️' },
-                                        { value: 'Definição', icon: '✨' },
-                                        { value: 'Manutenção', icon: '⚖️' }
+                                        { value: 'Ganhar força', label: t('onboarding.goals.strength'), icon: '💪' },
+                                        { value: 'Hipertrofia', label: t('onboarding.goals.hypertrophy'), icon: '🏋️' },
+                                        { value: 'Definição', label: t('onboarding.goals.definition'), icon: '✨' },
+                                        { value: 'Manutenção', label: t('onboarding.goals.maintenance'), icon: '⚖️' }
                                     ].map(goal => (
                                         <button
                                             key={goal.value}
@@ -128,7 +132,7 @@ const Onboarding = () => {
                                             onClick={() => handleChange('goal', goal.value)}
                                         >
                                             <div className="option-icon">{goal.icon}</div>
-                                            <div className="option-label">{goal.value}</div>
+                                            <div className="option-label">{goal.label}</div>
                                         </button>
                                     ))}
                                 </div>
@@ -139,10 +143,10 @@ const Onboarding = () => {
                     {/* Step 2: Frequency & Equipment */}
                     {step === 2 && (
                         <div className="onboarding-step animate-fadeIn">
-                            <h3 className="mb-lg">Frequência e Equipamentos</h3>
+                            <h3 className="mb-lg">{t('onboarding.step2_title')}</h3>
 
                             <div className="form-group">
-                                <label className="form-label">Quantas vezes por semana?</label>
+                                <label className="form-label">{t('onboarding.times_per_week')}</label>
                                 <div className="option-grid grid-4">
                                     {['2x', '3x', '4x', '5x+'].map(freq => (
                                         <button
@@ -158,21 +162,21 @@ const Onboarding = () => {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Equipamentos Disponíveis</label>
+                                <label className="form-label">{t('onboarding.available_equipment')}</label>
                                 <div className="checkbox-grid">
                                     {[
-                                        'Peso corporal',
-                                        'Barra fixa',
-                                        'Paralelas',
-                                        'Elásticos'
-                                    ].map(equipment => (
-                                        <label key={equipment} className="form-checkbox">
+                                        { id: 'Peso corporal', label: t('onboarding.equipment_list.bodyweight') },
+                                        { id: 'Barra fixa', label: t('onboarding.equipment_list.pullup_bar') },
+                                        { id: 'Paralelas', label: t('onboarding.equipment_list.dip_bars') },
+                                        { id: 'Elásticos', label: t('onboarding.equipment_list.bands') }
+                                    ].map(item => (
+                                        <label key={item.id} className="form-checkbox">
                                             <input
                                                 type="checkbox"
-                                                checked={formData.equipment.includes(equipment)}
-                                                onChange={() => handleEquipmentToggle(equipment)}
+                                                checked={formData.equipment.includes(item.id)}
+                                                onChange={() => handleEquipmentToggle(item.id)}
                                             />
-                                            <span>{equipment}</span>
+                                            <span>{item.label}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -183,21 +187,21 @@ const Onboarding = () => {
                     {/* Step 3: Limitations */}
                     {step === 3 && (
                         <div className="onboarding-step animate-fadeIn">
-                            <h3 className="mb-lg">Alguma restrição física?</h3>
+                            <h3 className="mb-lg">{t('onboarding.step3_title')}</h3>
 
                             <div className="form-group">
                                 <label className="form-label">
-                                    Restrições ou Lesões (opcional)
+                                    {t('onboarding.limitations_label')}
                                 </label>
                                 <textarea
                                     className="form-textarea"
-                                    placeholder="Ex: dor no ombro direito, problema no joelho..."
+                                    placeholder={t('onboarding.limitations_placeholder')}
                                     value={formData.limitations}
                                     onChange={(e) => handleChange('limitations', e.target.value)}
                                     rows={5}
                                 />
                                 <p className="text-sm text-muted mt-sm">
-                                    Isso nos ajuda a personalizar seu treino e evitar exercícios inadequados
+                                    {t('onboarding.limitations_desc')}
                                 </p>
                             </div>
                         </div>
@@ -212,7 +216,7 @@ const Onboarding = () => {
                                 onClick={handleBack}
                                 disabled={loading}
                             >
-                                Voltar
+                                {t('common.back')}
                             </button>
                         )}
 
@@ -224,7 +228,7 @@ const Onboarding = () => {
                                 disabled={!canProceed()}
                                 style={{ marginLeft: step === 1 ? 'auto' : '0' }}
                             >
-                                Próximo
+                                {t('common.next')}
                             </button>
                         ) : (
                             <button
@@ -234,7 +238,7 @@ const Onboarding = () => {
                                 disabled={loading || !canProceed()}
                                 style={{ marginLeft: 'auto' }}
                             >
-                                {loading ? 'Criando plano...' : 'Finalizar'}
+                                {loading ? t('onboarding.creating_plan') : t('common.finish')}
                             </button>
                         )}
                     </div>
@@ -243,5 +247,6 @@ const Onboarding = () => {
         </div>
     );
 };
+
 
 export default Onboarding;

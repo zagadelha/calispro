@@ -1,20 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TrendingUp, User, LogOut, BarChart2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { getTodayWorkout } from '../utils/workoutGenerator';
 import { generateSkillWorkout, getAllSkills, getUserSkillStage, calculateReadinessScore, generatePatternWorkout, formatSkillName, getSkillRotation, exerciseMap } from '../utils/progressionSystem';
 import { doc, updateDoc, collection, addDoc, query, where, getDocs, deleteDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { ptBR, es, enUS } from 'date-fns/locale';
 import logo from '../assets/logo2.png';
+import Header from '../components/Header';
 import InstallButton from '../components/InstallButton';
 import { getVirtualDate, getVirtualNow, addDays, resetDate } from '../utils/timeTravel';
 import { getUserHistory } from '../utils/historyManager';
 
+const localesMap = {
+    pt: ptBR,
+    en: enUS,
+    es: es
+};
 
 const Dashboard = () => {
+    const { t, i18n } = useTranslation();
+    const currentLocale = localesMap[i18n.language.split('-')[0]] || ptBR;
     const [workout, setWorkout] = useState(null);
     const [generatedWorkout, setGeneratedWorkout] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -292,14 +300,6 @@ const Dashboard = () => {
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            await logout();
-            navigate('/login');
-        } catch (err) {
-            console.error('Error logging out:', err);
-        }
-    };
 
     // Jump to next day without workout
     const jumpToNextMissingWorkout = async () => {
@@ -355,7 +355,7 @@ const Dashboard = () => {
                 <div className="container">
                     <div className="loading-state">
                         <div className="spinner"></div>
-                        <p className="text-secondary mt-md">Carregando...</p>
+                        <p className="text-secondary mt-md">{t('common.loading')}</p>
                     </div>
                 </div>
             </div>
@@ -368,63 +368,55 @@ const Dashboard = () => {
     return (
         <div className="dashboard-container">
             {/* Header */}
-            <header className="dashboard-header">
-                <div className="container">
-                    <div className="flex justify-between items-center">
-                        <img src={logo} alt="CalisPro" className="app-logo" />
-                        <div className="flex items-center gap-md">
-                            <button onClick={() => navigate('/progress')} className="btn btn-secondary btn-sm flex items-center" title="Progresso">
-                                <BarChart2 size={18} className="mr-1" />
-                                <span className="btn-text">Progresso</span>
-                            </button>
-                            <button onClick={() => navigate('/evolution')} className="btn btn-secondary btn-sm flex items-center" title="Evolução">
-                                <TrendingUp size={18} className="mr-1" />
-                                <span className="btn-text">Evolução</span>
-                            </button>
-                            <button onClick={() => navigate('/profile')} className="btn btn-secondary btn-sm flex items-center" title="Perfil">
-                                <User size={18} className="mr-1" />
-                                <span className="btn-text">Perfil</span>
-                            </button>
-                            <button onClick={handleLogout} className="btn btn-outline btn-sm flex items-center" title="Sair">
-                                <LogOut size={18} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <Header />
 
             {/* Main Content */}
             <main className="dashboard-main">
                 <div className="container">
                     {/* Welcome Section */}
-                    <section className="welcome-section mb-xl flex justify-between items-center">
-                        <div>
-                            <h2 className="mb-sm">
-                                Olá, {userProfile?.name?.split(' ')[0] || 'Atleta'}! 👋
-                            </h2>
-                            <p className="text-secondary">
-                                {format(getVirtualNow(), "EEEE, d 'de' MMMM", { locale: ptBR })}
-                            </p>
-                        </div>
-                        {readiness && (
-                            <div className="text-right">
-                                <div className="text-xs text-secondary">Nível de Preparação</div>
-                                <div className={`text-xl font-bold ${readiness.totalScore > 70 ? 'text-green-400' : 'text-primary'}`}>
-                                    {readiness.totalScore}
-                                </div>
-                                <div className="text-xs text-secondary mt-1">
-                                    {readiness.totalScore >= 90 ? 'Excelente 🌟' :
-                                        readiness.totalScore >= 60 ? 'Alto 💪' :
-                                            readiness.totalScore >= 30 ? 'Médio 😐' : 'Baixo 😴'}
-                                </div>
+                    <section className="welcome-section mb-xl glass p-xl rounded-2xl border-white/5 animate-fadeIn">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-lg">
+                            <div className="flex-1">
+                                <h2 className="mb-xs flex items-center gap-xs text-3xl font-black tracking-tight italic uppercase">
+                                    {t('dashboard.welcome', { name: userProfile?.name?.split(' ')[0] || t('common.athlete') })} 👋
+                                </h2>
+                                <p className="text-secondary text-sm font-medium opacity-80 capitalize">
+                                    {format(getVirtualNow(), i18n.language.startsWith('en') ? "EEEE, MMMM d" : "EEEE, d 'de' MMMM", { locale: currentLocale })}
+                                </p>
                             </div>
-                        )}
+
+                            {readiness && (
+                                <div className="glass-dark p-lg rounded-xl border border-white/5 w-full md:w-auto shadow-xl" style={{ minWidth: '220px' }}>
+                                    <div className="flex justify-between items-center mb-md">
+                                        <span className="text-[10px] uppercase font-black tracking-widest text-secondary opacity-70">
+                                            {t('dashboard.readiness_score')}
+                                        </span>
+                                        <div className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${readiness.totalScore > 70 ? 'bg-success' : readiness.totalScore > 30 ? 'bg-primary' : 'bg-red-500'}`} style={{ backgroundColor: readiness.totalScore > 70 ? 'rgba(16, 185, 129, 0.2)' : readiness.totalScore > 30 ? 'rgba(102, 126, 234, 0.2)' : 'rgba(239, 68, 68, 0.2)', color: readiness.totalScore > 70 ? '#4ade80' : readiness.totalScore > 30 ? '#7c8ef7' : '#f87171' }}>
+                                            {readiness.totalScore >= 90 ? t('common.excellent') :
+                                                readiness.totalScore >= 60 ? t('common.high') :
+                                                    readiness.totalScore >= 30 ? t('common.medium') : t('common.low')}
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-md">
+                                        <span className={`text-5xl font-black tabular-nums ${readiness.totalScore > 70 ? 'text-green-400' : readiness.totalScore > 30 ? 'text-primary' : 'text-red-400'}`} style={{ lineHeight: 1 }}>
+                                            {readiness.totalScore}
+                                        </span>
+                                        <span className="text-4xl" style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.2))' }}>
+                                            {readiness.totalScore >= 90 ? '🌟' :
+                                                readiness.totalScore >= 60 ? '💪' :
+                                                    readiness.totalScore >= 30 ? '😐' : '😴'}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </section>
 
                     {/* Today's Workout Card */}
                     {displayWorkout && (
-                        <div className="mb-md">
-                            <h3 className="text-lg font-bold">Seu Treino de Hoje</h3>
+                        <div className="mb-md flex items-center gap-sm px-sm">
+                            <div className="w-1 h-6 bg-primary rounded-full shadow-[0_0_10px_rgba(102,126,234,0.5)]"></div>
+                            <h3 className="text-xl font-black uppercase tracking-tighter italic">{t('dashboard.today_workout')}</h3>
                         </div>
                     )}
                     {displayWorkout ? (
@@ -434,10 +426,10 @@ const Dashboard = () => {
                                     <div className="flex justify-between items-start">
                                         <div>
                                             <div className="flex items-center gap-sm mb-1">
-                                                <span className="badge badge-primary">Hoje</span>
+                                                <span className="badge badge-primary">{t('landing.transformations.today')}</span>
                                                 {displayWorkout.readiness_score && (
                                                     <span className="badge badge-secondary">
-                                                        Score: {displayWorkout.readiness_score}
+                                                        {t('common.score')}: {displayWorkout.readiness_score}
                                                     </span>
                                                 )}
                                             </div>
@@ -471,17 +463,19 @@ const Dashboard = () => {
                                             </div>
                                             <div className="flex-1">
                                                 <div className="flex justify-between items-center mb-1">
-                                                    <h4 className="font-bold text-base">{exercise.exercise_name || exercise.name}</h4>
+                                                    <h4 className="font-bold text-base">
+                                                        {t(`dashboard.exercises.${exercise.original_id}`, { defaultValue: exercise.exercise_name || exercise.name })}
+                                                    </h4>
                                                     {exercise.type && (
                                                         <span className="text-xs text-primary uppercase font-bold tracking-wider">
-                                                            {exercise.type === 'Skill' ? 'Habilidade' :
-                                                                exercise.type === 'Strength' ? 'Força' :
-                                                                    exercise.type === 'Core' ? 'Core' : 'Acessório'}
+                                                            {exercise.type === 'Skill' ? t('common.skill') :
+                                                                exercise.type === 'Strength' ? t('common.strength') :
+                                                                    exercise.type === 'Core' ? t('common.core') : t('common.accessory')}
                                                         </span>
                                                     )}
                                                 </div>
                                                 <p className="text-sm text-secondary">
-                                                    {exercise.target_sets} séries × {
+                                                    {exercise.target_sets} {t('common.sets')} × {
                                                         exercise.prescription ||
                                                         (exercise.metric_type === 'seconds' || (!exercise.metric_type && !exercise.target_reps && exercise.target_seconds) ?
                                                             `${exercise.target_seconds || 0}s` :
@@ -498,13 +492,13 @@ const Dashboard = () => {
                                     onClick={handleStartWorkout}
                                     className="btn btn-primary btn-full btn-lg py-4 text-lg shadow-lg hover:transform hover:scale-[1.02] transition-all"
                                 >
-                                    {workout && workout.status === 'completed' ? '✅ Treino Concluído' :
-                                        isWorkoutActive ? '▶️ Continuar Treino' : '🚀 Iniciar Treino'}
+                                    {workout && workout.status === 'completed' ? '✅ ' + t('dashboard.workout_done') :
+                                        isWorkoutActive ? '▶️ ' + t('dashboard.continue_workout') : '🚀 ' + t('dashboard.start_workout')}
                                 </button>
 
                                 {workout && workout.status === 'completed' && (
                                     <p className="text-center text-sm text-secondary mt-md">
-                                        Bom descanso! Volte amanhã para mais.
+                                        {t('landing.cta.ready')}
                                     </p>
                                 )}
                             </div>
@@ -512,8 +506,8 @@ const Dashboard = () => {
                     ) : (
                         <div className="card text-center p-xl">
                             <div className="text-4xl mb-md">🎉</div>
-                            <h3>Tudo feito por hoje!</h3>
-                            <p className="text-secondary">Aproveite seu descanso.</p>
+                            <h3>{t('dashboard.no_workout')}</h3>
+                            <p className="text-secondary">{t('landing.cta.description')}</p>
                         </div>
                     )}
 
@@ -522,19 +516,19 @@ const Dashboard = () => {
                         <section className="specialized-section mt-xl">
                             <div className="card specialized-card overflow-hidden">
                                 <div className="flex justify-between items-center mb-md">
-                                    <h3 className="text-lg font-bold">Gerar Treino Livre</h3>
+                                    <h3 className="text-lg font-bold">{t('dashboard.off_plan_title')}</h3>
                                     <button
                                         onClick={() => setShowSpecialized(!showSpecialized)}
                                         className="btn btn-secondary btn-sm"
                                     >
-                                        {showSpecialized ? 'Ocultar' : 'Explorar'}
+                                        {showSpecialized ? t('profile.recalculate').split(' ')[0] : t('landing.calisthenics_info.more').split(' ')[0]}
                                     </button>
                                 </div>
 
                                 {showSpecialized ? (
                                     <div className="animate-fadeIn">
                                         <p className="text-secondary text-sm mb-lg">
-                                            Deseja focar em algo específico hoje? Escolha uma categoria ou habilidade.
+                                            {t('dashboard.off_plan_desc')}
                                         </p>
 
                                         <div className="flex gap-md mb-lg">
@@ -542,23 +536,23 @@ const Dashboard = () => {
                                                 onClick={() => setSpecializedMode('pattern')}
                                                 className={`btn btn-sm flex-1 ${specializedMode === 'pattern' ? 'btn-primary' : 'btn-outline'}`}
                                             >
-                                                Categoria
+                                                {t('dashboard.by_category')}
                                             </button>
                                             <button
                                                 onClick={() => setSpecializedMode('skill')}
                                                 className={`btn btn-sm flex-1 ${specializedMode === 'skill' ? 'btn-primary' : 'btn-outline'}`}
                                             >
-                                                Habilidade
+                                                {t('dashboard.by_skill')}
                                             </button>
                                         </div>
 
                                         {specializedMode === 'pattern' ? (
                                             <div className="grid grid-2 gap-sm mb-lg">
                                                 {[
-                                                    { id: 'push', label: 'Empurrar', icon: '💪' },
-                                                    { id: 'pull', label: 'Puxar', icon: '🧗' },
-                                                    { id: 'legs', label: 'Pernas', icon: '🦵' },
-                                                    { id: 'core', label: 'Core', icon: '🧘' }
+                                                    { id: 'push', label: t('common.push'), icon: '💪' },
+                                                    { id: 'pull', label: t('common.pull'), icon: '🧗' },
+                                                    { id: 'legs', label: t('common.legs'), icon: '🦵' },
+                                                    { id: 'core', label: t('common.core'), icon: '🧘' }
                                                 ].map(p => (
                                                     <button
                                                         key={p.id}
@@ -577,7 +571,7 @@ const Dashboard = () => {
                                                     onChange={(e) => setSelectedSkill(e.target.value)}
                                                     className="form-select"
                                                 >
-                                                    <option value="">Selecione uma habilidade...</option>
+                                                    <option value="">{t('profile.select')}...</option>
                                                     {getAllSkills().map(skill => (
                                                         <option key={skill} value={skill}>
                                                             {formatSkillName(skill)}
@@ -588,12 +582,12 @@ const Dashboard = () => {
                                         )}
 
                                         <div className="mb-lg">
-                                            <p className="text-secondary text-xs mb-sm uppercase tracking-wider font-bold">Nível do Treino</p>
+                                            <p className="text-secondary text-xs mb-sm uppercase tracking-wider font-bold">{t('profile.experience')}</p>
                                             <div className="flex gap-sm">
                                                 {[
-                                                    { id: 'beginner', label: 'Iniciante' },
-                                                    { id: 'intermediate', label: 'Intermediário' },
-                                                    { id: 'advanced', label: 'Avançado' }
+                                                    { id: 'beginner', label: t('common.beginner') },
+                                                    { id: 'intermediate', label: t('common.intermediate') },
+                                                    { id: 'advanced', label: t('common.advanced') }
                                                 ].map(level => (
                                                     <button
                                                         key={level.id}
@@ -610,18 +604,18 @@ const Dashboard = () => {
                                             onClick={handleGenerateSpecializedWorkout}
                                             className="btn btn-primary btn-full shadow-lg"
                                         >
-                                            Gerar Treino ⚡
+                                            {t('dashboard.generate_now')} ⚡
                                         </button>
                                     </div>
                                 ) : (
                                     <div className="text-secondary text-sm flex flex-col gap-sm">
                                         <div className="flex gap-sm">
                                             <span>•</span>
-                                            <span>Gere treinos focados em habilidades ou categorias musculares específicas.</span>
+                                            <span>{t('dashboard.off_plan_note1')}</span>
                                         </div>
                                         <div className="flex gap-sm">
                                             <span>•</span>
-                                            <span>Este treino não é programado e não será contabilizado na sua evolução.</span>
+                                            <span>{t('dashboard.off_plan_note2')}</span>
                                         </div>
                                     </div>
                                 )}

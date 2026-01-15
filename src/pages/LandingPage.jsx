@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from '../components/LanguageSelector';
 import logo from '../assets/logo2.png';
 import hero1 from '../assets/hero1.png';
 import hero2 from '../assets/hero2.png';
@@ -15,38 +17,11 @@ import infoVSitBars from '../assets/info_vsit_bars.png';
 import infoWomanFullPlancheBeach from '../assets/info_woman_full_planche_beach.png';
 
 function LandingPage() {
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [currentImage, setCurrentImage] = useState(0);
     const [currentTransformation, setCurrentTransformation] = useState(0);
     const images = [hero1, hero2, hero3];
-
-    const transformations = [
-        {
-            image: transformationManWeightLoss,
-            title: 'Queima de Gordura',
-            description: 'De 95kg para 75kg em 6 meses'
-        },
-        {
-            image: transformationWomanWeightLoss,
-            title: 'Emagrecimento Saudável',
-            description: 'De 78kg para 62kg em 5 meses'
-        },
-        {
-            image: transformationManMuscleGain,
-            title: 'Ganho de Massa Muscular',
-            description: 'De 65kg para 78kg em 8 meses'
-        },
-        {
-            image: transformationManStrength,
-            title: 'Transformação Completa',
-            description: 'De 102kg para 85kg com ganho de força'
-        },
-        {
-            image: transformationWomanMuscle,
-            title: 'Definição e Força',
-            description: 'De 58kg para 63kg com muito mais músculo'
-        }
-    ];
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -62,64 +37,94 @@ function LandingPage() {
         return () => clearInterval(interval);
     }, []);
 
+    const transformations = [
+        {
+            image: transformationManWeightLoss,
+            title: t('landing.transformations.fat_burn.title'),
+            description: t('landing.transformations.fat_burn.desc')
+        },
+        {
+            image: transformationWomanWeightLoss,
+            title: t('landing.transformations.healthy_loss.title'),
+            description: t('landing.transformations.healthy_loss.desc')
+        },
+        {
+            image: transformationManMuscleGain,
+            title: t('landing.transformations.muscle_gain.title'),
+            description: t('landing.transformations.muscle_gain.desc')
+        },
+        {
+            image: transformationManStrength,
+            title: t('landing.transformations.complete.title'),
+            description: t('landing.transformations.complete.desc')
+        },
+        {
+            image: transformationWomanMuscle,
+            title: t('landing.transformations.definition_strength.title'),
+            description: t('landing.transformations.definition_strength.desc')
+        }
+    ];
+
     const benefits = [
         {
             icon: '🎯',
-            title: 'Treinos Personalizados',
-            description: 'Planos de treino adaptados ao seu nível e objetivos individuais'
+            title: t('landing.benefits.personalized.title'),
+            description: t('landing.benefits.personalized.desc')
         },
         {
             icon: '📊',
-            title: 'Acompanhamento de Progresso',
-            description: 'Monitore sua evolução com métricas detalhadas e gráficos intuitivos'
+            title: t('landing.benefits.tracking.title'),
+            description: t('landing.benefits.tracking.desc')
         },
         {
             icon: '🚀',
-            title: 'Progressão Inteligente',
-            description: 'Sistema automático que ajusta a dificuldade conforme você evolui'
+            title: t('landing.benefits.intelligent.title'),
+            description: t('landing.benefits.intelligent.desc')
         },
         {
             icon: '💪',
-            title: 'Biblioteca de Exercícios',
-            description: 'Centenas de exercícios com instruções detalhadas e demonstrações'
+            title: t('landing.benefits.library.title'),
+            description: t('landing.benefits.library.desc')
         },
         {
             icon: '⏱️',
-            title: 'Treinos Flexíveis',
-            description: 'Adapte seus treinos ao tempo disponível, de 15 a 60 minutos'
+            title: t('landing.benefits.flexible.title'),
+            description: t('landing.benefits.flexible.desc')
         },
         {
             icon: '🎓',
-            title: 'Guias para Iniciantes',
-            description: 'Comece do zero com orientações passo a passo para segurança'
+            title: t('landing.benefits.guides.title'),
+            description: t('landing.benefits.guides.desc')
         }
     ];
 
     const calisthenicsInfo = [
         {
             image: infoStrength,
-            title: 'Força Funcional',
-            description: 'Desenvolva força real aplicável ao dia a dia, não apenas músculos isolados. Pense em carregar objetos pesados com facilidade.'
+            title: t('landing.info.strength.title'),
+            description: t('landing.info.strength.desc')
         },
         {
             image: infoWomanHandstand,
-            title: 'Flexibilidade Total',
-            description: 'Treine em qualquer lugar, parque, casa ou academia. A liberdade de se mover sem amarras.'
+            title: t('landing.info.flexibility.title'),
+            description: t('landing.info.flexibility.desc')
         },
         {
             image: infoVSitBars,
-            title: 'Corpo Equilibrado',
-            description: 'Construa um físico harmonioso trabalhando todo o corpo de forma integrada e estável.'
+            title: t('landing.info.balanced.title'),
+            description: t('landing.info.balanced.desc')
         },
         {
             image: infoWomanFullPlancheBeach,
-            title: 'Sempre Desafiador',
-            description: 'Progressões infinitas, do básico ao avançado, sempre há um novo desafio para superar.'
+            title: t('landing.info.challenging.title'),
+            description: t('landing.info.challenging.desc')
         }
     ];
 
     return (
         <div className="landing-page">
+            <LanguageSelector floating />
+
             {/* Hero Section */}
             <section className="hero-section">
                 <div className="hero-overlay" />
@@ -137,18 +142,29 @@ function LandingPage() {
                     <div className="container">
                         <img src={logo} alt="CalisPro" className="hero-logo" />
                         <h1 className="hero-title">
-                            Transforme Seu Corpo com <span className="orange-text">Calistenia</span>
+                            {(() => {
+                                const title = t('landing.title');
+                                const keyword = i18n.language.startsWith('en') ? 'Calisthenics' : 'Calistenia';
+                                const parts = title.split(keyword);
+                                if (parts.length > 1) {
+                                    return (
+                                        <>
+                                            {parts[0]}<span className="orange-text">{keyword}</span>{parts[1]}
+                                        </>
+                                    );
+                                }
+                                return title;
+                            })()}
                         </h1>
                         <p className="hero-subtitle">
-                            O aplicativo inteligente que guia sua jornada na calistenia,
-                            do primeiro exercício aos movimentos mais avançados
+                            {t('landing.subtitle')}
                         </p>
                         <div className="hero-cta">
                             <button onClick={() => navigate('/signup')} className="btn btn-primary btn-lg cta-button">
-                                Começar Agora
+                                {t('landing.start_now')}
                             </button>
                             <button onClick={() => navigate('/login')} className="btn btn-outline btn-lg">
-                                Já Tenho Conta
+                                {t('landing.have_account')}
                             </button>
                         </div>
                     </div>
@@ -162,11 +178,9 @@ function LandingPage() {
             {/* What is Calisthenics Section */}
             <section className="section calisthenics-section">
                 <div className="container">
-                    <h2 className="section-title text-center">O que é Calistenia?</h2>
+                    <h2 className="section-title text-center">{t('landing.what_is_calisthenics')}</h2>
                     <p className="section-intro text-center">
-                        A calistenia é uma forma de treinamento que utiliza apenas o peso corporal para desenvolver
-                        força, flexibilidade, coordenação e resistência. Do grego "kalos" (beleza) e "sthenos" (força),
-                        esta arte milenar cria corpos fortes, ágeis e esteticamente harmoniosos.
+                        {t('landing.section_intro')}
                     </p>
 
                     <div className="info-grid">
@@ -192,9 +206,9 @@ function LandingPage() {
             {/* Benefits Section */}
             <section className="section benefits-section">
                 <div className="container">
-                    <h2 className="section-title text-center">Por Que CalisPro?</h2>
+                    <h2 className="section-title text-center">{t('landing.why_calispro')}</h2>
                     <p className="section-intro text-center">
-                        Seu guia completo para dominar a calistenia, independente do seu nível
+                        {t('landing.why_calispro_intro')}
                     </p>
 
                     <div className="benefits-grid">
@@ -212,51 +226,48 @@ function LandingPage() {
             {/* For Everyone Section */}
             <section className="section for-everyone-section">
                 <div className="container">
-                    <h2 className="section-title text-center">Para Todos os Níveis</h2>
+                    <h2 className="section-title text-center">{t('landing.for_everyone')}</h2>
 
                     <div className="levels-container">
                         <div className="level-card">
-                            <div className="level-badge badge-beginner">Iniciante</div>
-                            <h3 className="level-title">Começando do Zero</h3>
+                            <div className="level-badge badge-beginner">{t('common.beginner')}</div>
+                            <h3 className="level-title">{t('landing.levels.beginner.title')}</h3>
                             <p className="level-description">
-                                Sem experiência? Sem problema! Nosso sistema começa com exercícios básicos e
-                                te guia com segurança pelos fundamentos da calistenia.
+                                {t('landing.levels.beginner.desc')}
                             </p>
                             <ul className="level-features">
-                                <li>Exercícios básicos e seguros</li>
-                                <li>Instrução passo a passo</li>
-                                <li>Progressão gradual e controlada</li>
-                                <li>Foco em técnica e postura</li>
+                                <li>{t('landing.levels.beginner.f1')}</li>
+                                <li>{t('landing.levels.beginner.f2')}</li>
+                                <li>{t('landing.levels.beginner.f3')}</li>
+                                <li>{t('landing.levels.beginner.f4')}</li>
                             </ul>
                         </div>
 
                         <div className="level-card level-card-highlight">
-                            <div className="level-badge badge-intermediate">Intermediário</div>
-                            <h3 className="level-title">Evoluindo Constantemente</h3>
+                            <div className="level-badge badge-intermediate">{t('common.intermediate')}</div>
+                            <h3 className="level-title">{t('landing.levels.intermediate.title')}</h3>
                             <p className="level-description">
-                                Já tem uma base? Acelere seu progresso com treinos desafiadores que
-                                expandem seus limites de forma inteligente.
+                                {t('landing.levels.intermediate.desc')}
                             </p>
                             <ul className="level-features">
-                                <li>Variações mais complexas</li>
-                                <li>Combinações dinâmicas</li>
-                                <li>Treinos de resistência</li>
-                                <li>Preparação para skills avançadas</li>
+                                <li>{t('landing.levels.intermediate.f1')}</li>
+                                <li>{t('landing.levels.intermediate.f2')}</li>
+                                <li>{t('landing.levels.intermediate.f3')}</li>
+                                <li>{t('landing.levels.intermediate.f4')}</li>
                             </ul>
                         </div>
 
                         <div className="level-card">
-                            <div className="level-badge badge-advanced">Avançado</div>
-                            <h3 className="level-title">Dominando Skills</h3>
+                            <div className="level-badge badge-advanced">{t('common.advanced')}</div>
+                            <h3 className="level-title">{t('landing.levels.advanced.title')}</h3>
                             <p className="level-description">
-                                Busca dominar movimentos impressionantes? Treine skills complexas como
-                                muscle-ups, handstands, front lever e muito mais.
+                                {t('landing.levels.advanced.desc')}
                             </p>
                             <ul className="level-features">
-                                <li>Skills avançadas</li>
-                                <li>Progressões específicas</li>
-                                <li>Treinos de alta intensidade</li>
-                                <li>Refinamento de técnica</li>
+                                <li>{t('landing.levels.advanced.f1')}</li>
+                                <li>{t('landing.levels.advanced.f2')}</li>
+                                <li>{t('landing.levels.advanced.f3')}</li>
+                                <li>{t('landing.levels.advanced.f4')}</li>
                             </ul>
                         </div>
                     </div>
@@ -266,9 +277,9 @@ function LandingPage() {
             {/* Transformations Carousel Section */}
             <section className="section transformations-section">
                 <div className="container">
-                    <h2 className="section-title text-center">Resultados Reais de Pessoas Reais</h2>
+                    <h2 className="section-title text-center">{t('landing.results_title')}</h2>
                     <p className="section-intro text-center">
-                        Veja as transformações incríveis alcançadas com treinos de calistenia
+                        {t('landing.results_intro')}
                     </p>
 
                     <div className="transformations-carousel">
@@ -297,7 +308,7 @@ function LandingPage() {
                                 key={idx}
                                 className={`carousel-indicator ${idx === currentTransformation ? 'active' : ''}`}
                                 onClick={() => setCurrentTransformation(idx)}
-                                aria-label={`Ver transformação ${idx + 1}`}
+                                aria-label={`${t('landing.results_title')} ${idx + 1}`}
                             />
                         ))}
                     </div>
@@ -306,14 +317,14 @@ function LandingPage() {
                         <button
                             className="carousel-nav-btn prev"
                             onClick={() => setCurrentTransformation((prev) => prev === 0 ? transformations.length - 1 : prev - 1)}
-                            aria-label="Transformação anterior"
+                            aria-label={t('common.back')}
                         >
                             ‹
                         </button>
                         <button
                             className="carousel-nav-btn next"
                             onClick={() => setCurrentTransformation((prev) => (prev + 1) % transformations.length)}
-                            aria-label="Próxima transformação"
+                            aria-label={t('common.next')}
                         >
                             ›
                         </button>
@@ -325,12 +336,12 @@ function LandingPage() {
             <section className="section cta-section">
                 <div className="container">
                     <div className="cta-content">
-                        <h2 className="cta-title">Pronto para Começar Sua Transformação?</h2>
+                        <h2 className="cta-title">{t('landing.ready_to_start')}</h2>
                         <p className="cta-description">
-                            Junte-se a milhares de atletas que já estão transformando seus corpos com o CalisPro
+                            {t('landing.ready_to_start_desc')}
                         </p>
                         <button onClick={() => navigate('/signup')} className="btn btn-primary btn-lg cta-button">
-                            Criar Conta Grátis
+                            {t('landing.create_free_account')}
                         </button>
                     </div>
                 </div>
@@ -341,7 +352,7 @@ function LandingPage() {
                 <div className="container">
                     <div className="footer-content">
                         <img src={logo} alt="CalisPro" className="footer-logo" />
-                        <p className="footer-text">© 2025 CalisPro. Todos os direitos reservados.</p>
+                        <p className="footer-text">{t('landing.rights_reserved')}</p>
                     </div>
                 </div>
             </footer>

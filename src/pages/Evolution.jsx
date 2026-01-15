@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import {
     calculateReadinessScore,
@@ -22,6 +23,7 @@ import bgEvolution from '../assets/bg-evolution.png'; // Imported new background
 
 import { getUserHistory } from '../utils/historyManager';
 import { getVirtualDate } from '../utils/timeTravel';
+import Header from '../components/Header';
 import {
     Radar,
     RadarChart,
@@ -32,6 +34,7 @@ import {
 } from 'recharts';
 
 const Evolution = () => {
+    const { t } = useTranslation();
     const [readiness, setReadiness] = useState(null);
     const [skillStages, setSkillStages] = useState([]);
     const [radarData, setRadarData] = useState([]);
@@ -83,11 +86,11 @@ const Evolution = () => {
 
             // Prepare Radar Data
             const categoryMap = {
-                push: 'Empurrar',
-                pull: 'Puxar',
-                legs: 'Pernas',
-                core: 'Core',
-                skills: 'Habilidades'
+                push: t('onboarding.equipment_list.dip_bars'),
+                pull: t('onboarding.equipment_list.pullup_bar'),
+                legs: t('onboarding.equipment_list.bodyweight'),
+                core: t('common.core'),
+                skills: t('evolution.skills')
             };
 
             const radarDataFormatted = ['push', 'pull', 'legs', 'core', 'skills'].map(key => ({
@@ -114,15 +117,8 @@ const Evolution = () => {
 
     return (
         <div className="progress-container">
-            <header className="page-header">
-                <div className="container">
-                    <div className="header-left">
-                        <button onClick={() => navigate('/dashboard')} className="btn btn-secondary btn-sm">← Voltar</button>
-                    </div>
-                    <h2>Minha Evolução</h2>
-                    <div className="header-right"></div>
-                </div>
-            </header>
+            {/* Header */}
+            <Header />
 
             <main className="progress-main py-xl px-md md-px-0">
                 <div className="container">
@@ -135,8 +131,8 @@ const Evolution = () => {
                                 backgroundPosition: 'center',
                                 minHeight: '400px'
                             }}>
-                                <span className="mb-lg badge badge-primary py-xs px-md">Pontuação Total</span>
-                                <h3 className="mb-2xl text-primary uppercase tracking-tighter text-sm font-black" style={{ position: 'relative', zIndex: 10 }}>Nível de Preparação</h3>
+                                <span className="mb-lg badge badge-primary py-xs px-md">{t('evolution.total_score')}</span>
+                                <h3 className="mb-2xl text-primary uppercase tracking-tighter text-sm font-black" style={{ position: 'relative', zIndex: 10 }}>{t('dashboard.readiness_score')}</h3>
                                 <div className="flex items-center justify-center relative" style={{ zIndex: 10 }}>
                                     <div style={{
                                         width: '180px', height: '180px', borderRadius: '50%',
@@ -156,8 +152,8 @@ const Evolution = () => {
 
                             <div className="card p-xl glass flex flex-col" style={{ minHeight: '400px' }}>
                                 <div className="text-center mb-xl">
-                                    <h3 className="uppercase tracking-widest text-xs font-black opacity-60">Equilíbrio Atleta</h3>
-                                    <div className="badge badge-success mt-sm">Visão Valências</div>
+                                    <h3 className="uppercase tracking-widest text-xs font-black opacity-60">{t('evolution.athlete_balance')}</h3>
+                                    <div className="badge badge-success mt-sm">{t('evolution.athlete_level')}</div>
                                 </div>
                                 <div className="flex-1 flex items-center justify-center" style={{ width: '100%', minHeight: '300px' }}>
                                     <ResponsiveContainer width="100%" height="100%">
@@ -174,7 +170,7 @@ const Evolution = () => {
                                                 axisLine={false}
                                             />
                                             <Radar
-                                                name="Resultado"
+                                                name={t('evolution.result')}
                                                 dataKey="value"
                                                 stroke="var(--primary-light)"
                                                 fill="var(--primary-light)"
@@ -195,15 +191,15 @@ const Evolution = () => {
                             <div className="max-w-2xl">
                                 <div className="flex items-center gap-sm mb-xs">
                                     <div className="w-8 h-[2px] bg-primary"></div>
-                                    <span className="text-primary text-[10px] font-black uppercase tracking-[0.2em]">Domínio Técnico</span>
+                                    <span className="text-primary text-[10px] font-black uppercase tracking-[0.2em]">{t('evolution.technical_mastery')}</span>
                                 </div>
-                                <h2 className="mb-sm text-4xl font-black uppercase tracking-tighter italic">Habilidades</h2>
-                                <p className="text-secondary text-base leading-relaxed opacity-70">Acompanhe seu progresso e desbloqueie novas conquistas para elevar seu nível atlético através do domínio de padrões específicos.</p>
+                                <h2 className="mb-sm text-4xl font-black uppercase tracking-tighter italic">{t('evolution.skills')}</h2>
+                                <p className="text-secondary text-base leading-relaxed opacity-70">{t('landing.calisthenics_info.calisthenics_concept')}</p>
                             </div>
 
                             <div className="flex gap-lg items-center glass-dark p-xl rounded-2xl w-full lg-w-auto">
                                 <div className="flex-1 lg-flex-initial text-center lg-text-right px-md">
-                                    <div className="text-[9px] text-secondary uppercase font-black tracking-widest opacity-40 mb-1">Concluídas</div>
+                                    <div className="text-[9px] text-secondary uppercase font-black tracking-widest opacity-40 mb-1">{t('evolution.completed')}</div>
                                     <div className="flex items-center justify-center lg-justify-end gap-sm">
                                         <Trophy size={18} className="text-success" />
                                         <span className="text-3xl font-black text-white tabular-nums">
@@ -213,7 +209,7 @@ const Evolution = () => {
                                 </div>
                                 <div className="w-[1px] h-12 bg-white opacity-10"></div>
                                 <div className="flex-1 lg-flex-initial text-center lg-text-right px-md">
-                                    <div className="text-[9px] text-secondary uppercase font-black tracking-widest opacity-40 mb-1">Em Foco</div>
+                                    <div className="text-[9px] text-secondary uppercase font-black tracking-widest opacity-40 mb-1">{t('evolution.in_focus')}</div>
                                     <div className="flex items-center justify-center lg-justify-end gap-sm">
                                         <TrendingUp size={18} className="text-primary" />
                                         <span className="text-3xl font-black text-white tabular-nums">
@@ -230,10 +226,10 @@ const Evolution = () => {
                                 const goal = isReps ? stage.default_prescription.reps_max : stage.default_prescription.seconds_max;
                                 const current = isReps ? (stats.reps || 0) : (stats.seconds || 0);
                                 const percent = Math.min(100, Math.max(0, (current / goal) * 100));
-                                const unit = isReps ? 'reps' : 's';
+                                const unit = isReps ? ' reps' : 's';
 
                                 const difficulty = stage.difficulty_score;
-                                const levelLabel = difficulty <= 3 ? 'Iniciante' : difficulty <= 6 ? 'Intermediário' : 'Avançado';
+                                const levelLabel = difficulty <= 3 ? t('common.beginner') : difficulty <= 6 ? t('common.intermediate') : t('common.advanced');
                                 const levelColor = difficulty <= 3 ? '#10B981' : difficulty <= 6 ? '#F59E0B' : '#EF4444';
 
                                 return (
@@ -262,7 +258,7 @@ const Evolution = () => {
                                                         {levelLabel}
                                                     </span>
                                                     <div className="text-[10px] font-bold text-secondary uppercase tracking-widest bg-white bg-opacity-5 px-2 py-0.5 rounded border border-white border-opacity-5 w-fit">
-                                                        Domínio {masteredCount}/{totalCount}
+                                                        {t('evolution.mastery')} {masteredCount}/{totalCount}
                                                     </div>
                                                 </div>
 
@@ -300,10 +296,10 @@ const Evolution = () => {
 
                                             <div className="mb-lg">
                                                 <p className="text-[10px] text-secondary uppercase font-black tracking-widest opacity-50 mb-2">
-                                                    {status === 'completed' ? 'CONQUISTA MÁXIMA' : status === 'locked' ? 'BLOQUEADO' : 'FOCO ATUAL'}
+                                                    {status === 'completed' ? t('evolution.max_achievement') : status === 'locked' ? t('evolution.locked') : t('evolution.current_focus')}
                                                 </p>
                                                 <h4 className={`text-base font-bold truncate ${status === 'locked' ? 'text-secondary font-normal italic' : 'text-primary'}`}>
-                                                    {stage.name}
+                                                    {t(`dashboard.exercises.${stage.id}`, { defaultValue: stage.name })}
                                                 </h4>
                                             </div>
 
@@ -311,11 +307,11 @@ const Evolution = () => {
                                             <div className="bg-black bg-opacity-40 p-4 rounded-xl border border-white border-opacity-5 shadow-inner">
                                                 <div className="flex justify-between items-end mb-3">
                                                     <div className="flex flex-col">
-                                                        <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">Personal Record</span>
+                                                        <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">{t('evolution.pr')}</span>
                                                         <span className="text-lg font-black text-white">{current}{unit}</span>
                                                     </div>
                                                     <div className="text-right">
-                                                        <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">Objetivo</span>
+                                                        <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">{t('evolution.objective')}</span>
                                                         <div className="text-sm font-bold text-white opacity-80">{goal}{unit}</div>
                                                     </div>
                                                 </div>
@@ -330,19 +326,19 @@ const Evolution = () => {
                                                 <div className="flex items-center gap-2 mt-4 text-[10px] font-black uppercase tracking-widest">
                                                     {status === 'completed' ? (
                                                         <span className="text-success flex items-center gap-1.5 animate-bounce">
-                                                            <CheckCircle2 size={12} /> Desafio Concluído!
+                                                            <CheckCircle2 size={12} /> {t('evolution.completed_msg')}!
                                                         </span>
                                                     ) : status === 'locked' ? (
                                                         <span className="text-secondary opacity-60 flex items-center gap-1.5">
-                                                            <Lock size={12} /> Requer Pré-requisitos
+                                                            <Lock size={12} /> {t('evolution.requirements_msg')}
                                                         </span>
                                                     ) : current >= goal ? (
                                                         <span className="text-primary flex items-center gap-1.5 ">
-                                                            <Award size={12} /> Pronto para Evoluir!
+                                                            <Award size={12} /> {t('evolution.ready_msg')}!
                                                         </span>
                                                     ) : (
                                                         <span className="text-secondary flex items-center gap-1.5">
-                                                            <TrendingUp size={12} /> {Math.round(percent)}% concluído
+                                                            <TrendingUp size={12} /> {Math.round(percent)}% {t('evolution.evolution_msg')}
                                                         </span>
                                                     )}
                                                 </div>
