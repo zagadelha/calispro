@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { TrendingUp, User, LogOut, BarChart2, Menu, X, Home } from 'lucide-react';
+import { TrendingUp, User, LogOut, BarChart2, Menu, X, Home, HelpCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import logo from '../assets/logo2.png';
 import LanguageSelector from './LanguageSelector';
+import Tutorial from './Tutorial';
 
 const Header = () => {
     const { t } = useTranslation();
-    const { logout } = useAuth();
+    const { logout, currentUser } = useAuth();
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [showTutorial, setShowTutorial] = useState(false);
 
     const handleLogout = async () => {
         try {
@@ -19,6 +21,11 @@ const Header = () => {
         } catch (err) {
             console.error('Error logging out:', err);
         }
+    };
+
+    const handleOpenTutorial = () => {
+        setShowTutorial(true);
+        setMenuOpen(false);
     };
 
     return (
@@ -67,6 +74,13 @@ const Header = () => {
 
                                 <div className="menu-divider"></div>
 
+                                <button className="menu-item" onClick={handleOpenTutorial}>
+                                    <HelpCircle size={18} />
+                                    <span>{t('nav.tutorial')}</span>
+                                </button>
+
+                                <div className="menu-divider"></div>
+
                                 <div className="menu-section">
                                     <span className="menu-label">{t('common.language')}</span>
                                     <LanguageSelector />
@@ -85,6 +99,9 @@ const Header = () => {
             </div>
             {/* Overlay to close menu when clicking outside */}
             {menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)}></div>}
+
+            {/* Tutorial Modal */}
+            {showTutorial && <Tutorial onClose={() => setShowTutorial(false)} autoShow={false} userId={currentUser?.uid} />}
         </header>
     );
 };

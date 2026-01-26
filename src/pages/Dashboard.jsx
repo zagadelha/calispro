@@ -11,6 +11,7 @@ import { ptBR, es, enUS } from 'date-fns/locale';
 import logo from '../assets/logo2.png';
 import Header from '../components/Header';
 import InstallButton from '../components/InstallButton';
+import Tutorial from '../components/Tutorial';
 import { getVirtualDate, getVirtualNow, addDays, resetDate } from '../utils/timeTravel';
 import { getUserHistory } from '../utils/historyManager';
 
@@ -20,7 +21,10 @@ const localesMap = {
     es: es
 };
 
+
 const Dashboard = () => {
+    console.log('[Dashboard] Component function called');
+
     const { t, i18n } = useTranslation();
     const currentLocale = localesMap[i18n.language.split('-')[0]] || ptBR;
     const [workout, setWorkout] = useState(null);
@@ -33,12 +37,50 @@ const Dashboard = () => {
     const [selectedSkill, setSelectedSkill] = useState('');
     const [selectedPattern, setSelectedPattern] = useState('push');
     const [workoutLevel, setWorkoutLevel] = useState('beginner');
+    const [showTutorial, setShowTutorial] = useState(false);
     const { currentUser, userProfile, logout } = useAuth();
     const navigate = useNavigate();
+
+    // Debug: Log component mount
+    useEffect(() => {
+        console.log('[Dashboard] Component mounted');
+        return () => console.log('[Dashboard] Component unmounted');
+    }, []);
+
+    // Debug: Log state changes
+    useEffect(() => {
+        console.log('[Dashboard] State - Loading:', loading, 'CurrentUser:', !!currentUser, 'ShowTutorial:', showTutorial);
+    }, [loading, currentUser, showTutorial]);
 
     useEffect(() => {
         loadData();
     }, [currentUser]);
+
+    // Separate useEffect for tutorial to ensure it runs after page is loaded
+    useEffect(() => {
+        console.log('[Tutorial useEffect] Running - Loading:', loading, 'User:', !!currentUser);
+
+        if (!loading && currentUser) {
+            // Check if tutorial should be shown - USE USER-SPECIFIC KEY
+            const tutorialKey = `calispro_tutorial_completed_${currentUser.uid}`;
+            const tutorialCompleted = localStorage.getItem(tutorialKey);
+            console.log('[Tutorial] Loading:', loading, 'User:', !!currentUser, 'Key:', tutorialKey, 'Completed:', tutorialCompleted);
+
+            if (!tutorialCompleted) {
+                console.log('[Tutorial] Will show tutorial in 1.5s');
+                // Show tutorial after page is fully loaded
+                const timer = setTimeout(() => {
+                    console.log('[Tutorial] Showing tutorial now');
+                    setShowTutorial(true);
+                }, 1500);
+                return () => clearTimeout(timer);
+            } else {
+                console.log('[Tutorial] Tutorial already completed for this user, not showing');
+            }
+        } else {
+            console.log('[Tutorial] Conditions not met - Loading:', loading, 'User:', !!currentUser);
+        }
+    }, [loading, currentUser]);
 
     // Auto-complete old 'in_progress' workouts from previous days
     const autoCompleteOldWorkouts = async (userId) => {
@@ -351,14 +393,19 @@ const Dashboard = () => {
 
     if (loading) {
         return (
-            <div className="dashboard-container">
-                <div className="container">
-                    <div className="loading-state">
-                        <div className="spinner"></div>
-                        <p className="text-secondary mt-md">{t('common.loading')}</p>
+            <>
+                <div className="dashboard-container">
+                    <div className="container">
+                        <div className="loading-state">
+                            <div className="spinner"></div>
+                            <p className="text-secondary mt-md">{t('common.loading')}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                {/* Tutorial Modal - can show even during loading */}
+                {showTutorial && <Tutorial onClose={() => setShowTutorial(false)} autoShow={true} userId={currentUser?.uid} />}
+            </>
         );
     }
 
@@ -676,6 +723,9 @@ const Dashboard = () => {
                     </div>
                 </div>
             )}
+
+            {/* Tutorial Modal */}
+            {showTutorial && <Tutorial onClose={() => setShowTutorial(false)} autoShow={true} userId={currentUser?.uid} />}
         </div>
     );
 };

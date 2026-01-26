@@ -37,7 +37,8 @@
         "evolution": "Evolution",
         "profile": "Profile",
         "progress": "Progress",
-        "logout": "Logout"
+        "logout": "Logout",
+        "tutorial": "Tutorial"
     },
     "landing": {
         "title": "Transform Your Body with Calisthenics",
@@ -491,6 +492,52 @@
         "errors": {
             "fill_all": "Please select a type and write your message.",
             "submit_error": "Error sending feedback. Please try again."
+        }
+    },
+    "tutorial": {
+        "step_indicator": "Step {{current}} of {{total}}",
+        "dont_show_again": "Don't show again",
+        "welcome": {
+            "title": "Welcome to CalisPro!",
+            "description": "Your complete guide to mastering calisthenics. Let's take a quick tour of the main features of the app.",
+            "highlight1": "Intuitive and easy-to-use interface",
+            "highlight2": "Access all features through the menu",
+            "highlight3": "Personalize your workout experience"
+        },
+        "workout": {
+            "title": "Your Workouts",
+            "description": "On the Dashboard, you'll find your workout of the day, can generate extra workouts, and track your next scheduled workout.",
+            "highlight1": "View exercises with GIF demonstrations",
+            "highlight2": "Record your reps and time for each exercise",
+            "highlight3": "Provide feedback after each workout to improve your progression"
+        },
+        "evolution": {
+            "title": "Your Evolution",
+            "description": "Track your progress in advanced skills and watch your athlete level evolve.",
+            "highlight1": "Monitor mastery of each skill",
+            "highlight2": "See which exercises are unlocked",
+            "highlight3": "Track your maximum achievements (Personal Records)"
+        },
+        "progress": {
+            "title": "Your Progress",
+            "description": "View detailed statistics of your workouts and maintain your active streak.",
+            "highlight1": "Track your consecutive training days",
+            "highlight2": "View charts of workouts per month",
+            "highlight3": "Analyze distribution by training category"
+        },
+        "profile": {
+            "title": "Your Profile",
+            "description": "Manage your personal information, goals, and available equipment.",
+            "highlight1": "Adjust your level and goals anytime",
+            "highlight2": "Update available equipment",
+            "highlight3": "Recalculate your training plan when needed"
+        },
+        "finish": {
+            "title": "Ready to Start!",
+            "description": "Now you know all the features. It's time to begin your calisthenics journey!",
+            "highlight1": "You can review this tutorial anytime from the menu",
+            "highlight2": "Complete workouts regularly for best results",
+            "highlight3": "Good luck on your transformation journey!"
         }
     }
 }

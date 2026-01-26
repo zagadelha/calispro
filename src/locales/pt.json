@@ -37,7 +37,8 @@
         "evolution": "Evolução",
         "profile": "Perfil",
         "progress": "Progresso",
-        "logout": "Sair"
+        "logout": "Sair",
+        "tutorial": "Tutorial"
     },
     "landing": {
         "title": "Transforme Seu Corpo com Calistenia",
@@ -491,6 +492,52 @@
         "errors": {
             "fill_all": "Por favor, selecione um tipo e escreva sua mensagem.",
             "submit_error": "Erro ao enviar feedback. Tente novamente."
+        }
+    },
+    "tutorial": {
+        "step_indicator": "Passo {{current}} de {{total}}",
+        "dont_show_again": "Não mostrar novamente",
+        "welcome": {
+            "title": "Bem-vindo ao CalisPro!",
+            "description": "Seu guia completo para dominar a calistenia. Vamos fazer um tour rápido pelas principais funcionalidades do app.",
+            "highlight1": "Interface intuitiva e fácil de usar",
+            "highlight2": "Acesse todas as funcionalidades pelo menu",
+            "highlight3": "Personalize sua experiência de treino"
+        },
+        "workout": {
+            "title": "Seus Treinos",
+            "description": "No Dashboard, você encontra seu treino do dia, pode gerar treinos extras e acompanhar seu próximo treino programado.",
+            "highlight1": "Visualize exercícios com demonstrações",
+            "highlight2": "Registre suas repetições e tempo de cada exercício",
+            "highlight3": "Forneça feedback após cada treino para melhorar sua progressão"
+        },
+        "evolution": {
+            "title": "Sua Evolução",
+            "description": "Acompanhe seu progresso nas habilidades avançadas e veja seu nível de atleta evoluir.",
+            "highlight1": "Monitore o domínio de cada habilidade",
+            "highlight2": "Veja quais exercícios estão desbloqueados",
+            "highlight3": "Acompanhe suas conquistas máximas (Personal Records)"
+        },
+        "progress": {
+            "title": "Seu Progresso",
+            "description": "Visualize estatísticas detalhadas dos seus treinos e mantenha sua sequência ativa.",
+            "highlight1": "Acompanhe seus dias consecutivos de treino",
+            "highlight2": "Veja gráficos de treinos por mês",
+            "highlight3": "Analise distribuição por categoria de treino"
+        },
+        "profile": {
+            "title": "Seu Perfil",
+            "description": "Gerencie suas informações pessoais, objetivos e equipamentos disponíveis.",
+            "highlight1": "Ajuste seu nível e objetivos a qualquer momento",
+            "highlight2": "Atualize equipamentos disponíveis",
+            "highlight3": "Recalcule seu plano de treino quando necessário"
+        },
+        "finish": {
+            "title": "Pronto para Começar!",
+            "description": "Agora você conhece todas as funcionalidades. Está na hora de começar sua jornada na calistenia!",
+            "highlight1": "Você pode rever este tutorial a qualquer momento pelo menu",
+            "highlight2": "Complete treinos regularmente para melhores resultados",
+            "highlight3": "Boa sorte em sua jornada de transformação!"
         }
     }
 }

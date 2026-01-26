@@ -37,7 +37,8 @@
         "evolution": "Evolución",
         "profile": "Perfil",
         "progress": "Progreso",
-        "logout": "Cerrar sesión"
+        "logout": "Cerrar sesión",
+        "tutorial": "Tutorial"
     },
     "landing": {
         "title": "Transforma Tu Cuerpo con Calistenia",
@@ -491,6 +492,52 @@
         "errors": {
             "fill_all": "Por favor, selecciona un tipo y escribe tu mensaje.",
             "submit_error": "Error al enviar comentarios. Inténtalo de nuevo."
+        }
+    },
+    "tutorial": {
+        "step_indicator": "Paso {{current}} de {{total}}",
+        "dont_show_again": "No mostrar de nuevo",
+        "welcome": {
+            "title": "¡Bienvenido a CalisPro!",
+            "description": "Tu guía completa para dominar la calistenia. Hagamos un recorrido rápido por las principales funciones de la aplicación.",
+            "highlight1": "Interfaz intuitiva y fácil de usar",
+            "highlight2": "Accede a todas las funciones a través del menú",
+            "highlight3": "Personaliza tu experiencia de entrenamiento"
+        },
+        "workout": {
+            "title": "Tus Entrenamientos",
+            "description": "En el Panel, encontrarás tu entrenamiento del día, podrás generar entrenamientos extra y seguir tu próximo entrenamiento programado.",
+            "highlight1": "Visualiza ejercicios con demostraciones en GIF",
+            "highlight2": "Registra tus repeticiones y tiempo de cada ejercicio",
+            "highlight3": "Proporciona feedback después de cada entrenamiento para mejorar tu progresión"
+        },
+        "evolution": {
+            "title": "Tu Evolución",
+            "description": "Sigue tu progreso en habilidades avanzadas y ve cómo evoluciona tu nivel de atleta.",
+            "highlight1": "Monitorea el dominio de cada habilidad",
+            "highlight2": "Ve qué ejercicios están desbloqueados",
+            "highlight3": "Sigue tus logros máximos (Personal Records)"
+        },
+        "progress": {
+            "title": "Tu Progreso",
+            "description": "Visualiza estadísticas detalladas de tus entrenamientos y mantén tu racha activa.",
+            "highlight1": "Sigue tus días consecutivos de entrenamiento",
+            "highlight2": "Ve gráficos de entrenamientos por mes",
+            "highlight3": "Analiza la distribución por categoría de entrenamiento"
+        },
+        "profile": {
+            "title": "Tu Perfil",
+            "description": "Gestiona tu información personal, objetivos y equipos disponibles.",
+            "highlight1": "Ajusta tu nivel y objetivos en cualquier momento",
+            "highlight2": "Actualiza el equipo disponible",
+            "highlight3": "Recalcula tu plan de entrenamiento cuando sea necesario"
+        },
+        "finish": {
+            "title": "¡Listo para Empezar!",
+            "description": "Ahora conoces todas las funciones. ¡Es hora de comenzar tu viaje en la calistenia!",
+            "highlight1": "Puedes revisar este tutorial en cualquier momento desde el menú",
+            "highlight2": "Completa entrenamientos regularmente para obtener mejores resultados",
+            "highlight3": "¡Buena suerte en tu viaje de transformación!"
         }
     }
 }
