@@ -16,7 +16,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [biometricAvailable, setBiometricAvailable] = useState(false);
     const [hasSavedCredentials, setHasSavedCredentials] = useState(false);
-    const { login, loginWithGoogle } = useAuth();
+    const { login, loginWithGoogle, currentUser } = useAuth();
     const navigate = useNavigate();
 
     // Helper function to get the RP ID (base domain)
@@ -39,6 +39,14 @@ const Login = () => {
 
         return normalizedHostname;
     };
+
+    // Redirect if user is already logged in
+    useEffect(() => {
+        if (currentUser) {
+            console.log('[Auth] User already logged in, redirecting to dashboard');
+            navigate('/dashboard');
+        }
+    }, [currentUser, navigate]);
 
     // Check if biometric authentication is available
     useEffect(() => {
@@ -262,17 +270,31 @@ const Login = () => {
             });
 
             if (assertion) {
-                // In a real implementation, you would verify the assertion with your backend
-                // For now, we'll use the saved email to log in with a stored session
+                console.log('[Biometric] Biometric verification successful');
 
-                // Check if we have a remembered password (not recommended for production)
-                // Instead, you should implement a backend endpoint that verifies the biometric assertion
+                // Check if Firebase session is still active
+                if (currentUser && currentUser.email === savedEmail) {
+                    // User is already authenticated in Firebase!
+                    // Biometry just verified identity, now navigate to dashboard
+                    console.log('[Biometric] Firebase session active, logging in automatically!', {
+                        email: currentUser.email,
+                        uid: currentUser.uid
+                    });
 
-                // For this demo, we'll show a message that biometric is verified
-                // and the user needs to use another auth method first time
-                console.log('[Biometric] Login verified, email:', savedEmail);
-                setError(t('auth.biometric_verified'));
-                setEmail(savedEmail);
+                    navigate('/dashboard');
+                } else {
+                    // Firebase session expired or doesn't match
+                    // User needs to login with password to refresh session
+                    console.warn('[Biometric] Firebase session expired or not found', {
+                        hasCurrentUser: !!currentUser,
+                        currentUserEmail: currentUser?.email,
+                        savedEmail: savedEmail,
+                        match: currentUser?.email === savedEmail
+                    });
+
+                    setError('Sessão expirada. Por favor, faça login com email e senha para renovar.');
+                    setEmail(savedEmail);
+                }
             }
         } catch (err) {
             // Enhanced error logging for debugging
