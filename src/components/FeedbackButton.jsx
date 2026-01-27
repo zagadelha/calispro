@@ -37,6 +37,25 @@ const FeedbackButton = () => {
             return;
         }
 
+        // Validate EmailJS configuration
+        const isConfigValid =
+            EMAILJS_CONFIG.serviceId &&
+            EMAILJS_CONFIG.templateId &&
+            EMAILJS_CONFIG.publicKey &&
+            !EMAILJS_CONFIG.serviceId.includes('YOUR_') &&
+            !EMAILJS_CONFIG.templateId.includes('YOUR_') &&
+            !EMAILJS_CONFIG.publicKey.includes('YOUR_');
+
+        if (!isConfigValid) {
+            console.error('EmailJS não configurado corretamente:', {
+                serviceId: EMAILJS_CONFIG.serviceId,
+                templateId: EMAILJS_CONFIG.templateId,
+                publicKey: EMAILJS_CONFIG.publicKey ? '***' : 'missing'
+            });
+            alert('Erro de configuração. Por favor, contate o suporte.');
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -51,14 +70,28 @@ const FeedbackButton = () => {
                 to_email: EMAILJS_CONFIG.recipientEmail
             };
 
-            // Send email via EmailJS
-            await emailjs.send(
+            console.log('Enviando feedback via EmailJS...', {
+                serviceId: EMAILJS_CONFIG.serviceId,
+                templateId: EMAILJS_CONFIG.templateId,
+                recipientEmail: EMAILJS_CONFIG.recipientEmail
+            });
+
+            // Send email via EmailJS with timeout
+            const sendPromise = emailjs.send(
                 EMAILJS_CONFIG.serviceId,
                 EMAILJS_CONFIG.templateId,
                 templateParams,
                 EMAILJS_CONFIG.publicKey
             );
 
+            // Add timeout (15 seconds)
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Timeout: Email demorou muito para enviar')), 15000)
+            );
+
+            await Promise.race([sendPromise, timeoutPromise]);
+
+            console.log('Feedback enviado com sucesso!');
             setSubmitted(true);
             setTimeout(() => {
                 setIsOpen(false);
@@ -67,8 +100,28 @@ const FeedbackButton = () => {
                 setMessage('');
             }, 2000);
         } catch (error) {
-            console.error('Error submitting feedback:', error);
-            alert(t('support.errors.submit_error'));
+            console.error('❌ Erro ao enviar feedback:', {
+                message: error.message,
+                status: error.status,
+                text: error.text,
+                name: error.name,
+                stack: error.stack
+            });
+
+            // More specific error messages
+            let errorMessage = t('support.errors.submit_error');
+
+            if (error.message?.includes('Timeout')) {
+                errorMessage = 'Tempo esgotado. Verifique sua conexão e tente novamente.';
+            } else if (error.status === 400) {
+                errorMessage = 'Erro de configuração do EmailJS. Contate o suporte.';
+            } else if (error.status === 403) {
+                errorMessage = 'Acesso negado. Verifique as configurações do EmailJS.';
+            } else if (!navigator.onLine) {
+                errorMessage = 'Sem conexão com a internet. Verifique sua rede.';
+            }
+
+            alert(errorMessage);
         } finally {
             setLoading(false);
         }
