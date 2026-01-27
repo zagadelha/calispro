@@ -25,24 +25,47 @@ const Login = () => {
     }, []);
 
     const checkBiometricAvailability = async () => {
+        console.log('[Biometric] Checking availability...');
+        console.log('[Biometric] Platform info:', {
+            hasPublicKeyCredential: !!window.PublicKeyCredential,
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            vendor: navigator.vendor
+        });
+
         // Check if WebAuthn is supported
         if (!window.PublicKeyCredential) {
+            console.warn('[Biometric] WebAuthn not supported on this browser');
             return;
         }
 
         try {
             // Check if platform authenticator (biometric) is available
             const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+
+            console.log('[Biometric] Platform authenticator available:', available);
             setBiometricAvailable(available);
 
             // Check if we have saved credentials
             const savedEmail = localStorage.getItem('biometric_email');
+            const savedCredId = localStorage.getItem('biometric_credential_id');
+
+            console.log('[Biometric] Saved credentials check:', {
+                hasSavedEmail: !!savedEmail,
+                savedEmail: savedEmail,
+                hasSavedCredentialId: !!savedCredId
+            });
+
             setHasSavedCredentials(!!savedEmail);
             if (savedEmail) {
                 setEmail(savedEmail);
             }
         } catch (err) {
-            console.log('Biometric check failed:', err);
+            console.error('[Biometric] Availability check failed:', {
+                name: err?.name,
+                message: err?.message,
+                stack: err?.stack
+            });
         }
     };
 
@@ -125,6 +148,8 @@ const Login = () => {
     };
 
     const handleBiometricLogin = async () => {
+        console.log('[Biometric] Login attempt started');
+
         try {
             setError('');
             setLoading(true);
@@ -132,7 +157,15 @@ const Login = () => {
             const savedEmail = localStorage.getItem('biometric_email');
             const savedCredentialId = localStorage.getItem('biometric_credential_id');
 
+            console.log('[Biometric] Checking saved credentials:', {
+                hasSavedEmail: !!savedEmail,
+                savedEmail: savedEmail,
+                hasSavedCredentialId: !!savedCredentialId,
+                credentialIdLength: savedCredentialId?.length
+            });
+
             if (!savedEmail || !savedCredentialId) {
+                console.warn('[Biometric] No saved credentials found');
                 setError(t('auth.errors.no_biometric'));
                 return;
             }
@@ -140,6 +173,8 @@ const Login = () => {
             // Generate a challenge
             const challenge = new Uint8Array(32);
             crypto.getRandomValues(challenge);
+
+            console.log('[Biometric] Challenge generated, length:', challenge.length);
 
             // Request authentication
             const publicKeyCredentialRequestOptions = {
@@ -149,8 +184,22 @@ const Login = () => {
                 rpId: window.location.hostname
             };
 
+            console.log('[Biometric] Requesting credentials with options:', {
+                timeout: publicKeyCredentialRequestOptions.timeout,
+                userVerification: publicKeyCredentialRequestOptions.userVerification,
+                rpId: publicKeyCredentialRequestOptions.rpId,
+                isLocalhost: window.location.hostname === 'localhost',
+                protocol: window.location.protocol
+            });
+
             const assertion = await navigator.credentials.get({
                 publicKey: publicKeyCredentialRequestOptions
+            });
+
+            console.log('[Biometric] Assertion received:', {
+                hasAssertion: !!assertion,
+                assertionId: assertion?.id,
+                authenticatorData: assertion?.response?.authenticatorData
             });
 
             if (assertion) {
@@ -162,13 +211,30 @@ const Login = () => {
 
                 // For this demo, we'll show a message that biometric is verified
                 // and the user needs to use another auth method first time
+                console.log('[Biometric] Login verified, email:', savedEmail);
                 setError(t('auth.biometric_verified'));
                 setEmail(savedEmail);
             }
         } catch (err) {
-            console.error('Biometric login failed:', err);
+            // Enhanced error logging for debugging
+            console.error('Biometric login failed:', {
+                name: err?.name,
+                message: err?.message,
+                code: err?.code,
+                stack: err?.stack,
+                errorType: typeof err,
+                errorString: String(err),
+                isNotAllowedError: err?.name === 'NotAllowedError',
+                isSecurityError: err?.name === 'SecurityError',
+                isInvalidStateError: err?.name === 'InvalidStateError'
+            });
+
             if (err.name === 'NotAllowedError') {
                 setError(t('auth.errors.biometric_cancelled'));
+            } else if (err.name === 'SecurityError') {
+                setError('Erro de segurança. Verifique se está usando HTTPS.');
+            } else if (err.name === 'InvalidStateError') {
+                setError('Nenhuma credencial biométrica registrada. Faça login com email/senha primeiro.');
             } else {
                 setError(t('auth.errors.biometric_failed'));
             }
