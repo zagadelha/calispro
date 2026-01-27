@@ -27,6 +27,7 @@
         "no": "No",
         "sets": "sets",
         "score": "Score",
+        "or": "or",
         "push": "Push",
         "pull": "Pull",
         "legs": "Legs",
@@ -460,6 +461,8 @@
         "signup_link": "Sign up",
         "login_subtitle": "Your guide from beginner to advanced in Calisthenics.",
         "signup_subtitle": "Create your account and start today",
+        "biometric_login": "Sign in with Biometrics",
+        "biometric_verified": "Biometrics verified! Complete login below.",
         "errors": {
             "fill_all": "Please fill in all fields",
             "passwords_dont_match": "Passwords do not match",
@@ -468,7 +471,10 @@
             "user_not_found": "Incorrect email or password",
             "email_in_use": "This email is already in use",
             "weak_password": "Weak password",
-            "general_error": "Error processing. Try again."
+            "general_error": "Error processing. Try again.",
+            "no_biometric": "No biometric credentials found",
+            "biometric_cancelled": "Biometric authentication cancelled",
+            "biometric_failed": "Biometric authentication failed"
         }
     },
     "support": {

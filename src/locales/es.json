@@ -27,6 +27,7 @@
         "no": "No",
         "sets": "series",
         "score": "Puntuación",
+        "or": "o",
         "push": "Empujar",
         "pull": "Tirar",
         "legs": "Piernas",
@@ -460,6 +461,8 @@
         "signup_link": "Regístrate",
         "login_subtitle": "Tu guía de principiante a avanzado en Calistenia.",
         "signup_subtitle": "Crea tu conta y comienza hoy",
+        "biometric_login": "Iniciar con Biometría",
+        "biometric_verified": "Biometría verificada! Completa el inicio de sesión abajo.",
         "errors": {
             "fill_all": "Por favor, complete todos los campos",
             "passwords_dont_match": "Las contraseñas no coinciden",
@@ -468,7 +471,10 @@
             "user_not_found": "Correo electrónico o contraseña incorrectos",
             "email_in_use": "Este correo electrónico ya está en uso",
             "weak_password": "Contraseña muy débil",
-            "general_error": "Error al procesar. Inténtalo de nuevo."
+            "general_error": "Error al procesar. Inténtalo de nuevo.",
+            "no_biometric": "No se encontraron credenciales biométricas",
+            "biometric_cancelled": "Autenticación biométrica cancelada",
+            "biometric_failed": "Fallo en la autenticación biométrica"
         }
     },
     "support": {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
@@ -14,8 +14,37 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [biometricAvailable, setBiometricAvailable] = useState(false);
+    const [hasSavedCredentials, setHasSavedCredentials] = useState(false);
     const { login, loginWithGoogle } = useAuth();
     const navigate = useNavigate();
+
+    // Check if biometric authentication is available
+    useEffect(() => {
+        checkBiometricAvailability();
+    }, []);
+
+    const checkBiometricAvailability = async () => {
+        // Check if WebAuthn is supported
+        if (!window.PublicKeyCredential) {
+            return;
+        }
+
+        try {
+            // Check if platform authenticator (biometric) is available
+            const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+            setBiometricAvailable(available);
+
+            // Check if we have saved credentials
+            const savedEmail = localStorage.getItem('biometric_email');
+            setHasSavedCredentials(!!savedEmail);
+            if (savedEmail) {
+                setEmail(savedEmail);
+            }
+        } catch (err) {
+            console.log('Biometric check failed:', err);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,6 +58,12 @@ const Login = () => {
             setError('');
             setLoading(true);
             await login(email, password);
+
+            // After successful login, offer to save biometric credentials
+            if (biometricAvailable && !hasSavedCredentials) {
+                await registerBiometric(email);
+            }
+
             navigate('/dashboard');
         } catch (err) {
             console.error(err);
@@ -38,6 +73,104 @@ const Login = () => {
                 setError(t('auth.errors.invalid_email'));
             } else {
                 setError(t('auth.errors.general_error'));
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const registerBiometric = async (userEmail) => {
+        try {
+            // Generate a challenge (in production, this should come from your backend)
+            const challenge = new Uint8Array(32);
+            crypto.getRandomValues(challenge);
+
+            // Create credential options
+            const publicKeyCredentialCreationOptions = {
+                challenge: challenge,
+                rp: {
+                    name: "CalisPro",
+                    id: window.location.hostname
+                },
+                user: {
+                    id: new TextEncoder().encode(userEmail),
+                    name: userEmail,
+                    displayName: userEmail
+                },
+                pubKeyCredParams: [
+                    { alg: -7, type: "public-key" },  // ES256
+                    { alg: -257, type: "public-key" } // RS256
+                ],
+                authenticatorSelection: {
+                    authenticatorAttachment: "platform",
+                    userVerification: "required"
+                },
+                timeout: 60000,
+                attestation: "none"
+            };
+
+            const credential = await navigator.credentials.create({
+                publicKey: publicKeyCredentialCreationOptions
+            });
+
+            // Save credential info to localStorage (in production, save to backend)
+            if (credential) {
+                localStorage.setItem('biometric_email', userEmail);
+                localStorage.setItem('biometric_credential_id', btoa(String.fromCharCode(...new Uint8Array(credential.rawId))));
+                setHasSavedCredentials(true);
+            }
+        } catch (err) {
+            console.log('Biometric registration cancelled or failed:', err);
+        }
+    };
+
+    const handleBiometricLogin = async () => {
+        try {
+            setError('');
+            setLoading(true);
+
+            const savedEmail = localStorage.getItem('biometric_email');
+            const savedCredentialId = localStorage.getItem('biometric_credential_id');
+
+            if (!savedEmail || !savedCredentialId) {
+                setError(t('auth.errors.no_biometric'));
+                return;
+            }
+
+            // Generate a challenge
+            const challenge = new Uint8Array(32);
+            crypto.getRandomValues(challenge);
+
+            // Request authentication
+            const publicKeyCredentialRequestOptions = {
+                challenge: challenge,
+                timeout: 60000,
+                userVerification: "required",
+                rpId: window.location.hostname
+            };
+
+            const assertion = await navigator.credentials.get({
+                publicKey: publicKeyCredentialRequestOptions
+            });
+
+            if (assertion) {
+                // In a real implementation, you would verify the assertion with your backend
+                // For now, we'll use the saved email to log in with a stored session
+
+                // Check if we have a remembered password (not recommended for production)
+                // Instead, you should implement a backend endpoint that verifies the biometric assertion
+
+                // For this demo, we'll show a message that biometric is verified
+                // and the user needs to use another auth method first time
+                setError(t('auth.biometric_verified'));
+                setEmail(savedEmail);
+            }
+        } catch (err) {
+            console.error('Biometric login failed:', err);
+            if (err.name === 'NotAllowedError') {
+                setError(t('auth.errors.biometric_cancelled'));
+            } else {
+                setError(t('auth.errors.biometric_failed'));
             }
         } finally {
             setLoading(false);
@@ -72,9 +205,32 @@ const Login = () => {
                     </div>
 
                     {error && (
-                        <div className="alert alert-error mb-lg">
+                        <div className={`alert ${error.includes('verificad') ? 'alert-success' : 'alert-error'} mb-lg`}>
                             {error}
                         </div>
+                    )}
+
+                    {/* Biometric Login Button - Only show if available and has saved credentials */}
+                    {biometricAvailable && hasSavedCredentials && (
+                        <>
+                            <button
+                                onClick={handleBiometricLogin}
+                                className="btn btn-primary btn-full mb-md"
+                                disabled={loading}
+                                style={{
+                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                    border: '2px solid rgba(255,255,255,0.2)',
+                                    position: 'relative',
+                                    overflow: 'hidden'
+                                }}
+                            >
+                                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                                    <span style={{ fontSize: '20px' }}>🔐</span>
+                                    {t('auth.biometric_login')}
+                                </span>
+                            </button>
+                            <div className="divider-text">{t('common.or')}</div>
+                        </>
                     )}
 
                     <form onSubmit={handleSubmit}>
@@ -111,7 +267,7 @@ const Login = () => {
                         </button>
                     </form>
 
-                    <div className="divider-text">ou</div>
+                    <div className="divider-text">{t('common.or')}</div>
 
                     <button
                         onClick={handleGoogleLogin}
