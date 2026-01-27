@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const CURRENT_VERSION = '1.0.0'; // This will be updated automatically in build
+// Version is automatically injected from package.json during build
+const CURRENT_VERSION = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '1.0.2';
 const VERSION_CHECK_INTERVAL = 30 * 60 * 1000; // Check every 30 minutes
 const VERSION_STORAGE_KEY = 'calispro_version_dismissed';
 
