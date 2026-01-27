@@ -79,8 +79,11 @@ const VersionChecker = () => {
             });
         }
 
-        // Clear browser cache and reload
-        window.location.reload(true);
+        // Force hard reload from server by adding timestamp
+        // This is more reliable than reload(true) which is deprecated
+        const url = new URL(window.location.href);
+        url.searchParams.set('_refresh', Date.now().toString());
+        window.location.href = url.toString();
     };
 
     const handleDismiss = () => {

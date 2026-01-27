@@ -310,10 +310,14 @@ const Profile = () => {
                 }
             }
 
+
             console.log('[InstallUpdate] Atualização concluída, recarregando...');
 
-            // Force reload from server
-            window.location.reload(true);
+            // Force hard reload from server by adding timestamp
+            // This is more reliable than reload(true) which is deprecated
+            const url = new URL(window.location.href);
+            url.searchParams.set('_refresh', Date.now().toString());
+            window.location.href = url.toString();
         } catch (error) {
             console.error('[InstallUpdate] Erro ao instalar atualização:', error);
             alert('Erro ao instalar atualização: ' + error.message);

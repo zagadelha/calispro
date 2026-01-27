@@ -68,8 +68,11 @@ const AdminDashboard = () => {
 
             alert('Service workers e caches limpos com sucesso! A página será recarregada.');
 
-            // Force reload from server
-            window.location.reload(true);
+            // Force hard reload from server by adding timestamp
+            // This is more reliable than reload(true) which is deprecated
+            const url = new URL(window.location.href);
+            url.searchParams.set('_refresh', Date.now().toString());
+            window.location.href = url.toString();
         } catch (error) {
             console.error('[ForceUpdate] Error during force update:', error);
             alert('Erro ao forçar atualização: ' + error.message);
