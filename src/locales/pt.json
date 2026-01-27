@@ -31,7 +31,8 @@
         "push": "Empurrar",
         "pull": "Puxar",
         "legs": "Pernas",
-        "language": "Idioma"
+        "language": "Idioma",
+        "dismiss": "Dispensar"
     },
     "nav": {
         "dashboard": "Dashboard",
@@ -207,7 +208,14 @@
         "recalculate_confirm": "Isso irá gerar um novo plano de treino. Deseja continuar?",
         "plan_generated": "Novo plano de treino gerado!",
         "delete_confirm1": "⚠️ ATENÇÃO: Isso irá apagar TODO o seu histórico de treinos, recordes e evolução. Esta ação NÃO pode ser desfeita e você perderá todo o seu progresso.",
-        "delete_confirm2": "Você tem CERTEZA absoluta? Todos os seus dados de progresso sumirão para sempre."
+        "delete_confirm2": "Você tem CERTEZA absoluta? Todos os seus dados de progresso sumirão para sempre.",
+        "version": "Versão"
+    },
+    "version": {
+        "new_version_available": "Nova versão disponível!",
+        "update_message": "Uma atualização (v{{version}}) está pronta. Atualize para obter as últimas melhorias.",
+        "update_now": "Atualizar Agora",
+        "current_version": "Versão Atual"
     },
     "dashboard": {
         "welcome": "Olá, {{name}}!",

@@ -6,6 +6,7 @@ import { generateWorkoutPlan } from '../utils/workoutGenerator';
 import { collection, query, where, getDocs, writeBatch, doc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import Header from '../components/Header';
+import { CURRENT_VERSION } from '../components/VersionChecker';
 
 const Profile = () => {
     const { t } = useTranslation();
@@ -492,6 +493,13 @@ const Profile = () => {
                                     )}
                                 </>
                             )}
+                        </div>
+
+                        {/* Version Info */}
+                        <div className="profile-version-info">
+                            <p>
+                                {t('profile.version')}: <strong>v{CURRENT_VERSION}</strong>
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -31,7 +31,8 @@
         "push": "Push",
         "pull": "Pull",
         "legs": "Legs",
-        "language": "Language"
+        "language": "Language",
+        "dismiss": "Dismiss"
     },
     "nav": {
         "dashboard": "Dashboard",
@@ -207,7 +208,14 @@
         "recalculate_confirm": "This will generate a new workout plan. Do you want to continue?",
         "plan_generated": "New workout plan generated!",
         "delete_confirm1": "⚠️ ATTENTION: This will delete ALL your workout history, records, and evolution. This action CANNOT be undone and you will lose all your progress.",
-        "delete_confirm2": "Are you ABSOLUTELY sure? All your progress data will disappear forever."
+        "delete_confirm2": "Are you ABSOLUTELY sure? All your progress data will disappear forever.",
+        "version": "Version"
+    },
+    "version": {
+        "new_version_available": "New version available!",
+        "update_message": "An update (v{{version}}) is ready. Update to get the latest improvements.",
+        "update_now": "Update Now",
+        "current_version": "Current Version"
     },
     "dashboard": {
         "welcome": "Hello, {{name}}!",
