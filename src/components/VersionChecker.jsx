@@ -50,6 +50,27 @@ const VersionChecker = () => {
                 if (dismissedVersion !== remoteVersion) {
                     setNewVersionAvailable(true);
                     setIsDismissed(false);
+
+                    // AUTOMATIC CACHE CLEAR: If user has old cached code, force clear immediately
+                    // This prevents errors like "isPerformanceCheck is not defined"
+                    const lastClearedVersion = localStorage.getItem('calispro_last_cleared_version');
+
+                    if (lastClearedVersion !== remoteVersion) {
+                        console.log('[VersionChecker] 🚨 Version mismatch detected! Auto-clearing cache...');
+
+                        // Store that we're clearing for this version to prevent loops
+                        localStorage.setItem('calispro_last_cleared_version', remoteVersion);
+
+                        // Clear everything and reload after 2 seconds (give time for user to see notification)
+                        setTimeout(async () => {
+                            await clearAllCaches();
+                            // Add version to URL to force complete refresh
+                            const url = new URL(window.location.href);
+                            url.searchParams.set('v', remoteVersion);
+                            url.searchParams.set('_refresh', Date.now().toString());
+                            window.location.href = url.toString();
+                        }, 2000);
+                    }
                 }
             } else {
                 setNewVersionAvailable(false);
@@ -58,6 +79,36 @@ const VersionChecker = () => {
             }
         } catch (error) {
             console.error('[VersionChecker] Error checking version:', error);
+        }
+    };
+
+    const clearAllCaches = async () => {
+        console.log('[VersionChecker] 🧹 Clearing all caches...');
+
+        try {
+            // 1. Unregister all service workers
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                console.log(`[VersionChecker] Unregistering ${registrations.length} service worker(s)...`);
+
+                for (const registration of registrations) {
+                    await registration.unregister();
+                }
+            }
+
+            // 2. Clear all caches
+            if ('caches' in window) {
+                const cacheNames = await caches.keys();
+                console.log(`[VersionChecker] Clearing ${cacheNames.length} cache(s)...`);
+
+                for (const cacheName of cacheNames) {
+                    await caches.delete(cacheName);
+                }
+            }
+
+            console.log('[VersionChecker] ✅ All caches cleared successfully');
+        } catch (error) {
+            console.error('[VersionChecker] Error clearing caches:', error);
         }
     };
 
@@ -71,16 +122,11 @@ const VersionChecker = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const handleRefresh = () => {
-        // Clear all caches and reload
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(registrations => {
-                registrations.forEach(registration => registration.unregister());
-            });
-        }
+    const handleRefresh = async () => {
+        // Clear all caches using the centralized function
+        await clearAllCaches();
 
         // Force hard reload from server by adding timestamp
-        // This is more reliable than reload(true) which is deprecated
         const url = new URL(window.location.href);
         url.searchParams.set('_refresh', Date.now().toString());
         window.location.href = url.toString();
