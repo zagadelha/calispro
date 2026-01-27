@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import emailjs from '@emailjs/browser';
 import { EMAILJS_CONFIG } from '../config/emailjs';
 import { getVirtualNow } from '../utils/timeTravel';
+import { emailJSLogger } from '../utils/debugLogger';
 
 const FeedbackButton = () => {
     const { t } = useTranslation();
@@ -47,14 +48,21 @@ const FeedbackButton = () => {
             !EMAILJS_CONFIG.publicKey.includes('YOUR_');
 
         if (!isConfigValid) {
-            console.error('EmailJS não configurado corretamente:', {
-                serviceId: EMAILJS_CONFIG.serviceId,
-                templateId: EMAILJS_CONFIG.templateId,
-                publicKey: EMAILJS_CONFIG.publicKey ? '***' : 'missing'
-            });
+            emailJSLogger.logError(
+                new Error('EmailJS configuration invalid'),
+                {
+                    serviceId: EMAILJS_CONFIG.serviceId,
+                    templateId: EMAILJS_CONFIG.templateId,
+                    publicKey: EMAILJS_CONFIG.publicKey ? '***' : 'missing'
+                }
+            );
             alert('Erro de configuração. Por favor, contate o suporte.');
             return;
         }
+
+        // Log environment info before attempting to send
+        emailJSLogger.logEnvironment();
+        emailJSLogger.logConfig(EMAILJS_CONFIG);
 
         setLoading(true);
 
@@ -70,7 +78,7 @@ const FeedbackButton = () => {
                 to_email: EMAILJS_CONFIG.recipientEmail
             };
 
-            console.log('Enviando feedback via EmailJS...', {
+            emailJSLogger.logAttempt({
                 serviceId: EMAILJS_CONFIG.serviceId,
                 templateId: EMAILJS_CONFIG.templateId,
                 recipientEmail: EMAILJS_CONFIG.recipientEmail
@@ -89,9 +97,13 @@ const FeedbackButton = () => {
                 setTimeout(() => reject(new Error('Timeout: Email demorou muito para enviar')), 15000)
             );
 
-            await Promise.race([sendPromise, timeoutPromise]);
+            const result = await Promise.race([sendPromise, timeoutPromise]);
 
-            console.log('Feedback enviado com sucesso!');
+            emailJSLogger.logSuccess({
+                status: result.status,
+                text: result.text
+            });
+
             setSubmitted(true);
             setTimeout(() => {
                 setIsOpen(false);
@@ -100,12 +112,11 @@ const FeedbackButton = () => {
                 setMessage('');
             }, 2000);
         } catch (error) {
-            console.error('❌ Erro ao enviar feedback:', {
-                message: error.message,
-                status: error.status,
-                text: error.text,
-                name: error.name,
-                stack: error.stack
+            emailJSLogger.logError(error, {
+                feedbackType,
+                messageLength: message.length,
+                userId: currentUser?.uid || 'anonymous',
+                userEmail: currentUser?.email || 'N/A'
             });
 
             // More specific error messages
