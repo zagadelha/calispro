@@ -19,6 +19,27 @@ const Login = () => {
     const { login, loginWithGoogle } = useAuth();
     const navigate = useNavigate();
 
+    // Helper function to get the RP ID (base domain)
+    // Normalizes www.calispro.com -> calispro.com
+    const getRpId = () => {
+        const hostname = window.location.hostname;
+
+        // For localhost, use as-is
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return hostname;
+        }
+
+        // Remove www. prefix if present
+        const normalizedHostname = hostname.replace(/^www\./, '');
+
+        console.log('[Biometric] RP ID normalized:', {
+            original: hostname,
+            normalized: normalizedHostname
+        });
+
+        return normalizedHostname;
+    };
+
     // Check if biometric authentication is available
     useEffect(() => {
         checkBiometricAvailability();
@@ -104,6 +125,9 @@ const Login = () => {
 
     const registerBiometric = async (userEmail) => {
         try {
+            const rpId = getRpId();
+            console.log('[Biometric] Registering credential with RP ID:', rpId);
+
             // Generate a challenge (in production, this should come from your backend)
             const challenge = new Uint8Array(32);
             crypto.getRandomValues(challenge);
@@ -113,7 +137,7 @@ const Login = () => {
                 challenge: challenge,
                 rp: {
                     name: "CalisPro",
-                    id: window.location.hostname
+                    id: rpId
                 },
                 user: {
                     id: new TextEncoder().encode(userEmail),
@@ -138,12 +162,24 @@ const Login = () => {
 
             // Save credential info to localStorage (in production, save to backend)
             if (credential) {
+                const credentialId = btoa(String.fromCharCode(...new Uint8Array(credential.rawId)));
+
+                console.log('[Biometric] Credential created successfully:', {
+                    credentialIdLength: credentialId.length,
+                    rpId: rpId,
+                    email: userEmail
+                });
+
                 localStorage.setItem('biometric_email', userEmail);
-                localStorage.setItem('biometric_credential_id', btoa(String.fromCharCode(...new Uint8Array(credential.rawId))));
+                localStorage.setItem('biometric_credential_id', credentialId);
+                localStorage.setItem('biometric_rp_id', rpId);
                 setHasSavedCredentials(true);
             }
         } catch (err) {
-            console.log('Biometric registration cancelled or failed:', err);
+            console.log('[Biometric] Registration cancelled or failed:', {
+                name: err?.name,
+                message: err?.message
+            });
         }
     };
 
@@ -176,18 +212,41 @@ const Login = () => {
 
             console.log('[Biometric] Challenge generated, length:', challenge.length);
 
+            // Use the same normalized RP ID as registration
+            const rpId = getRpId();
+            const savedRpId = localStorage.getItem('biometric_rp_id');
+
+            console.log('[Biometric] RP ID check:', {
+                current: rpId,
+                saved: savedRpId,
+                match: rpId === savedRpId
+            });
+
+            // Decode the credential ID from base64
+            const credentialIdBuffer = Uint8Array.from(
+                atob(savedCredentialId),
+                c => c.charCodeAt(0)
+            );
+
             // Request authentication
             const publicKeyCredentialRequestOptions = {
                 challenge: challenge,
                 timeout: 60000,
                 userVerification: "required",
-                rpId: window.location.hostname
+                rpId: rpId,
+                allowCredentials: [{
+                    id: credentialIdBuffer,
+                    type: 'public-key',
+                    transports: ['internal']
+                }]
             };
 
             console.log('[Biometric] Requesting credentials with options:', {
                 timeout: publicKeyCredentialRequestOptions.timeout,
                 userVerification: publicKeyCredentialRequestOptions.userVerification,
                 rpId: publicKeyCredentialRequestOptions.rpId,
+                hasAllowCredentials: true,
+                credentialIdLength: credentialIdBuffer.length,
                 isLocalhost: window.location.hostname === 'localhost',
                 protocol: window.location.protocol
             });
@@ -229,8 +288,15 @@ const Login = () => {
                 isInvalidStateError: err?.name === 'InvalidStateError'
             });
 
+
             if (err.name === 'NotAllowedError') {
-                setError(t('auth.errors.biometric_cancelled'));
+                // Credential might be invalid - offer to clear and re-register
+                const errorMsg = 'Credencial biométrica inválida. Possível incompatibilidade de domínio (www vs não-www). Faça login com email/senha para re-registrar.';
+                setError(errorMsg);
+
+                // Auto-clear invalid credentials
+                console.warn('[Biometric] Clearing potentially invalid credentials');
+                clearBiometricCredentials();
             } else if (err.name === 'SecurityError') {
                 setError('Erro de segurança. Verifique se está usando HTTPS.');
             } else if (err.name === 'InvalidStateError') {
@@ -241,6 +307,14 @@ const Login = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const clearBiometricCredentials = () => {
+        console.log('[Biometric] Clearing saved credentials');
+        localStorage.removeItem('biometric_email');
+        localStorage.removeItem('biometric_credential_id');
+        localStorage.removeItem('biometric_rp_id');
+        setHasSavedCredentials(false);
     };
 
     const handleGoogleLogin = async () => {
