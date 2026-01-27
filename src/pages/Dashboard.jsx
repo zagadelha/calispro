@@ -14,8 +14,6 @@ import InstallButton from '../components/InstallButton';
 import Tutorial from '../components/Tutorial';
 import { getVirtualDate, getVirtualNow, addDays, resetDate } from '../utils/timeTravel';
 import { getUserHistory } from '../utils/historyManager';
-import EmailJSDiagnostic from '../components/EmailJSDiagnostic';
-
 
 const localesMap = {
     pt: ptBR,
@@ -777,9 +775,6 @@ const Dashboard = () => {
 
             {/* Tutorial Modal */}
             {showTutorial && <Tutorial onClose={() => setShowTutorial(false)} autoShow={true} userId={currentUser?.uid} />}
-
-            {/* EmailJS Diagnostic - Development Only */}
-            {import.meta.env.DEV && <EmailJSDiagnostic />}
         </div>
     );
 };

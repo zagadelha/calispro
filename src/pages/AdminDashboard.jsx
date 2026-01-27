@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, BarChart2, MessageSquare, List, RefreshCw } from 'lucide-react';
+import { ArrowLeft, BarChart2, MessageSquare, List, RefreshCw, Mail } from 'lucide-react';
+import EmailJSDiagnostic from '../components/EmailJSDiagnostic';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
+    const [showEmailDiagnostic, setShowEmailDiagnostic] = useState(false);
 
     const reports = [
         {
@@ -123,8 +125,25 @@ const AdminDashboard = () => {
                             Remove todos os service workers e caches, forçando os apps instalados a baixarem a versão mais recente do servidor.
                         </p>
                     </div>
+
+                    <div className="action-section" style={{ marginTop: '1.5rem' }}>
+                        <h2>Diagnóstico de Email (Feedback)</h2>
+                        <button
+                            className="btn-email-diagnostic"
+                            onClick={() => setShowEmailDiagnostic(!showEmailDiagnostic)}
+                        >
+                            <Mail size={20} />
+                            <span>{showEmailDiagnostic ? 'Ocultar' : 'Exibir'} Teste de EmailJS</span>
+                        </button>
+                        <p className="action-description">
+                            Testa a configuração do EmailJS e envia um email de teste para verificar se o sistema de feedback está funcionando corretamente.
+                        </p>
+                    </div>
                 </div>
             </main>
+
+            {/* EmailJS Diagnostic Component */}
+            {showEmailDiagnostic && <EmailJSDiagnostic />}
 
             <style dangerouslySetInnerHTML={{
                 __html: `
@@ -231,6 +250,28 @@ const AdminDashboard = () => {
                     box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
                 }
                 .btn-force-update:active {
+                    transform: translateY(0);
+                }
+                .btn-email-diagnostic {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    padding: 1rem 1.5rem;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                }
+                .btn-email-diagnostic:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+                }
+                .btn-email-diagnostic:active {
                     transform: translateY(0);
                 }
                 .action-description {
