@@ -16,7 +16,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [biometricAvailable, setBiometricAvailable] = useState(false);
     const [hasSavedCredentials, setHasSavedCredentials] = useState(false);
-    const { login, loginWithGoogle, currentUser } = useAuth();
+    const { login, loginWithGoogle, currentUser, loading: authLoading } = useAuth();
     const navigate = useNavigate();
 
     // Helper function to get the RP ID (base domain)
@@ -263,6 +263,7 @@ const Login = () => {
                 publicKey: publicKeyCredentialRequestOptions
             });
 
+
             console.log('[Biometric] Assertion received:', {
                 hasAssertion: !!assertion,
                 assertionId: assertion?.id,
@@ -271,6 +272,20 @@ const Login = () => {
 
             if (assertion) {
                 console.log('[Biometric] Biometric verification successful');
+
+                // Wait 1 second for Firebase auth to load (race condition fix)
+                console.log('[Biometric] Waiting for Firebase auth to load...', {
+                    authLoading,
+                    hasCurrentUser: !!currentUser
+                });
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                console.log('[Biometric] After waiting - checking session:', {
+                    hasCurrentUser: !!currentUser,
+                    currentUserEmail: currentUser?.email,
+                    savedEmail
+                });
 
                 // Check if Firebase session is still active
                 if (currentUser && currentUser.email === savedEmail) {
