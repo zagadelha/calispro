@@ -264,7 +264,7 @@ const WorkoutExecution = () => {
 
     const handleFinishWorkout = async () => {
         // Validar se performance está completa
-        const perfCheck = isPerformanceCheck = isPerformanceComplete();
+        const perfCheck = isPerformanceComplete();
         if (!perfCheck.complete) {
             alert(`⚠️ ${t('workout_execution.performance_warning')}`);
             return;
