@@ -220,7 +220,7 @@
         "continue_workout": "Continuar Entrenamiento",
         "workout_done": "Entrenamiento Completado",
         "next_workout": "Próximo Entrenamiento",
-        "readiness_score": "Score de Preparación",
+        "readiness_score": "Nivel de Preparación",
         "off_plan_title": "Entrenamiento fuera del plan",
         "off_plan_desc": "Generar un entrenamiento avulso basado en categoría o habilidad",
         "by_category": "Categoría",
@@ -329,7 +329,7 @@
     },
     "evolution": {
         "title": "Mi Evolución",
-        "total_score": "Puntuación Total",
+        "total_score": "Nivel Total",
         "athlete_balance": "Equilibrio Atleta",
         "athlete_level": "Nivel de Atleta",
         "skills": "Habilidades",
@@ -507,7 +507,7 @@
         "workout": {
             "title": "Tus Entrenamientos",
             "description": "En el Panel, encontrarás tu entrenamiento del día, podrás generar entrenamientos extra y seguir tu próximo entrenamiento programado.",
-            "highlight1": "Visualiza ejercicios con demostraciones en GIF",
+            "highlight1": "Visualiza ejercicios con demostraciones",
             "highlight2": "Registra tus repeticiones y tiempo de cada ejercicio",
             "highlight3": "Proporciona feedback después de cada entrenamiento para mejorar tu progresión"
         },

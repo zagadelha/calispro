@@ -220,7 +220,7 @@
         "continue_workout": "Continuar Treino",
         "workout_done": "Treino Concluído",
         "next_workout": "Próximo Treino",
-        "readiness_score": "Score de Prontidão",
+        "readiness_score": "Nível de Preparação",
         "off_plan_title": "Treino fora do plano",
         "off_plan_desc": "Gere um treino avulso baseado em categoria ou habilidade",
         "by_category": "Categoria",
@@ -329,7 +329,7 @@
     },
     "evolution": {
         "title": "Minha Evolução",
-        "total_score": "Pontuação Total",
+        "total_score": "Nível Total",
         "athlete_balance": "Equilíbrio Atleta",
         "athlete_level": "Nível do Atleta",
         "skills": "Habilidades",

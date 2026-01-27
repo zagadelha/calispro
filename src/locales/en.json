@@ -220,7 +220,7 @@
         "continue_workout": "Continue Workout",
         "workout_done": "Workout Done",
         "next_workout": "Next Workout",
-        "readiness_score": "Readiness Score",
+        "readiness_score": "Preparation Level",
         "off_plan_title": "Off-plan workout",
         "off_plan_desc": "Generate a custom workout based on category or skill",
         "by_category": "Category",
@@ -329,7 +329,7 @@
     },
     "evolution": {
         "title": "My Evolution",
-        "total_score": "Total Score",
+        "total_score": "Total Level",
         "athlete_balance": "Athlete Balance",
         "athlete_level": "Athlete Level",
         "skills": "Skills",
@@ -507,7 +507,7 @@
         "workout": {
             "title": "Your Workouts",
             "description": "On the Dashboard, you'll find your workout of the day, can generate extra workouts, and track your next scheduled workout.",
-            "highlight1": "View exercises with GIF demonstrations",
+            "highlight1": "View exercises with demonstrations",
             "highlight2": "Record your reps and time for each exercise",
             "highlight3": "Provide feedback after each workout to improve your progression"
         },

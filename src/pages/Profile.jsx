@@ -479,14 +479,17 @@ const Profile = () => {
                                         🗑️ {t('profile.delete_history')}
                                     </button>
 
-                                    <div className="mt-lg text-center">
-                                        <button
-                                            onClick={() => window.location.reload()}
-                                            className="text-secondary text-xs btn-link"
-                                        >
-                                            🔄 {t('profile.force_refresh')}
-                                        </button>
-                                    </div>
+                                    {/* Force Refresh - Only in Development */}
+                                    {import.meta.env.DEV && (
+                                        <div className="mt-lg text-center">
+                                            <button
+                                                onClick={() => window.location.reload()}
+                                                className="text-secondary text-xs btn-link"
+                                            >
+                                                🔄 {t('profile.force_refresh')}
+                                            </button>
+                                        </div>
+                                    )}
                                 </>
                             )}
                         </div>

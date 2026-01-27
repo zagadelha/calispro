@@ -421,41 +421,90 @@ const Dashboard = () => {
             <main className="dashboard-main">
                 <div className="container">
                     {/* Welcome Section */}
-                    <section className="welcome-section mb-xl glass p-xl rounded-2xl border-white/5 animate-fadeIn">
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-lg">
-                            <div className="flex-1">
-                                <h2 className="mb-xs flex items-center gap-xs text-3xl font-black tracking-tight italic uppercase">
-                                    {t('dashboard.welcome', { name: userProfile?.name?.split(' ')[0] || t('common.athlete') })} 👋
-                                </h2>
-                                <p className="text-secondary text-sm font-medium opacity-80 capitalize">
-                                    {format(getVirtualNow(), i18n.language.startsWith('en') ? "EEEE, MMMM d" : "EEEE, d 'de' MMMM", { locale: currentLocale })}
-                                </p>
-                            </div>
+                    <section className="welcome-section mb-xl">
+                        <div className="glass p-lg rounded-2xl border border-white/10 shadow-lg" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)' }}>
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-lg">
+                                {/* Greeting */}
+                                <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-4xl">👋</span>
+                                        <h1 className="text-2xl md:text-3xl font-bold" style={{
+                                            background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)',
+                                            WebkitBackgroundClip: 'text',
+                                            WebkitTextFillColor: 'transparent',
+                                            backgroundClip: 'text',
+                                            margin: 0,
+                                            lineHeight: 1.2
+                                        }}>
+                                            {t('dashboard.welcome', { name: userProfile?.name?.split(' ')[0] || t('common.athlete') })}
+                                        </h1>
+                                    </div>
+                                    <p className="text-sm text-secondary opacity-90 font-medium" style={{ textTransform: 'capitalize' }}>
+                                        {format(getVirtualNow(), i18n.language.startsWith('en') ? "EEEE, MMMM d" : "EEEE, d 'de' MMMM", { locale: currentLocale })}
+                                    </p>
+                                </div>
 
-                            {readiness && (
-                                <div className="glass-dark p-lg rounded-xl border border-white/5 w-full md:w-auto shadow-xl" style={{ minWidth: '220px' }}>
-                                    <div className="flex justify-between items-center mb-md">
-                                        <span className="text-[10px] uppercase font-black tracking-widest text-secondary opacity-70">
-                                            {t('dashboard.readiness_score')}
-                                        </span>
-                                        <div className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${readiness.totalScore > 70 ? 'bg-success' : readiness.totalScore > 30 ? 'bg-primary' : 'bg-red-500'}`} style={{ backgroundColor: readiness.totalScore > 70 ? 'rgba(16, 185, 129, 0.2)' : readiness.totalScore > 30 ? 'rgba(102, 126, 234, 0.2)' : 'rgba(239, 68, 68, 0.2)', color: readiness.totalScore > 70 ? '#4ade80' : readiness.totalScore > 30 ? '#7c8ef7' : '#f87171' }}>
-                                            {readiness.totalScore >= 90 ? t('common.excellent') :
-                                                readiness.totalScore >= 60 ? t('common.high') :
-                                                    readiness.totalScore >= 30 ? t('common.medium') : t('common.low')}
+                                {/* Readiness Score Card */}
+                                {readiness && (
+                                    <div className="w-full md:w-auto" style={{ minWidth: '260px', maxWidth: '100%' }}>
+                                        <div className="glass-dark rounded-xl border border-white/10 overflow-hidden shadow-xl" style={{
+                                            background: 'linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%)',
+                                            padding: '4px'
+                                        }}>
+                                            {/* Header with label and badge */}
+                                            <div className="px-5 pt-4 pb-3 border-b border-white/5">
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <span className="text-xs font-semibold text-secondary opacity-80" style={{ letterSpacing: '0.05em' }}>
+                                                        {t('dashboard.readiness_score')}
+                                                    </span>
+                                                    <div className={`px-2 py-1 rounded-md text-xs font-bold`} style={{
+                                                        backgroundColor: 'transparent',
+                                                        color: readiness.totalScore > 70 ? '#4ade80' : readiness.totalScore > 30 ? '#a5b4fc' : '#f87171'
+                                                    }}>
+                                                        {readiness.totalScore >= 90 ? t('common.excellent') :
+                                                            readiness.totalScore >= 60 ? t('common.high') :
+                                                                readiness.totalScore >= 30 ? t('common.medium') : t('common.low')}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Score Display */}
+                                            <div className="px-5 py-5 flex items-center justify-between">
+                                                <div className="flex items-baseline gap-2">
+                                                    <span className={`font-black tabular-nums`} style={{
+                                                        fontSize: '3.5rem',
+                                                        lineHeight: 1,
+                                                        background: readiness.totalScore > 70
+                                                            ? 'linear-gradient(135deg, #4ade80 0%, #10b981 100%)'
+                                                            : readiness.totalScore > 30
+                                                                ? 'linear-gradient(135deg, #a5b4fc 0%, #7c8ef7 100%)'
+                                                                : 'linear-gradient(135deg, #f87171 0%, #ef4444 100%)',
+                                                        WebkitBackgroundClip: 'text',
+                                                        WebkitTextFillColor: 'transparent',
+                                                        backgroundClip: 'text',
+                                                        textShadow: '0 0 20px rgba(255,255,255,0.1)'
+                                                    }}>
+                                                        {readiness.totalScore}
+                                                    </span>
+                                                    <span className="text-secondary text-sm font-semibold" style={{ marginBottom: '0.5rem' }}>/100</span>
+                                                </div>
+                                                <div className="flex items-center justify-center" style={{
+                                                    width: '56px',
+                                                    height: '56px',
+                                                    borderRadius: '12px',
+                                                    background: 'transparent'
+                                                }}>
+                                                    <span style={{ fontSize: '2rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>
+                                                        {readiness.totalScore >= 90 ? '🌟' :
+                                                            readiness.totalScore >= 60 ? '💪' :
+                                                                readiness.totalScore >= 30 ? '😐' : '😴'}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-md">
-                                        <span className={`text-5xl font-black tabular-nums ${readiness.totalScore > 70 ? 'text-green-400' : readiness.totalScore > 30 ? 'text-primary' : 'text-red-400'}`} style={{ lineHeight: 1 }}>
-                                            {readiness.totalScore}
-                                        </span>
-                                        <span className="text-4xl" style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.2))' }}>
-                                            {readiness.totalScore >= 90 ? '🌟' :
-                                                readiness.totalScore >= 60 ? '💪' :
-                                                    readiness.totalScore >= 30 ? '😐' : '😴'}
-                                        </span>
-                                    </div>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </section>
 
