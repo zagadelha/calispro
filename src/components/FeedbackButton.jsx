@@ -3,8 +3,8 @@ import { MessageCircle, X, Send, Bug, Lightbulb, HelpCircle, Mail } from 'lucide
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import emailjs from '@emailjs/browser';
+import { EMAILJS_CONFIG } from '../config/emailjs';
 import { getVirtualNow } from '../utils/timeTravel';
 
 const FeedbackButton = () => {
@@ -40,16 +40,24 @@ const FeedbackButton = () => {
         setLoading(true);
 
         try {
-            // Save feedback to Firestore
-            await addDoc(collection(db, 'feedback'), {
+            // Prepare email template parameters
+            const templateParams = {
                 user_id: currentUser?.uid || 'anonymous',
                 user_email: currentUser?.email || 'N/A',
                 user_name: userProfile?.name || t('common.athlete'),
-                type: feedbackType,
+                feedback_type: feedbackTypes.find(type => type.id === feedbackType)?.label || feedbackType,
                 message: message,
                 created_at: getVirtualNow().toISOString(),
-                status: 'pending'
-            });
+                to_email: EMAILJS_CONFIG.recipientEmail
+            };
+
+            // Send email via EmailJS
+            await emailjs.send(
+                EMAILJS_CONFIG.serviceId,
+                EMAILJS_CONFIG.templateId,
+                templateParams,
+                EMAILJS_CONFIG.publicKey
+            );
 
             setSubmitted(true);
             setTimeout(() => {

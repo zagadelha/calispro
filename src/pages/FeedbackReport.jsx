@@ -7,6 +7,11 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useAuth } from '../contexts/AuthContext';
 
+// ⚠️ DEPRECATED: Este painel está descontinuado desde 27/01/2026
+// Feedbacks agora são enviados por email para calisproapp@gmail.com
+// Este componente permanece apenas para visualizar feedbacks antigos
+
+
 const FeedbackReport = () => {
     const [feedbacks, setFeedbacks] = useState([]);
     const [loading, setLoading] = useState(true);
