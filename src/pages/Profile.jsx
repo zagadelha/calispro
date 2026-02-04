@@ -344,7 +344,7 @@ const Profile = () => {
 
     if (installingUpdate) {
         return (
-            <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0f172a] text-white">
+            <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0f172a] text-white text-center px-6">
                 <div className="mb-6 h-16 w-16 animate-spin rounded-full border-4 border-primary border-t-transparent shadow-glow"></div>
                 <h2 className="text-2xl font-black uppercase tracking-tighter italic animate-pulse">
                     Atualizando Sistema
