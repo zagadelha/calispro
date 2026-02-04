@@ -286,7 +286,7 @@ const Evolution = () => {
                             </div>
                         )}
 
-                        <div className="grid grid-1 md-grid-2 lg-grid-3 gap-xl">
+                        <div className="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
                             {skillStages
                                 .filter(({ stage }) => {
                                     const diff = stage.difficulty_score;
@@ -310,119 +310,106 @@ const Evolution = () => {
                                     return (
                                         <div
                                             key={skill}
-                                            className={`card relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] cursor-pointer ${status === 'completed' ? 'border-success border-opacity-40' : status === 'locked' ? 'opacity-60 grayscale-[0.3]' : 'hover:border-primary-light'}`}
-                                            style={{
-                                                background: status === 'completed'
-                                                    ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 0, 0, 0.5))'
-                                                    : 'var(--bg-card)',
-                                                borderLeft: `6px solid ${levelColor}`
-                                            }}
+                                            className={`group relative flex flex-col overflow-hidden rounded-[2rem] transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer bg-[#1a1f2e] border border-white border-opacity-5 ${status === 'locked' ? 'opacity-60 grayscale-[0.8]' : ''}`}
+                                            style={{ backgroundColor: '#1a1f2e' }}
                                         >
-                                            {/* Background Decor */}
-                                            <div className="absolute -top-6 -right-6 opacity-5 pointer-events-none rotate-12">
-                                                {status === 'completed' ? <Trophy size={140} /> : <TrendingUp size={140} />}
-                                            </div>
-
-                                            <div className="relative z-10">
-                                                <div className="flex justify-between items-start mb-lg">
-                                                    <div className="flex flex-col gap-1.5">
-                                                        <span
-                                                            className="text-[10px] font-black uppercase px-2 py-0.5 rounded shadow-sm w-fit"
-                                                            style={{ backgroundColor: levelColor, color: '#fff' }}
-                                                        >
-                                                            {levelLabel}
-                                                        </span>
-                                                        <div className="text-[10px] font-bold text-secondary uppercase tracking-widest bg-white bg-opacity-5 px-2 py-0.5 rounded border border-white border-opacity-5 w-fit">
-                                                            {t('evolution.mastery')} {masteredCount}/{totalCount}
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="flex flex-col items-end gap-2">
-                                                        {status === 'completed' ? (
-                                                            <div className="bg-success text-white p-2 rounded-full shadow-glow">
-                                                                <Trophy size={20} />
-                                                            </div>
-                                                        ) : status === 'locked' ? (
-                                                            <div className="bg-gray-800 text-secondary p-2 rounded-full border border-white border-opacity-10 opacity-60">
-                                                                <Lock size={20} />
-                                                            </div>
-                                                        ) : current >= goal ? (
-                                                            <div className="bg-primary text-white p-2 rounded-full shadow-glow animate-pulse">
-                                                                <Award size={20} />
-                                                            </div>
-                                                        ) : (
-                                                            <div className="bg-white bg-opacity-5 text-secondary p-2 rounded-full border border-white border-opacity-5">
-                                                                <TrendingUp size={20} />
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-
-                                                <h3 className="text-2xl font-black mb-1 capitalize tracking-tight flex items-center gap-2">
-                                                    {formatSkillName(skill)}
-                                                </h3>
-
-                                                <div className="w-full h-1 bg-white bg-opacity-5 rounded-full overflow-hidden mb-xl">
-                                                    <div
-                                                        className={`h-full transition-all duration-1000 ${status === 'completed' ? 'bg-success shadow-glow' : 'bg-primary'}`}
-                                                        style={{ width: `${(masteredCount / totalCount) * 100}%` }}
+                                            {/* Media Header with GIF */}
+                                            <div className="relative h-48 w-full overflow-hidden bg-black">
+                                                {stage.media?.url ? (
+                                                    <img
+                                                        src={stage.media.url}
+                                                        alt={stage.name}
+                                                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                        style={{ opacity: 1 }}
                                                     />
+                                                ) : (
+                                                    <div className="flex h-full w-full items-center justify-center text-white/10 uppercase font-black text-4xl italic">
+                                                        {skill.slice(0, 2)}
+                                                    </div>
+                                                )}
+
+                                                {/* Overlays */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-[#1a1f2e] via-transparent to-transparent" />
+
+                                                {/* Top Badge (Level) */}
+                                                <div className="absolute top-4 left-4">
+                                                    <span
+                                                        className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-lg backdrop-blur-md border border-white/10"
+                                                        style={{ backgroundColor: `${levelColor}cc`, color: '#fff' }}
+                                                    >
+                                                        {levelLabel}
+                                                    </span>
                                                 </div>
 
-                                                <div className="mb-lg">
-                                                    <p className="text-[10px] text-secondary uppercase font-black tracking-widest opacity-50 mb-2">
-                                                        {status === 'completed' ? t('evolution.max_achievement') : status === 'locked' ? t('evolution.locked') : t('evolution.current_focus')}
-                                                    </p>
-                                                    <h4 className={`text-base font-bold truncate ${status === 'locked' ? 'text-secondary font-normal italic' : 'text-primary'}`}>
-                                                        {t(`dashboard.exercises.${stage.id}`, { defaultValue: stage.name })}
-                                                    </h4>
+                                                {/* Status Icon */}
+                                                <div className="absolute top-4 right-4 h-8 w-8 rounded-full flex items-center justify-center backdrop-blur-md border border-white/10 text-white shadow-lg">
+                                                    {status === 'completed' ? (
+                                                        <Trophy size={16} className="text-yellow-400" />
+                                                    ) : status === 'locked' ? (
+                                                        <Lock size={16} className="text-white/40" />
+                                                    ) : (
+                                                        <TrendingUp size={16} className="text-primary" />
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Content Partition */}
+                                            <div className="px-6 pb-6 -mt-4 relative z-10 flex flex-col flex-grow bg-[#1a1f2e]">
+                                                <div className="mb-4">
+                                                    <h3 className="text-xl font-bold text-white capitalize tracking-tight mb-1">
+                                                        {formatSkillName(skill)}
+                                                    </h3>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
+                                                            <div
+                                                                className={`h-full transition-all duration-1000 ${status === 'completed' ? 'bg-success shadow-glow' : 'bg-primary'}`}
+                                                                style={{ width: `${(masteredCount / totalCount) * 100}%` }}
+                                                            />
+                                                        </div>
+                                                        <span className="text-[10px] font-bold text-white/40 uppercase tracking-tighter">
+                                                            {masteredCount}/{totalCount}
+                                                        </span>
+                                                    </div>
                                                 </div>
 
-                                                {/* Progress Artifact */}
-                                                <div className="bg-black bg-opacity-40 p-4 rounded-xl border border-white border-opacity-5 shadow-inner">
-                                                    <div className="flex justify-between items-end mb-3">
-                                                        <div className="flex flex-col">
-                                                            <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">{t('evolution.pr')}</span>
-                                                            <span className="text-lg font-black text-white">{current}{unit}</span>
-                                                        </div>
-                                                        <div className="text-right">
-                                                            <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">{t('evolution.objective')}</span>
-                                                            <div className="text-sm font-bold text-white opacity-80">{goal}{unit}</div>
-                                                        </div>
+                                                <div className="flex-grow flex flex-col justify-end gap-4">
+                                                    <div>
+                                                        <p className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1">
+                                                            {status === 'completed' ? t('evolution.max_achievement') : status === 'locked' ? t('evolution.locked') : t('evolution.current_focus')}
+                                                        </p>
+                                                        <h4 className={`text-sm font-semibold truncate ${status === 'locked' ? 'text-white/40 italic' : 'text-gray-200'}`}>
+                                                            {t(`dashboard.exercises.${stage.id}`, { defaultValue: stage.name })}
+                                                        </h4>
                                                     </div>
 
-                                                    <div className="w-full bg-gray-800 h-2 rounded-full overflow-hidden shadow-inner border border-white border-opacity-5">
-                                                        <div
-                                                            className={`h-full transition-all duration-1000 ease-out shadow-glow ${status === 'completed' ? 'bg-success' : current >= goal ? 'bg-primary' : 'bg-primary bg-opacity-60'}`}
-                                                            style={{ width: `${status === 'completed' ? 100 : percent}%` }}
-                                                        ></div>
-                                                    </div>
+                                                    {/* Progress Box */}
+                                                    <div className="bg-black/40 p-4 rounded-2xl border border-white/5 shadow-inner">
+                                                        <div className="flex justify-between items-center mb-2">
+                                                            <div className="flex flex-col">
+                                                                <span className="text-[9px] text-white/30 uppercase font-black tracking-widest">{t('evolution.pr')}</span>
+                                                                <span className="text-sm font-bold text-white">{current}{unit}</span>
+                                                            </div>
+                                                            <div className="h-6 w-px bg-white/10" />
+                                                            <div className="flex flex-col items-end">
+                                                                <span className="text-[9px] text-white/30 uppercase font-black tracking-widest">{t('evolution.objective')}</span>
+                                                                <span className="text-sm font-bold text-white/40">{goal}{unit}</span>
+                                                            </div>
+                                                        </div>
 
-                                                    <div className="flex items-center gap-2 mt-4 text-[10px] font-black uppercase tracking-widest">
-                                                        {status === 'completed' ? (
-                                                            <span className="text-success flex items-center gap-1.5 animate-bounce">
-                                                                <CheckCircle2 size={12} /> {t('evolution.completed_msg')}!
-                                                            </span>
-                                                        ) : status === 'locked' ? (
-                                                            <span className="text-secondary opacity-60 flex items-center gap-1.5">
-                                                                <Lock size={12} /> {t('evolution.requirements_msg')}
-                                                            </span>
-                                                        ) : current >= goal ? (
-                                                            <span className="text-primary flex items-center gap-1.5 ">
-                                                                <Award size={12} /> {t('evolution.ready_msg')}!
-                                                            </span>
-                                                        ) : (
-                                                            <span className="text-secondary flex items-center gap-1.5">
-                                                                <TrendingUp size={12} /> {Math.round(percent)}% {t('evolution.evolution_msg')}
-                                                            </span>
-                                                        )}
+                                                        {/* Progress Meter */}
+                                                        <div className="relative h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                                                            <div
+                                                                className={`h-full transition-all duration-1000 ease-out ${status === 'completed' ? 'bg-success' : current >= goal ? 'bg-primary shadow-glow' : 'bg-primary/60'}`}
+                                                                style={{ width: `${status === 'completed' ? 100 : percent}%` }}
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            {/* Locked Mask */}
+                                            {/* Locked Overlay Mask */}
                                             {status === 'locked' && (
-                                                <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-[1px] pointer-events-none" />
+                                                <div className="absolute inset-0 bg-[#1a1f2e]/40 backdrop-blur-[2px] pointer-events-none z-30" />
                                             )}
                                         </div>
                                     );
