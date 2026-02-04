@@ -243,7 +243,7 @@ const Evolution = () => {
                                                 transition-all duration-200 ease-out
                                                 ${activeTab === tab.id
                                                     ? 'text-white shadow-lg scale-[1.02]'
-                                                    : 'text-white text-opacity-40 hover:text-opacity-100 hover:bg-white hover:bg-opacity-5'
+                                                    : 'text-white hover:bg-white hover:bg-opacity-5'
                                                 }
                                             `}
                                             style={{
@@ -259,8 +259,11 @@ const Evolution = () => {
                                                 borderColor: activeTab === tab.id ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.08)'
                                             }}
                                         >
-                                            <span style={{ fontSize: '16px' }}>{tab.icon}</span>
-                                            <span>{tab.label}</span>
+                                            <span style={{ fontSize: '16px', filter: activeTab === tab.id ? 'brightness(1)' : 'grayscale(1) opacity(0.7)' }}>{tab.icon}</span>
+                                            <span style={{
+                                                color: activeTab === tab.id ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
+                                                textShadow: activeTab === tab.id ? '0 1px 2px rgba(0,0,0,0.2)' : 'none'
+                                            }}>{tab.label}</span>
                                         </button>
                                     ))}
                                 </div>
