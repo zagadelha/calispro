@@ -35,15 +35,16 @@ const VersionChecker = () => {
             }
 
             const data = await response.json();
-            const remoteVersion = data.version;
+            const remoteVersion = String(data.version).trim();
+            const localVersion = String(CURRENT_VERSION).trim();
 
-            console.log('[VersionChecker] Current version:', CURRENT_VERSION);
+            console.log('[VersionChecker] Current version:', localVersion);
             console.log('[VersionChecker] Remote version:', remoteVersion);
 
             // Check if dismissed version matches the latest version
             const dismissedVersion = localStorage.getItem(VERSION_STORAGE_KEY);
 
-            if (remoteVersion !== CURRENT_VERSION) {
+            if (remoteVersion !== localVersion) {
                 setLatestVersion(remoteVersion);
 
                 // Only show notification if user hasn't dismissed this version

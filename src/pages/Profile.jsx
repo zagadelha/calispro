@@ -27,6 +27,8 @@ const Profile = () => {
     });
     const navigate = useNavigate();
 
+    const [installingUpdate, setInstallingUpdate] = useState(false);
+
     // Sync formData when userProfile is loaded or updated
     useEffect(() => {
         console.log('[Profile] Syncing formData with userProfile:', userProfile?.email);
@@ -287,6 +289,7 @@ const Profile = () => {
     const handleInstallUpdate = async (remoteVersion) => {
         try {
             console.log('[InstallUpdate] Iniciando atualização...');
+            setInstallingUpdate(true); // Mostrar UI de carregamento total
 
             // Unregister all service workers
             if ('serviceWorker' in navigator) {
@@ -302,7 +305,12 @@ const Profile = () => {
             // Clear all caches
             if ('caches' in window) {
                 const cacheNames = await caches.keys();
-                console.log(`[InstallUpdate] Limpando ${cacheNames.length} cache(s)...`);
+                const count = cacheNames.length;
+                console.log(`[InstallUpdate] Limpando ${count} cache(s)...`);
+
+                if (count === 0) {
+                    console.log('[InstallUpdate] Nenhum cache encontrado para limpar (visto como sincronizado)');
+                }
 
                 for (const cacheName of cacheNames) {
                     await caches.delete(cacheName);
@@ -310,23 +318,43 @@ const Profile = () => {
                 }
             }
 
+            // Sync with VersionChecker to prevent redundant auto-clears
+            if (remoteVersion) {
+                localStorage.setItem('calispro_last_cleared_version', remoteVersion);
+            }
+
             console.log('[InstallUpdate] Atualização concluída, recarregando em 1.5s...');
 
             // Wait a bit to ensure browser processed everything
             setTimeout(() => {
-                // Force hard reload from server by adding timestamp and version
-                const url = new URL(window.location.href);
+                // Redirect to HOME to avoid "loading chunk failed" on current page
+                const url = new URL(window.location.origin);
                 if (remoteVersion) {
                     url.searchParams.set('v', remoteVersion);
                 }
                 url.searchParams.set('_refresh', Date.now().toString());
                 window.location.href = url.toString();
-            }, 1500);
+            }, 1000);
         } catch (error) {
             console.error('[InstallUpdate] Erro ao instalar atualização:', error);
+            setInstallingUpdate(false);
             alert('Erro ao instalar atualização: ' + error.message);
         }
     };
+
+    if (installingUpdate) {
+        return (
+            <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0f172a] text-white">
+                <div className="mb-6 h-16 w-16 animate-spin rounded-full border-4 border-primary border-t-transparent shadow-glow"></div>
+                <h2 className="text-2xl font-black uppercase tracking-tighter italic animate-pulse">
+                    Atualizando Sistema
+                </h2>
+                <p className="mt-2 text-secondary text-sm animate-pulse">
+                    Limpando cache e sincronizando nova versão...
+                </p>
+            </div>
+        );
+    }
 
     return (
         <div className="profile-container">
