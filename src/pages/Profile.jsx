@@ -344,12 +344,37 @@ const Profile = () => {
 
     if (installingUpdate) {
         return (
-            <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0f172a] text-white text-center px-6">
-                <div className="mb-6 h-16 w-16 animate-spin rounded-full border-4 border-primary border-t-transparent shadow-glow"></div>
-                <h2 className="text-2xl font-black uppercase tracking-tighter italic animate-pulse">
+            <div
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#0f172a',
+                    color: 'white',
+                    zIndex: 99999,
+                    textAlign: 'center',
+                    padding: '0 2rem'
+                }}
+            >
+                <div className="spinning" style={{
+                    marginBottom: '1.5rem',
+                    width: '64px',
+                    height: '64px',
+                    border: '4px solid rgba(102, 126, 234, 0.1)',
+                    borderTopColor: '#667eea',
+                    borderRadius: '50%',
+                    boxShadow: '0 0 20px rgba(102, 126, 234, 0.3)'
+                }}></div>
+                <h2 className="font-black uppercase italic tracking-tighter" style={{ fontSize: '1.875rem', marginBottom: '0.5rem', lineHeight: '1' }}>
                     Atualizando Sistema
                 </h2>
-                <p className="mt-2 text-secondary text-sm animate-pulse">
+                <p className="text-secondary text-sm" style={{ margin: 0, opacity: 0.8 }}>
                     Limpando cache e sincronizando nova versão...
                 </p>
             </div>
