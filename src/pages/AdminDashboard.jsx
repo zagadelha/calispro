@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, BarChart2, MessageSquare, List } from 'lucide-react';
+import { ArrowLeft, BarChart2, MessageSquare, List, RefreshCw, Mail } from 'lucide-react';
+import EmailJSDiagnostic from '../components/EmailJSDiagnostic';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
+    const [showEmailDiagnostic, setShowEmailDiagnostic] = useState(false);
 
     const reports = [
         {
@@ -34,6 +36,51 @@ const AdminDashboard = () => {
         */
     ];
 
+    const handleForceUpdate = async () => {
+        const confirmed = window.confirm(
+            'Isso irá forçar a atualização do aplicativo para todos os usuários instalados. ' +
+            'Os caches serão limpos e o service worker será reiniciado. ' +
+            'Esta página será recarregada. Deseja continuar?'
+        );
+
+        if (!confirmed) return;
+
+        try {
+            // Unregister all service workers
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                console.log(`[ForceUpdate] Unregistering ${registrations.length} service worker(s)...`);
+
+                for (const registration of registrations) {
+                    await registration.unregister();
+                    console.log('[ForceUpdate] Service worker unregistered');
+                }
+            }
+
+            // Clear all caches
+            if ('caches' in window) {
+                const cacheNames = await caches.keys();
+                console.log(`[ForceUpdate] Clearing ${cacheNames.length} cache(s)...`);
+
+                for (const cacheName of cacheNames) {
+                    await caches.delete(cacheName);
+                    console.log(`[ForceUpdate] Cache cleared: ${cacheName}`);
+                }
+            }
+
+            alert('Service workers e caches limpos com sucesso! A página será recarregada.');
+
+            // Force hard reload from server by adding timestamp
+            // This is more reliable than reload(true) which is deprecated
+            const url = new URL(window.location.href);
+            url.searchParams.set('_refresh', Date.now().toString());
+            window.location.href = url.toString();
+        } catch (error) {
+            console.error('[ForceUpdate] Error during force update:', error);
+            alert('Erro ao forçar atualização: ' + error.message);
+        }
+    };
+
     return (
         <div className="admin-dashboard-page">
             <header className="page-header">
@@ -63,7 +110,40 @@ const AdminDashboard = () => {
                         </div>
                     ))}
                 </div>
+
+                <div className="admin-actions">
+                    <div className="action-section">
+                        <h2>Manutenção do Sistema</h2>
+                        <button
+                            className="btn-force-update"
+                            onClick={handleForceUpdate}
+                        >
+                            <RefreshCw size={20} />
+                            <span>Forçar Atualização de Apps Instalados</span>
+                        </button>
+                        <p className="action-description">
+                            Remove todos os service workers e caches, forçando os apps instalados a baixarem a versão mais recente do servidor.
+                        </p>
+                    </div>
+
+                    <div className="action-section" style={{ marginTop: '1.5rem' }}>
+                        <h2>Diagnóstico de Email (Feedback)</h2>
+                        <button
+                            className="btn-email-diagnostic"
+                            onClick={() => setShowEmailDiagnostic(!showEmailDiagnostic)}
+                        >
+                            <Mail size={20} />
+                            <span>{showEmailDiagnostic ? 'Ocultar' : 'Exibir'} Teste de EmailJS</span>
+                        </button>
+                        <p className="action-description">
+                            Testa a configuração do EmailJS e envia um email de teste para verificar se o sistema de feedback está funcionando corretamente.
+                        </p>
+                    </div>
+                </div>
             </main>
+
+            {/* EmailJS Diagnostic Component */}
+            {showEmailDiagnostic && <EmailJSDiagnostic />}
 
             <style dangerouslySetInnerHTML={{
                 __html: `
@@ -133,6 +213,72 @@ const AdminDashboard = () => {
                     color: #94a3b8;
                     font-size: 0.9rem;
                     line-height: 1.4;
+                }
+                .admin-actions {
+                    margin-top: 3rem;
+                    padding-top: 2rem;
+                    border-top: 1px solid rgba(255,255,255,0.1);
+                }
+                .action-section {
+                    background: #1e293b;
+                    border-radius: 16px;
+                    padding: 2rem;
+                    border: 1px solid rgba(255,255,255,0.05);
+                }
+                .action-section h2 {
+                    margin: 0 0 1.5rem 0;
+                    font-size: 1.5rem;
+                    color: white;
+                }
+                .btn-force-update {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    padding: 1rem 1.5rem;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+                }
+                .btn-force-update:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+                }
+                .btn-force-update:active {
+                    transform: translateY(0);
+                }
+                .btn-email-diagnostic {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    padding: 1rem 1.5rem;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                }
+                .btn-email-diagnostic:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+                }
+                .btn-email-diagnostic:active {
+                    transform: translateY(0);
+                }
+                .action-description {
+                    margin-top: 1rem;
+                    color: #94a3b8;
+                    font-size: 0.9rem;
+                    line-height: 1.5;
                 }
                 @media (max-width: 640px) {
                     .admin-grid {

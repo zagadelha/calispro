@@ -1,9 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import { fileURLToPath } from 'url'
+import { dirname, resolve } from 'path'
+import fs from 'fs'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const packageJson = JSON.parse(fs.readFileSync(resolve(__dirname, 'package.json'), 'utf-8'));
 
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    '__APP_VERSION__': JSON.stringify(packageJson.version),
+  },
   plugins: [
     react(),
     VitePWA({
@@ -40,6 +50,19 @@ export default defineConfig({
           }
         ]
       }
-    })
+    }),
+    // Plugin to copy package.json to dist folder
+    {
+      name: 'copy-package-json',
+      closeBundle() {
+        // Create a minimal version with only the version field
+        const minimalPackage = { version: packageJson.version };
+        fs.writeFileSync(
+          resolve(__dirname, 'dist', 'package.json'),
+          JSON.stringify(minimalPackage, null, 2)
+        );
+        console.log('✅ package.json copied to dist folder');
+      }
+    }
   ],
 })

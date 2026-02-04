@@ -5,6 +5,8 @@ import { InstallProvider } from './contexts/InstallContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import InstallPrompt from './components/InstallPrompt';
 import FeedbackButton from './components/FeedbackButton';
+import VersionChecker from './components/VersionChecker';
+import DebugPanel from './components/DebugPanel';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // Pages
@@ -27,8 +29,10 @@ function App() {
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <InstallProvider>
         <AuthProvider>
+          <VersionChecker />
           <InstallPrompt />
           <FeedbackButton />
+          <DebugPanel />
           <SpeedInsights />
           <Routes>
             {/* Public Routes */}

@@ -3,9 +3,10 @@ import { MessageCircle, X, Send, Bug, Lightbulb, HelpCircle, Mail } from 'lucide
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import emailjs from '@emailjs/browser';
+import { EMAILJS_CONFIG } from '../config/emailjs';
 import { getVirtualNow } from '../utils/timeTravel';
+import { emailJSLogger } from '../utils/debugLogger';
 
 const FeedbackButton = () => {
     const { t } = useTranslation();
@@ -37,18 +38,70 @@ const FeedbackButton = () => {
             return;
         }
 
+        // Validate EmailJS configuration
+        const isConfigValid =
+            EMAILJS_CONFIG.serviceId &&
+            EMAILJS_CONFIG.templateId &&
+            EMAILJS_CONFIG.publicKey &&
+            !EMAILJS_CONFIG.serviceId.includes('YOUR_') &&
+            !EMAILJS_CONFIG.templateId.includes('YOUR_') &&
+            !EMAILJS_CONFIG.publicKey.includes('YOUR_');
+
+        if (!isConfigValid) {
+            emailJSLogger.logError(
+                new Error('EmailJS configuration invalid'),
+                {
+                    serviceId: EMAILJS_CONFIG.serviceId,
+                    templateId: EMAILJS_CONFIG.templateId,
+                    publicKey: EMAILJS_CONFIG.publicKey ? '***' : 'missing'
+                }
+            );
+            alert('Erro de configuração. Por favor, contate o suporte.');
+            return;
+        }
+
+        // Log environment info before attempting to send
+        emailJSLogger.logEnvironment();
+        emailJSLogger.logConfig(EMAILJS_CONFIG);
+
         setLoading(true);
 
         try {
-            // Save feedback to Firestore
-            await addDoc(collection(db, 'feedback'), {
+            // Prepare email template parameters
+            const templateParams = {
                 user_id: currentUser?.uid || 'anonymous',
                 user_email: currentUser?.email || 'N/A',
                 user_name: userProfile?.name || t('common.athlete'),
-                type: feedbackType,
+                feedback_type: feedbackTypes.find(type => type.id === feedbackType)?.label || feedbackType,
                 message: message,
                 created_at: getVirtualNow().toISOString(),
-                status: 'pending'
+                to_email: EMAILJS_CONFIG.recipientEmail
+            };
+
+            emailJSLogger.logAttempt({
+                serviceId: EMAILJS_CONFIG.serviceId,
+                templateId: EMAILJS_CONFIG.templateId,
+                recipientEmail: EMAILJS_CONFIG.recipientEmail
+            });
+
+            // Send email via EmailJS with timeout
+            const sendPromise = emailjs.send(
+                EMAILJS_CONFIG.serviceId,
+                EMAILJS_CONFIG.templateId,
+                templateParams,
+                EMAILJS_CONFIG.publicKey
+            );
+
+            // Add timeout (15 seconds)
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Timeout: Email demorou muito para enviar')), 15000)
+            );
+
+            const result = await Promise.race([sendPromise, timeoutPromise]);
+
+            emailJSLogger.logSuccess({
+                status: result.status,
+                text: result.text
             });
 
             setSubmitted(true);
@@ -59,8 +112,27 @@ const FeedbackButton = () => {
                 setMessage('');
             }, 2000);
         } catch (error) {
-            console.error('Error submitting feedback:', error);
-            alert(t('support.errors.submit_error'));
+            emailJSLogger.logError(error, {
+                feedbackType,
+                messageLength: message.length,
+                userId: currentUser?.uid || 'anonymous',
+                userEmail: currentUser?.email || 'N/A'
+            });
+
+            // More specific error messages
+            let errorMessage = t('support.errors.submit_error');
+
+            if (error.message?.includes('Timeout')) {
+                errorMessage = 'Tempo esgotado. Verifique sua conexão e tente novamente.';
+            } else if (error.status === 400) {
+                errorMessage = 'Erro de configuração do EmailJS. Contate o suporte.';
+            } else if (error.status === 403) {
+                errorMessage = 'Acesso negado. Verifique as configurações do EmailJS.';
+            } else if (!navigator.onLine) {
+                errorMessage = 'Sem conexão com a internet. Verifique sua rede.';
+            }
+
+            alert(errorMessage);
         } finally {
             setLoading(false);
         }

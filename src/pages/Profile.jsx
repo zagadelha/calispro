@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { RefreshCw } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { generateWorkoutPlan } from '../utils/workoutGenerator';
 import { collection, query, where, getDocs, writeBatch, doc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import Header from '../components/Header';
+import { CURRENT_VERSION } from '../components/VersionChecker';
 
 const Profile = () => {
     const { t } = useTranslation();
@@ -13,6 +15,8 @@ const Profile = () => {
     const [editing, setEditing] = useState(false);
     const [loading, setLoading] = useState(false);
     const [uploadingPhoto, setUploadingPhoto] = useState(false);
+    const [checkingUpdate, setCheckingUpdate] = useState(false);
+    const [updateAvailable, setUpdateAvailable] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         experience_level: '',
@@ -229,6 +233,94 @@ const Profile = () => {
             alert('Ocorreu um erro ao apagar seu histórico. Detalhes: ' + err.message);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleCheckUpdate = async () => {
+        setCheckingUpdate(true);
+        setUpdateAvailable(null);
+
+        try {
+            console.log('[CheckUpdate] Verificando atualizações...');
+
+            // Fetch the package.json from the production server
+            const response = await fetch(`/package.json?t=${Date.now()}`, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Não foi possível verificar atualizações');
+            }
+
+            const data = await response.json();
+            const remoteVersion = data.version;
+
+            console.log('[CheckUpdate] Versão atual:', CURRENT_VERSION);
+            console.log('[CheckUpdate] Versão remota:', remoteVersion);
+
+            if (remoteVersion !== CURRENT_VERSION) {
+                setUpdateAvailable(remoteVersion);
+
+                const shouldUpdate = confirm(
+                    `Nova versão disponível: v${remoteVersion}\n` +
+                    `Versão atual: v${CURRENT_VERSION}\n\n` +
+                    `Deseja atualizar agora?`
+                );
+
+                if (shouldUpdate) {
+                    handleInstallUpdate();
+                }
+            } else {
+                alert(`Você já está na versão mais recente (v${CURRENT_VERSION})`);
+            }
+        } catch (error) {
+            console.error('[CheckUpdate] Erro ao verificar atualização:', error);
+            alert('Erro ao verificar atualizações: ' + error.message);
+        } finally {
+            setCheckingUpdate(false);
+        }
+    };
+
+    const handleInstallUpdate = async () => {
+        try {
+            console.log('[InstallUpdate] Iniciando atualização...');
+
+            // Unregister all service workers
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                console.log(`[InstallUpdate] Desregistrando ${registrations.length} service worker(s)...`);
+
+                for (const registration of registrations) {
+                    await registration.unregister();
+                    console.log('[InstallUpdate] Service worker desregistrado');
+                }
+            }
+
+            // Clear all caches
+            if ('caches' in window) {
+                const cacheNames = await caches.keys();
+                console.log(`[InstallUpdate] Limpando ${cacheNames.length} cache(s)...`);
+
+                for (const cacheName of cacheNames) {
+                    await caches.delete(cacheName);
+                    console.log(`[InstallUpdate] Cache limpo: ${cacheName}`);
+                }
+            }
+
+
+            console.log('[InstallUpdate] Atualização concluída, recarregando...');
+
+            // Force hard reload from server by adding timestamp
+            // This is more reliable than reload(true) which is deprecated
+            const url = new URL(window.location.href);
+            url.searchParams.set('_refresh', Date.now().toString());
+            window.location.href = url.toString();
+        } catch (error) {
+            console.error('[InstallUpdate] Erro ao instalar atualização:', error);
+            alert('Erro ao instalar atualização: ' + error.message);
         }
     };
 
@@ -492,6 +584,29 @@ const Profile = () => {
                                     )}
                                 </>
                             )}
+                        </div>
+
+                        {/* Version Info */}
+                        <div className="profile-version-info">
+                            <div className="version-info-content">
+                                <p>
+                                    {t('profile.version')}: <strong>v{CURRENT_VERSION}</strong>
+                                    {updateAvailable && (
+                                        <span className="update-badge">
+                                            Nova: v{updateAvailable}
+                                        </span>
+                                    )}
+                                </p>
+                                <button
+                                    onClick={handleCheckUpdate}
+                                    className="btn-check-update"
+                                    disabled={checkingUpdate}
+                                    title="Verificar atualizações"
+                                >
+                                    <RefreshCw size={16} className={checkingUpdate ? 'spinning' : ''} />
+                                    {checkingUpdate ? 'Verificando...' : 'Verificar Atualização'}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
