@@ -1243,9 +1243,14 @@ p {
 
 .menu-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: 1050;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Language Selector inside menu tuning */
@@ -3068,6 +3073,7 @@ p {
     transform: translateY(-100%);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -3091,9 +3097,12 @@ p {
 }
 
 @keyframes bounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-5px);
   }
@@ -3183,10 +3192,13 @@ p {
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.8;
     transform: scale(1.05);
@@ -3231,6 +3243,7 @@ p {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -3243,16 +3256,16 @@ p {
     text-align: center;
     padding: var(--spacing-sm);
   }
-  
+
   .version-notification-icon {
     font-size: 2rem;
   }
-  
+
   .version-notification-actions {
     width: 100%;
     justify-content: center;
   }
-  
+
   .version-notification-actions .btn {
     flex: 1;
   }

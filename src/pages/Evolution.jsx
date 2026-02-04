@@ -39,6 +39,7 @@ const Evolution = () => {
     const [skillStages, setSkillStages] = useState([]);
     const [radarData, setRadarData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState('all'); // 'all', 'beginner', 'intermediate', 'advanced'
     const { currentUser } = useAuth();
     const navigate = useNavigate();
 
@@ -220,138 +221,212 @@ const Evolution = () => {
                             </div>
                         </div>
 
+                        {/* Level Tabs */}
+                        <div className="mb-xl">
+                            <div className="flex items-center gap-3 mb-3">
+                                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t('common.level')}</span>
+                            </div>
+                            <div className="overflow-x-auto pb-2" style={{ WebkitOverflowScrolling: 'touch' }}>
+                                <div className="flex flex-row gap-2 p-2 bg-black bg-opacity-40 backdrop-blur-md rounded-2xl border border-white border-opacity-10 shadow-lg">
+                                    {[
+                                        { id: 'all', label: t('dashboard.view_all'), icon: '📊' },
+                                        { id: 'beginner', label: t('common.beginner'), icon: '🌱', color: '#10B981' },
+                                        { id: 'intermediate', label: t('common.intermediate'), icon: '🔥', color: '#F59E0B' },
+                                        { id: 'advanced', label: t('common.advanced'), icon: '⚡', color: '#EF4444' }
+                                    ].map(tab => (
+                                        <button
+                                            key={tab.id}
+                                            onClick={() => setActiveTab(tab.id)}
+                                            className={`
+                                                flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl
+                                                font-semibold tracking-wide whitespace-nowrap
+                                                transition-all duration-200 ease-out
+                                                ${activeTab === tab.id
+                                                    ? 'text-white shadow-lg'
+                                                    : 'text-gray-300 hover:text-white hover:bg-white hover:bg-opacity-10'
+                                                }
+                                            `}
+                                            style={{
+                                                background: activeTab === tab.id
+                                                    ? tab.color
+                                                        ? `linear-gradient(135deg, ${tab.color}, ${tab.color}cc)`
+                                                        : 'linear-gradient(135deg, var(--primary-light), var(--primary-dark))'
+                                                    : 'transparent',
+                                                fontSize: '13px',
+                                                letterSpacing: '0.03em',
+                                                minWidth: '100px'
+                                            }}
+                                        >
+                                            <span style={{ fontSize: '16px' }}>{tab.icon}</span>
+                                            <span>{tab.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Active Filter Indicator */}
+                        {activeTab !== 'all' && (
+                            <div className="mt-3 flex items-center gap-2 text-sm text-secondary animate-fadeIn">
+                                <span className="opacity-60">{t('dashboard.focus_prefix')}:</span>
+                                <span className="font-bold text-white">
+                                    {activeTab === 'beginner' ? t('common.beginner') :
+                                        activeTab === 'intermediate' ? t('common.intermediate') :
+                                            t('common.advanced')}
+                                </span>
+                                <span className="opacity-40">
+                                    ({skillStages.filter(s => {
+                                        const diff = s.stage.difficulty_score;
+                                        if (activeTab === 'beginner') return diff <= 3;
+                                        if (activeTab === 'intermediate') return diff > 3 && diff <= 6;
+                                        if (activeTab === 'advanced') return diff > 6;
+                                        return true;
+                                    }).length} {t('evolution.skills').toLowerCase()})
+                                </span>
+                            </div>
+                        )}
+
                         <div className="grid grid-1 md-grid-2 lg-grid-3 gap-xl">
-                            {skillStages.map(({ skill, stage, stats, status, masteredCount, totalCount }) => {
-                                const isReps = stage.metric_type === 'reps';
-                                const goal = isReps ? stage.default_prescription.reps_max : stage.default_prescription.seconds_max;
-                                const current = isReps ? (stats.reps || 0) : (stats.seconds || 0);
-                                const percent = Math.min(100, Math.max(0, (current / goal) * 100));
-                                const unit = isReps ? ' reps' : 's';
+                            {skillStages
+                                .filter(({ stage }) => {
+                                    const diff = stage.difficulty_score;
+                                    if (activeTab === 'all') return true;
+                                    if (activeTab === 'beginner') return diff <= 3;
+                                    if (activeTab === 'intermediate') return diff > 3 && diff <= 6;
+                                    if (activeTab === 'advanced') return diff > 6;
+                                    return true;
+                                })
+                                .map(({ skill, stage, stats, status, masteredCount, totalCount }) => {
+                                    const isReps = stage.metric_type === 'reps';
+                                    const goal = isReps ? stage.default_prescription.reps_max : stage.default_prescription.seconds_max;
+                                    const current = isReps ? (stats.reps || 0) : (stats.seconds || 0);
+                                    const percent = Math.min(100, Math.max(0, (current / goal) * 100));
+                                    const unit = isReps ? ' reps' : 's';
 
-                                const difficulty = stage.difficulty_score;
-                                const levelLabel = difficulty <= 3 ? t('common.beginner') : difficulty <= 6 ? t('common.intermediate') : t('common.advanced');
-                                const levelColor = difficulty <= 3 ? '#10B981' : difficulty <= 6 ? '#F59E0B' : '#EF4444';
+                                    const difficulty = stage.difficulty_score;
+                                    const levelLabel = difficulty <= 3 ? t('common.beginner') : difficulty <= 6 ? t('common.intermediate') : t('common.advanced');
+                                    const levelColor = difficulty <= 3 ? '#10B981' : difficulty <= 6 ? '#F59E0B' : '#EF4444';
 
-                                return (
-                                    <div
-                                        key={skill}
-                                        className={`card relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] cursor-pointer ${status === 'completed' ? 'border-success border-opacity-40' : status === 'locked' ? 'opacity-60 grayscale-[0.3]' : 'hover:border-primary-light'}`}
-                                        style={{
-                                            background: status === 'completed'
-                                                ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 0, 0, 0.5))'
-                                                : 'var(--bg-card)',
-                                            borderLeft: `6px solid ${levelColor}`
-                                        }}
-                                    >
-                                        {/* Background Decor */}
-                                        <div className="absolute -top-6 -right-6 opacity-5 pointer-events-none rotate-12">
-                                            {status === 'completed' ? <Trophy size={140} /> : <TrendingUp size={140} />}
-                                        </div>
+                                    return (
+                                        <div
+                                            key={skill}
+                                            className={`card relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] cursor-pointer ${status === 'completed' ? 'border-success border-opacity-40' : status === 'locked' ? 'opacity-60 grayscale-[0.3]' : 'hover:border-primary-light'}`}
+                                            style={{
+                                                background: status === 'completed'
+                                                    ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 0, 0, 0.5))'
+                                                    : 'var(--bg-card)',
+                                                borderLeft: `6px solid ${levelColor}`
+                                            }}
+                                        >
+                                            {/* Background Decor */}
+                                            <div className="absolute -top-6 -right-6 opacity-5 pointer-events-none rotate-12">
+                                                {status === 'completed' ? <Trophy size={140} /> : <TrendingUp size={140} />}
+                                            </div>
 
-                                        <div className="relative z-10">
-                                            <div className="flex justify-between items-start mb-lg">
-                                                <div className="flex flex-col gap-1.5">
-                                                    <span
-                                                        className="text-[10px] font-black uppercase px-2 py-0.5 rounded shadow-sm w-fit"
-                                                        style={{ backgroundColor: levelColor, color: '#fff' }}
-                                                    >
-                                                        {levelLabel}
-                                                    </span>
-                                                    <div className="text-[10px] font-bold text-secondary uppercase tracking-widest bg-white bg-opacity-5 px-2 py-0.5 rounded border border-white border-opacity-5 w-fit">
-                                                        {t('evolution.mastery')} {masteredCount}/{totalCount}
+                                            <div className="relative z-10">
+                                                <div className="flex justify-between items-start mb-lg">
+                                                    <div className="flex flex-col gap-1.5">
+                                                        <span
+                                                            className="text-[10px] font-black uppercase px-2 py-0.5 rounded shadow-sm w-fit"
+                                                            style={{ backgroundColor: levelColor, color: '#fff' }}
+                                                        >
+                                                            {levelLabel}
+                                                        </span>
+                                                        <div className="text-[10px] font-bold text-secondary uppercase tracking-widest bg-white bg-opacity-5 px-2 py-0.5 rounded border border-white border-opacity-5 w-fit">
+                                                            {t('evolution.mastery')} {masteredCount}/{totalCount}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex flex-col items-end gap-2">
+                                                        {status === 'completed' ? (
+                                                            <div className="bg-success text-white p-2 rounded-full shadow-glow">
+                                                                <Trophy size={20} />
+                                                            </div>
+                                                        ) : status === 'locked' ? (
+                                                            <div className="bg-gray-800 text-secondary p-2 rounded-full border border-white border-opacity-10 opacity-60">
+                                                                <Lock size={20} />
+                                                            </div>
+                                                        ) : current >= goal ? (
+                                                            <div className="bg-primary text-white p-2 rounded-full shadow-glow animate-pulse">
+                                                                <Award size={20} />
+                                                            </div>
+                                                        ) : (
+                                                            <div className="bg-white bg-opacity-5 text-secondary p-2 rounded-full border border-white border-opacity-5">
+                                                                <TrendingUp size={20} />
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
 
-                                                <div className="flex flex-col items-end gap-2">
-                                                    {status === 'completed' ? (
-                                                        <div className="bg-success text-white p-2 rounded-full shadow-glow">
-                                                            <Trophy size={20} />
-                                                        </div>
-                                                    ) : status === 'locked' ? (
-                                                        <div className="bg-gray-800 text-secondary p-2 rounded-full border border-white border-opacity-10 opacity-60">
-                                                            <Lock size={20} />
-                                                        </div>
-                                                    ) : current >= goal ? (
-                                                        <div className="bg-primary text-white p-2 rounded-full shadow-glow animate-pulse">
-                                                            <Award size={20} />
-                                                        </div>
-                                                    ) : (
-                                                        <div className="bg-white bg-opacity-5 text-secondary p-2 rounded-full border border-white border-opacity-5">
-                                                            <TrendingUp size={20} />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
+                                                <h3 className="text-2xl font-black mb-1 capitalize tracking-tight flex items-center gap-2">
+                                                    {formatSkillName(skill)}
+                                                </h3>
 
-                                            <h3 className="text-2xl font-black mb-1 capitalize tracking-tight flex items-center gap-2">
-                                                {formatSkillName(skill)}
-                                            </h3>
-
-                                            <div className="w-full h-1 bg-white bg-opacity-5 rounded-full overflow-hidden mb-xl">
-                                                <div
-                                                    className={`h-full transition-all duration-1000 ${status === 'completed' ? 'bg-success shadow-glow' : 'bg-primary'}`}
-                                                    style={{ width: `${(masteredCount / totalCount) * 100}%` }}
-                                                />
-                                            </div>
-
-                                            <div className="mb-lg">
-                                                <p className="text-[10px] text-secondary uppercase font-black tracking-widest opacity-50 mb-2">
-                                                    {status === 'completed' ? t('evolution.max_achievement') : status === 'locked' ? t('evolution.locked') : t('evolution.current_focus')}
-                                                </p>
-                                                <h4 className={`text-base font-bold truncate ${status === 'locked' ? 'text-secondary font-normal italic' : 'text-primary'}`}>
-                                                    {t(`dashboard.exercises.${stage.id}`, { defaultValue: stage.name })}
-                                                </h4>
-                                            </div>
-
-                                            {/* Progress Artifact */}
-                                            <div className="bg-black bg-opacity-40 p-4 rounded-xl border border-white border-opacity-5 shadow-inner">
-                                                <div className="flex justify-between items-end mb-3">
-                                                    <div className="flex flex-col">
-                                                        <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">{t('evolution.pr')}</span>
-                                                        <span className="text-lg font-black text-white">{current}{unit}</span>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">{t('evolution.objective')}</span>
-                                                        <div className="text-sm font-bold text-white opacity-80">{goal}{unit}</div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="w-full bg-gray-800 h-2 rounded-full overflow-hidden shadow-inner border border-white border-opacity-5">
+                                                <div className="w-full h-1 bg-white bg-opacity-5 rounded-full overflow-hidden mb-xl">
                                                     <div
-                                                        className={`h-full transition-all duration-1000 ease-out shadow-glow ${status === 'completed' ? 'bg-success' : current >= goal ? 'bg-primary' : 'bg-primary bg-opacity-60'}`}
-                                                        style={{ width: `${status === 'completed' ? 100 : percent}%` }}
-                                                    ></div>
+                                                        className={`h-full transition-all duration-1000 ${status === 'completed' ? 'bg-success shadow-glow' : 'bg-primary'}`}
+                                                        style={{ width: `${(masteredCount / totalCount) * 100}%` }}
+                                                    />
                                                 </div>
 
-                                                <div className="flex items-center gap-2 mt-4 text-[10px] font-black uppercase tracking-widest">
-                                                    {status === 'completed' ? (
-                                                        <span className="text-success flex items-center gap-1.5 animate-bounce">
-                                                            <CheckCircle2 size={12} /> {t('evolution.completed_msg')}!
-                                                        </span>
-                                                    ) : status === 'locked' ? (
-                                                        <span className="text-secondary opacity-60 flex items-center gap-1.5">
-                                                            <Lock size={12} /> {t('evolution.requirements_msg')}
-                                                        </span>
-                                                    ) : current >= goal ? (
-                                                        <span className="text-primary flex items-center gap-1.5 ">
-                                                            <Award size={12} /> {t('evolution.ready_msg')}!
-                                                        </span>
-                                                    ) : (
-                                                        <span className="text-secondary flex items-center gap-1.5">
-                                                            <TrendingUp size={12} /> {Math.round(percent)}% {t('evolution.evolution_msg')}
-                                                        </span>
-                                                    )}
+                                                <div className="mb-lg">
+                                                    <p className="text-[10px] text-secondary uppercase font-black tracking-widest opacity-50 mb-2">
+                                                        {status === 'completed' ? t('evolution.max_achievement') : status === 'locked' ? t('evolution.locked') : t('evolution.current_focus')}
+                                                    </p>
+                                                    <h4 className={`text-base font-bold truncate ${status === 'locked' ? 'text-secondary font-normal italic' : 'text-primary'}`}>
+                                                        {t(`dashboard.exercises.${stage.id}`, { defaultValue: stage.name })}
+                                                    </h4>
+                                                </div>
+
+                                                {/* Progress Artifact */}
+                                                <div className="bg-black bg-opacity-40 p-4 rounded-xl border border-white border-opacity-5 shadow-inner">
+                                                    <div className="flex justify-between items-end mb-3">
+                                                        <div className="flex flex-col">
+                                                            <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">{t('evolution.pr')}</span>
+                                                            <span className="text-lg font-black text-white">{current}{unit}</span>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <span className="text-[10px] text-secondary uppercase font-black tracking-tighter opacity-70">{t('evolution.objective')}</span>
+                                                            <div className="text-sm font-bold text-white opacity-80">{goal}{unit}</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="w-full bg-gray-800 h-2 rounded-full overflow-hidden shadow-inner border border-white border-opacity-5">
+                                                        <div
+                                                            className={`h-full transition-all duration-1000 ease-out shadow-glow ${status === 'completed' ? 'bg-success' : current >= goal ? 'bg-primary' : 'bg-primary bg-opacity-60'}`}
+                                                            style={{ width: `${status === 'completed' ? 100 : percent}%` }}
+                                                        ></div>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-2 mt-4 text-[10px] font-black uppercase tracking-widest">
+                                                        {status === 'completed' ? (
+                                                            <span className="text-success flex items-center gap-1.5 animate-bounce">
+                                                                <CheckCircle2 size={12} /> {t('evolution.completed_msg')}!
+                                                            </span>
+                                                        ) : status === 'locked' ? (
+                                                            <span className="text-secondary opacity-60 flex items-center gap-1.5">
+                                                                <Lock size={12} /> {t('evolution.requirements_msg')}
+                                                            </span>
+                                                        ) : current >= goal ? (
+                                                            <span className="text-primary flex items-center gap-1.5 ">
+                                                                <Award size={12} /> {t('evolution.ready_msg')}!
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-secondary flex items-center gap-1.5">
+                                                                <TrendingUp size={12} /> {Math.round(percent)}% {t('evolution.evolution_msg')}
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        {/* Locked Mask */}
-                                        {status === 'locked' && (
-                                            <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-[1px] pointer-events-none" />
-                                        )}
-                                    </div>
-                                );
-                            })}
+                                            {/* Locked Mask */}
+                                            {status === 'locked' && (
+                                                <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-[1px] pointer-events-none" />
+                                            )}
+                                        </div>
+                                    );
+                                })}
                         </div>
                     </section>
                 </div>

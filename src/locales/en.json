@@ -32,6 +32,7 @@
         "pull": "Pull",
         "legs": "Legs",
         "language": "Language",
+        "level": "Level",
         "dismiss": "Dismiss"
     },
     "nav": {
@@ -223,7 +224,7 @@
         "today_workout": "Today's Workout",
         "no_workout": "No workout for today",
         "generate_extra": "Generate Extra Workout",
-        "view_all": "View all",
+        "view_all": "All",
         "objective_prefix": "Objective",
         "focus_prefix": "Focus on",
         "start_workout": "Start Workout",

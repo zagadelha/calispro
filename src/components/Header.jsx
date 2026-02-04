@@ -97,8 +97,15 @@ const Header = () => {
                     )}
                 </div>
             </div>
-            {/* Overlay to close menu when clicking outside */}
-            {menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)}></div>}
+
+            {/* Overlay to close menu when clicking outside - rendered outside container for full screen coverage */}
+            {menuOpen && (
+                <div
+                    className="menu-overlay"
+                    onClick={() => setMenuOpen(false)}
+                    aria-hidden="true"
+                />
+            )}
 
             {/* Tutorial Modal */}
             {showTutorial && <Tutorial onClose={() => setShowTutorial(false)} autoShow={false} userId={currentUser?.uid} />}
