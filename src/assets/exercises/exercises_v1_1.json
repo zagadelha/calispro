@@ -37,7 +37,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeW51OXZyZGlwaXlkamkzOG4yMnpyanY1MTk4bTNoZm50a2syNzlyNCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3pY8FQP9uMtDKXkYqX/giphy.gif"
+        "url": "/src/assets/exercises/push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/push-up"
     },
@@ -71,7 +71,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExanNyOTIzc2NsNjY1Zzh2eDBsdmJyendqOTJ5ejh2aTUxOWNuNjRrYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/cVSWGfQhD2T8WmNTek/giphy.gif"
+        "url": "/src/assets/exercises/push_up_knee.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/knee-push-up"
     },
@@ -107,7 +107,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeDYwNjMxNHk1MnF1MHNhNnJoMnIweGN4MnRmbWxvaHR3ZHRxbGswZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/K1IGNk8ebMxyyY0hR2/giphy.gif"
+        "url": "/src/assets/exercises/incline_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/incline-push-up"
     },
@@ -143,7 +143,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnh3Y3RpbHRtc284OXZvbGk0em1ianNhdmNmejRwbmZ6NGZ2YXVxayZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Qfsqn3xxB8aYzbBCO1/giphy.gif"
+        "url": "/src/assets/exercises/diamond_push_up_light.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/diamond-push-up"
     },
@@ -179,7 +179,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnd5bTZraG5uZDVvMW95d295ZTd3ajVreTljc2ZsaW1zM3hiamU3dSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/wOaG2yUiBLar5YFvrr/giphy.gif"
+        "url": "/src/assets/exercises/wide_grip_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/wide-push-up"
     },
@@ -214,7 +214,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjhyYzlqNzk2c2VrMW85emZ1cWJxZDJ5bmZibDh2d243dm5lenB5MyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/6wLz7povE9WOMzcMU4/giphy.gif"
+        "url": "/src/assets/exercises/pike_push_up_beginner.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pike-push-up"
     },
@@ -251,7 +251,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzJibjRtZzE3bWV5d3E1cXd2ZjUxcnFiY2VuanpkZHZsZHY3dDRjaSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/WB4AIcJh76pWq2W5wn/giphy.gif"
+        "url": "/src/assets/exercises/australian_row.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/australian_row"
     },
@@ -283,7 +283,10 @@
         "reps_max": 15,
         "rest_seconds": 90
       },
-      "media": null,
+      "media": {
+        "type": "gif",
+        "url": "/src/assets/exercises/towel_row_table.gif"
+      },
       "fallback_media_search_url": "https://giphy.com/explore/towel-row"
     },
     {
@@ -315,7 +318,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmdvbjdxbHp1bHNxcGt2YWdhdGpzZDJjdmkxNzVuMG9qeW1zbWpzNCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IVtzw7itNoZCwyHFel/giphy.gif"
+        "url": "/src/assets/exercises/dead_hang.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dead-hang"
     },
@@ -351,7 +354,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitcron.com/wp-content/uploads/2021/04/41771301-Hanging-Scapular-Shrug_Back_720.gif"
+        "url": "/src/assets/exercises/scapular_retraction_bar.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/scapular-pull-up"
     },
@@ -387,7 +390,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExem1zdHRodmYxaTdzNWt2eG9nZ2p6YW0yb3NiNXBreGw0Z2ZkcmkxdSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ydxtYebfYAHzQvMvHW/giphy.gif"
+        "url": "/src/assets/exercises/assisted_chin_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/assisted-chin-up"
     },
@@ -422,7 +425,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb2Vyb3JxNmp2MWhteDFwejFsa25kMTluNDd6NXB3Y3Q0Zjl4Y2xpNCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/RTNDA7OxcwuOMcCPhL/giphy.gif"
+        "url": "/src/assets/exercises/bodyweight_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/bodyweight-squat"
     },
@@ -455,7 +458,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDM3ejB5Yjd3dmxsb2NiZmx6dnp6czNvOHh2Z2Izc3hpc2g3ZjR2ZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1C1ipHPEs4Vjwglwza/giphy.gif"
+        "url": "/src/assets/exercises/partial_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/partial-squat"
     },
@@ -489,7 +492,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://www.inspireusafoundation.org/file/2023/07/bodyweight-forward-lunge.gif"
+        "url": "/src/assets/exercises/static_lunge.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/static-lunge"
     },
@@ -522,7 +525,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://hips.hearstapps.com/hmg-prod/images/workouts/2016/03/stepup-1457044957.gif"
+        "url": "/src/assets/exercises/step_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/step-up-exercise"
     },
@@ -554,7 +557,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzNibzM2Z2EyMXdqdzVzODhoaGpka28wMHhvcDBhZnU1cGc1eGcxZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/cGBbyHgaOfDfjyl41M/giphy.gif"
+        "url": "/src/assets/exercises/calf_raise.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/calf-raise"
     },
@@ -588,7 +591,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHNycmQ3Y3ZxeXAzNDZrZWtkdDE5aXV0OWR3dmM5ajJyeGkzYzN4aCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/krmA7YIhRvwjJYbmrG/giphy.gif"
+        "url": "/src/assets/exercises/glute_bridge.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/glute-bridge"
     },
@@ -622,7 +625,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWxkeTFsNTUwcDc1Y25yMDN4Z25hbm9ocWc1MndhOGhhbDZ2cTB4ZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/pNzljh7TXChwrVoSNA/giphy.gif"
+        "url": "/src/assets/exercises/plank.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/plank-exercise"
     },
@@ -656,7 +659,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://burnfit.io/wp-content/uploads/2023/11/SIDE_PLANK.gif"
+        "url": "/src/assets/exercises/side_plank.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/side-plank"
     },
@@ -688,7 +691,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://burnfit.io/wp-content/uploads/2023/11/CRUNCH.gif"
+        "url": "/src/assets/exercises/crunch.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/crunch-exercise"
     },
@@ -721,7 +724,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYm9ua296dm04eGwzeHJ5ajNuN3FseGVhM2g3cTVlNHp1MGV6Ym95ZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/chMEggxfebYTvHkNNG/giphy.gif"
+        "url": "/src/assets/exercises/lying_knee_raises.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/lying-knee-raise"
     },
@@ -754,7 +757,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUycWw2OG9sbHBxNjI2dThub3Nib3BybTJjNWcyeHIycG9jbjZnbjlzcSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Rih75Cs5BrWhdJIGmu/giphy.gif"
+        "url": "/src/assets/exercises/dead_bug.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dead-bug-exercise"
     },
@@ -787,7 +790,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTc5em5jZXdzMGdvanpjOXBjZG5xaGg2aTF5dTI2czJ4ZzdsOGtidyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/9XbMdlJgKXXkEtC60Q/giphy.gif"
+        "url": "/src/assets/exercises/hollow_hold_basic.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/hollow-hold"
     },
@@ -821,7 +824,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWNva2Uwd3h1b3U0cGRhODcxdjc2NTRydWh4NGxjcnVxcnFwZHV3diZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/vI2BMBcFDgbbFrB0bA/giphy.gif"
+        "url": "/src/assets/exercises/mountain_climber.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/mountain-climbers"
     },
@@ -855,7 +858,7 @@
       },
       "media": {
         "type": "image",
-        "url": "https://i.ytimg.com/vi/hmc934fftKM/mqdefault.jpg"
+        "url": "/src/assets/exercises/superman.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/superman-exercise"
     },
@@ -893,7 +896,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGN3cjJwMXNxamRoeHJseWM0a285eHBueXZ0MmpqdnJrcnZrOHBvciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/YQmmcPHmFgHekp7ktU/giphy.gif"
+        "url": "/src/assets/exercises/decline_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/decline-push-up"
     },
@@ -929,7 +932,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://i.pinimg.com/originals/0f/34/3e/0f343e5f49ee783888500700e162f631.gif"
+        "url": "/src/assets/exercises/explosive_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/explosive-push-up"
     },
@@ -966,7 +969,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://burnfit.io/wp-content/uploads/2023/11/ARCHER_PUSH_UP.gif"
+        "url": "/src/assets/exercises/archer_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/archer-push-up"
     },
@@ -1002,7 +1005,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2021/06/Chest-Dips.gif"
+        "url": "/src/assets/exercises/dips_parallel.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dips-exercise"
     },
@@ -1041,7 +1044,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://images.milledcdn.com/2021-10-03/awaQaFj_BM6-iZ7E/M0piHFVGcbkW.gif"
+        "url": "/src/assets/exercises/pseudo_planche_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pseudo-planche-push-up"
     },
@@ -1077,7 +1080,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXZ5Z3NidmZ6Z203dXlvNDI2N2tpNmt2NDBqZXhtZTBtZjVybzNkZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/6wLz7povE9WOMzcMU4/giphy.gif"
+        "url": "/src/assets/exercises/pike_push_up_advanced.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pike-push-up"
     },
@@ -1115,7 +1118,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2022/08/how-to-do-pull-up.gif"
+        "url": "/src/assets/exercises/pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pull-ups"
     },
@@ -1151,7 +1154,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://www.hipertrofia.org/blog/wp-content/uploads/2019/04/chinup.gif"
+        "url": "/src/assets/exercises/chin_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/chin-ups"
     },
@@ -1187,7 +1190,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2022/01/commander-pull-up.gif"
+        "url": "/src/assets/exercises/commando_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/commando-pull-up"
     },
@@ -1223,7 +1226,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYW4xemNtamh3d3RsbDRyc2Jqd2ZvdXI0ZWF1OTIxY2wwY3Bhcmt1eCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l73xn2igLEoHKrogHA/giphy.gif"
+        "url": "/src/assets/exercises/isometric_90_deg.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pull-up-hold"
     },
@@ -1259,7 +1262,7 @@
       },
       "media": {
         "type": "link",
-        "url": "https://fitnessprogramer.com/exercise/scapula-pull-up/"
+        "url": "/src/assets/exercises/scapula_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/scapular-pull-up"
     },
@@ -1295,7 +1298,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://www.inspireusafoundation.org/file/2022/03/bulgarian-split-spuat.gif"
+        "url": "/src/assets/exercises/bulgarian_split_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/bulgarian-split-squat"
     },
@@ -1331,7 +1334,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://cdn.jefit.com/assets/img/exercises/gifs/1222.gif"
+        "url": "/src/assets/exercises/walking_lunge.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/walking-lunge"
     },
@@ -1367,7 +1370,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://www.inspireusafoundation.org/file/2022/09/pistol-squat-high-box.gif"
+        "url": "/src/assets/exercises/assisted_pistol_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pistol-squat"
     },
@@ -1403,7 +1406,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://homeworkouts.org/wp-content/uploads/anim-jump-squats.gif"
+        "url": "/src/assets/exercises/jump_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/jump-squat"
     },
@@ -1439,7 +1442,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://www.inspireusafoundation.org/file/2022/01/box-jump.gif"
+        "url": "/src/assets/exercises/box_jump.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/box-jump"
     },
@@ -1509,7 +1512,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://i.pinimg.com/originals/21/86/e7/2186e7a33fda75a9ff3f1f2a8eef435a.gif"
+        "url": "/src/assets/exercises/hanging_knee_raises.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/hanging-knee-raise"
     },
@@ -1545,7 +1548,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://newlife.com.cy/wp-content/uploads/2019/12/04721301-Hanging-Leg-Raise_Hips_360.gif"
+        "url": "/src/assets/exercises/hanging_leg_raises.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/hanging-leg-raise"
     },
@@ -1582,7 +1585,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTJmZXBlc2hmZmI5Y3lhdXI2d3Vkb3MzbXBvZHMyMXN4bzY1YjA4YyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Ve40hEDFgI6nLz4tPo/giphy.gif"
+        "url": "/src/assets/exercises/l_sit_tuck.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/l-sit"
     },
@@ -1617,7 +1620,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://liftmanual.com/wp-content/uploads/2023/04/hollow-rock.gif"
+        "url": "/src/assets/exercises/hollow_body_hold.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/hollow-body-hold"
     },
@@ -1654,7 +1657,7 @@
       },
       "media": {
         "type": "link",
-        "url": "https://cdn.shopify.com/s/files/1/0701/9950/9207/files/Dragon_Flag.gif?v=1737008728"
+        "url": "/src/assets/exercises/dragon_flag_negative.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dragon-flag"
     },
@@ -1690,7 +1693,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://i.pinimg.com/originals/42/6c/ba/426cba45d51a02ee0b053134600a2950.gif"
+        "url": "/src/assets/exercises/windshield_wipers_partial.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/windshield-wipers-exercise"
     },
@@ -1763,7 +1766,7 @@
       },
       "media": {
         "type": "image",
-        "url": "https://calisthenics.com/wp-content/uploads/2025/01/tuck-front-lever-progression.jpg"
+        "url": "/src/assets/exercises/front_lever_tuck.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/front-lever"
     },
@@ -1798,7 +1801,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://www.inspireusafoundation.org/file/2023/02/handstand-pushup.gif"
+        "url": "/src/assets/exercises/handstand_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/handstand-push-up"
     },
@@ -1833,7 +1836,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2021/09/Single-Arm-Push-up.gif"
+        "url": "/src/assets/exercises/one_arm_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/one-arm-push-up"
     },
@@ -1871,7 +1874,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXgzcGlnNmJ3eDVzNDlsNmtyYnVtcjVpOXJ6a2JmeWtrYmh2NW5vcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/aKc4TaUDO0dRu7xXiU/giphy.gif"
+        "url": "/src/assets/exercises/planche_lean.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/planche-lean"
     },
@@ -1909,7 +1912,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyNmMxdHY4eWZ6Z2UyMTRyMzVsNnQ4emNlNTN0YTBzeTU5cDE4azZ3OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CmnQ7MrEbH75jAFkH3/source.gif"
+        "url": "/src/assets/exercises/tuck_planche.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/tuck-planche"
     },
@@ -1945,7 +1948,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2022/07/Planche-Push-Up.gif"
+        "url": "/src/assets/exercises/planche_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/planche-push-up"
     },
@@ -1979,7 +1982,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2022/01/Korean-Dips.gif"
+        "url": "/src/assets/exercises/korean_dips.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/korean-dip"
     },
@@ -2015,7 +2018,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2021/05/Muscle-up-vertical-bar.gif"
+        "url": "/src/assets/exercises/muscle_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/muscle-up"
     },
@@ -2051,7 +2054,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2022/01/jumping-pull-up.gif"
+        "url": "/src/assets/exercises/explosive_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/explosive-pull-up"
     },
@@ -2086,7 +2089,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2022/01/One-Arm-Chin-Up.gif"
+        "url": "/src/assets/exercises/one_arm_pull_up_progression.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/one-arm-pull-up"
     },
@@ -2122,7 +2125,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://i.makeagif.com/media/7-04-2016/FpkGYN.gif"
+        "url": "/src/assets/exercises/typewriter_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/typewriter-pull-up"
     },
@@ -2157,7 +2160,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2023/06/Front-Lever-Pull-up.gif"
+        "url": "/src/assets/exercises/front_lever_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/front-lever-pull-up"
     },
@@ -2190,8 +2193,8 @@
         "rest_seconds": 120
       },
       "media": {
-        "type": "link",
-        "url": "https://makeagif.com/i/Z8rnqN"
+        "type": "gif",
+        "url": "/src/assets/exercises/ice_cream_makers.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/ice-cream-maker-exercise"
     },
@@ -2227,7 +2230,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2021/02/Pistol-Squat.gif"
+        "url": "/src/assets/exercises/pistol_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pistol-squat"
     },
@@ -2261,7 +2264,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://www.inspireusafoundation.org/file/2022/11/shrimp-squat.gif"
+        "url": "/src/assets/exercises/shrimp_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/shrimp-squat"
     },
@@ -2328,7 +2331,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://gymvisual.com/img/p/1/8/6/3/0/18630.gif"
+        "url": "/src/assets/exercises/jump_pistol_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/jump-pistol-squat"
     },
@@ -2360,7 +2363,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://www.inspireusafoundation.org/wp-content/uploads/2022/11/bodyweight-sissy-squat.gif"
+        "url": "/src/assets/exercises/sissy_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/sissy-squat"
     },
@@ -2394,7 +2397,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2023/02/Single-Leg-Box-Jump.gif"
+        "url": "/src/assets/exercises/single_leg_box_jump.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/single-leg-box-jump"
     },
@@ -2431,7 +2434,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://liftmanual.com/wp-content/uploads/2023/04/l-sit.gif"
+        "url": "/src/assets/exercises/l_sit_full.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/l-sit"
     },
@@ -2465,7 +2468,7 @@
       },
       "media": {
         "type": "image",
-        "url": "https://www.losmvmt.com/content/images/2022/10/IMG_3554.jpg"
+        "url": "/src/assets/exercises/v_sit.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/v-sit"
     },
@@ -2499,7 +2502,7 @@
       },
       "media": {
         "type": "image",
-        "url": "https://i.pinimg.com/736x/29/67/e0/2967e032f2a1697080af406a96c144fa.jpg"
+        "url": "/src/assets/exercises/dragon_flag_full.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dragon-flag"
     },
@@ -2533,7 +2536,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://i.makeagif.com/media/4-14-2015/QGyx25.gif"
+        "url": "/src/assets/exercises/windshield_wipers_full.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/windshield-wipers-exercise"
     },
@@ -2570,7 +2573,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://burnfit.io/wp-content/uploads/2023/11/TOES_TO_BAR.gif"
+        "url": "/src/assets/exercises/toes_to_bar.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/toes-to-bar"
     },
@@ -2607,7 +2610,7 @@
       },
       "media": {
         "type": "image",
-        "url": "https://liftmanual.com/wp-content/uploads/2023/04/front-lever.jpg"
+        "url": "/src/assets/exercises/front_lever.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/front-lever"
     },
@@ -2641,7 +2644,7 @@
       },
       "media": {
         "type": "image",
-        "url": "https://liftmanual.com/wp-content/uploads/2023/04/back-lever.jpg"
+        "url": "/src/assets/exercises/back_lever.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/back-lever"
     },
@@ -2713,7 +2716,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2022/02/Human-Flag.gif"
+        "url": "/src/assets/exercises/human_flag.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/human-flag"
     },
@@ -2748,7 +2751,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://liftmanual.com/wp-content/uploads/2023/04/hollow-rock.gif"
+        "url": "/src/assets/exercises/hollow_body_rock.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/hollow-body-rock"
     },
@@ -2784,7 +2787,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDI4YzFkajRsMTVnZjd6YzJvYnI5ZGpkdnB5YjRxOWxwcGpleHBwNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l0HlGZRXUggKJaOBy/giphy.gif"
+        "url": "/src/assets/exercises/ab_wheel_rollout_knees.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/ab-wheel"
     },
@@ -2820,7 +2823,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3ZoOGN6ZGVtd2V6YmV6dTJkd3B5Y3VhNnR5dGhveHhqYjJqc2p4ZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xT9IgpTy4UVnddmso0/giphy.gif"
+        "url": "/src/assets/exercises/archer_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pullup"
     },
@@ -2856,7 +2859,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHh1NzBnZmpxYnQ3cTN5Z2VnZGRkM2kyaXBsaHFnazN0N2JwdjJtZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l0HlPystfePnYIspq/giphy.gif"
+        "url": "/src/assets/exercises/commando_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pullup"
     },
@@ -2892,7 +2895,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExczJjNmQzN3lhOWJqeGtyZjR0OXljMGx6ZXliaGJ5cjZ6cGZ5ajdqZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xT9IgsBC2Aytq4tnTq/giphy.gif"
+        "url": "/src/assets/exercises/wide_grip_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pullup"
     },
@@ -3032,7 +3035,7 @@
       },
       "media": {
         "type": "image",
-        "url": "https://experiencelife.lifetime.life/wp-content/uploads/2025/06/so25-bid-L-Sit-Tuck-Hold-1024x577.jpg"
+        "url": "/src/assets/exercises/l_sit_knee_tuck.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/search/l-sit"
     },
@@ -3067,7 +3070,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessprogramer.com/wp-content/uploads/2021/06/Bench-Pike-Push-up.gif"
+        "url": "/src/assets/exercises/pike_push_up_elevated_feet.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pike-pushup"
     },
@@ -3103,7 +3106,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://fitnessvolt.com/wp-content/uploads/exercises/1080/close-grip-push-up-on-knees-2398.gif"
+        "url": "/src/assets/exercises/close_grip_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pushup"
     },
@@ -3138,7 +3141,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGt5ZnF4M3YxYTlkZDZhd3lhdHk3bGdoYWN1bnp6dW50YzRjcDVnZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l0MYEqEzwMWuBvlLu/giphy.gif"
+        "url": "/src/assets/exercises/assisted_pistol_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pistol-squat"
     },
@@ -3173,7 +3176,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTR6YWFldWY0emttdTh0ejZhZmZidWpodnpleHh2ZnFodHR6MnFqYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3o7TKMt1VVNkHV2PaE/giphy.gif"
+        "url": "/src/assets/exercises/negative_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pullup"
     },
@@ -3209,7 +3212,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://www.workedoutfitness.com/static/images/tuck-front-lever-raise.gif"
+        "url": "/src/assets/exercises/tucked_front_lever_raise.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/front-lever"
     },
@@ -3245,7 +3248,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://liftmanual.com/wp-content/uploads/2023/04/handstand-hold-on-wall.gif"
+        "url": "/src/assets/exercises/wall_handstand_hold.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/handstand"
     },
@@ -3281,7 +3284,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/26BRte7E5dlGs8xiw/giphy.gif"
+        "url": "/src/assets/exercises/assisted_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/assisted-pullup"
     },
@@ -3318,7 +3321,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/3o7btPOMufscWOr7Gw/giphy.gif"
+        "url": "/src/assets/exercises/chest_to_bar_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/chest-to-bar-pullup"
     },
@@ -3355,7 +3358,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/26n6WywJyh39n1pBu/giphy.gif"
+        "url": "/src/assets/exercises/weighted_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/weighted-pullup"
     },
@@ -3391,7 +3394,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/l0HlPwMAU9gZZwmqc/giphy.gif"
+        "url": "/src/assets/exercises/one_arm_pull_up_assisted.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/assisted-one-arm-pullup"
     },
@@ -3424,7 +3427,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/3oKIPtjElfqwMOTbH2/giphy.gif"
+        "url": "/src/assets/exercises/one_arm_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/one-arm-pullup"
     },
@@ -3457,7 +3460,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "https://media.giphy.com/media/3oKIPa2TdahY8LAAxy/giphy.gif"
+        "url": "/src/assets/exercises/dip.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/dip-exercise"
     }
