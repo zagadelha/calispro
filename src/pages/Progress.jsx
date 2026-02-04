@@ -293,16 +293,29 @@ const Progress = () => {
                                             />
                                             <Tooltip
                                                 cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                                                contentStyle={{
-                                                    backgroundColor: 'var(--bg-secondary)',
-                                                    border: '1px solid var(--border-color)',
-                                                    borderRadius: 'var(--radius-md)',
-                                                    color: 'var(--text-primary)',
-                                                    boxShadow: 'var(--shadow-lg)'
+                                                content={({ active, payload }) => {
+                                                    if (active && payload && payload.length) {
+                                                        return (
+                                                            <div style={{
+                                                                backgroundColor: 'var(--bg-secondary)',
+                                                                border: '1px solid var(--border-color)',
+                                                                borderRadius: 'var(--radius-md)',
+                                                                padding: '8px 12px',
+                                                                boxShadow: 'var(--shadow-lg)'
+                                                            }}>
+                                                                <p style={{
+                                                                    margin: 0,
+                                                                    color: 'white',
+                                                                    fontWeight: 'bold',
+                                                                    fontSize: '14px'
+                                                                }}>
+                                                                    {`${t('dashboard.stats.workouts_done').charAt(0).toUpperCase() + t('dashboard.stats.workouts_done').slice(1)}: ${payload[0].value}`}
+                                                                </p>
+                                                            </div>
+                                                        );
+                                                    }
+                                                    return null;
                                                 }}
-                                                itemStyle={{ color: 'white', fontWeight: 'bold' }}
-                                                formatter={(value) => [`${value} ${t('nav.progress').toLowerCase()}`, t('dashboard.stats.workouts_done')]}
-                                                labelStyle={{ marginBottom: '4px', color: 'var(--text-secondary)' }}
                                             />
                                             <Bar
                                                 dataKey="count"
@@ -362,15 +375,29 @@ const Progress = () => {
                                             />
                                             <Tooltip
                                                 cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                                                contentStyle={{
-                                                    backgroundColor: 'var(--bg-secondary)',
-                                                    border: '1px solid var(--border-color)',
-                                                    borderRadius: 'var(--radius-md)',
-                                                    color: 'var(--text-primary)',
-                                                    boxShadow: 'var(--shadow-lg)'
+                                                content={({ active, payload }) => {
+                                                    if (active && payload && payload.length) {
+                                                        return (
+                                                            <div style={{
+                                                                backgroundColor: 'var(--bg-secondary)',
+                                                                border: '1px solid var(--border-color)',
+                                                                borderRadius: 'var(--radius-md)',
+                                                                padding: '8px 12px',
+                                                                boxShadow: 'var(--shadow-lg)'
+                                                            }}>
+                                                                <p style={{
+                                                                    margin: 0,
+                                                                    color: 'white',
+                                                                    fontWeight: 'bold',
+                                                                    fontSize: '14px'
+                                                                }}>
+                                                                    {`${t('dashboard.stats.workouts_done').charAt(0).toUpperCase() + t('dashboard.stats.workouts_done').slice(1)}: ${payload[0].value}`}
+                                                                </p>
+                                                            </div>
+                                                        );
+                                                    }
+                                                    return null;
                                                 }}
-                                                itemStyle={{ color: 'white', fontWeight: 'bold' }}
-                                                formatter={(value) => [`${value} ${t('nav.progress').toLowerCase()}`, t('dashboard.stats.total_time').split(' ')[0]]}
                                             />
                                             <Bar
                                                 dataKey="count"
