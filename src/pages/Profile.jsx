@@ -271,7 +271,7 @@ const Profile = () => {
                 );
 
                 if (shouldUpdate) {
-                    handleInstallUpdate();
+                    handleInstallUpdate(remoteVersion);
                 }
             } else {
                 alert(`Você já está na versão mais recente (v${CURRENT_VERSION})`);
@@ -284,7 +284,7 @@ const Profile = () => {
         }
     };
 
-    const handleInstallUpdate = async () => {
+    const handleInstallUpdate = async (remoteVersion) => {
         try {
             console.log('[InstallUpdate] Iniciando atualização...');
 
@@ -310,14 +310,18 @@ const Profile = () => {
                 }
             }
 
+            console.log('[InstallUpdate] Atualização concluída, recarregando em 1.5s...');
 
-            console.log('[InstallUpdate] Atualização concluída, recarregando...');
-
-            // Force hard reload from server by adding timestamp
-            // This is more reliable than reload(true) which is deprecated
-            const url = new URL(window.location.href);
-            url.searchParams.set('_refresh', Date.now().toString());
-            window.location.href = url.toString();
+            // Wait a bit to ensure browser processed everything
+            setTimeout(() => {
+                // Force hard reload from server by adding timestamp and version
+                const url = new URL(window.location.href);
+                if (remoteVersion) {
+                    url.searchParams.set('v', remoteVersion);
+                }
+                url.searchParams.set('_refresh', Date.now().toString());
+                window.location.href = url.toString();
+            }, 1500);
         } catch (error) {
             console.error('[InstallUpdate] Erro ao instalar atualização:', error);
             alert('Erro ao instalar atualização: ' + error.message);

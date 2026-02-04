@@ -46,6 +46,18 @@ const AdminDashboard = () => {
         if (!confirmed) return;
 
         try {
+            // Fetch remote version to use in URL cache busting
+            let remoteVersion = null;
+            try {
+                const response = await fetch(`/package.json?t=${Date.now()}`, { cache: 'no-cache' });
+                if (response.ok) {
+                    const data = await response.json();
+                    remoteVersion = data.version;
+                }
+            } catch (e) {
+                console.warn('[ForceUpdate] Could not fetch remote version for URL tagging', e);
+            }
+
             // Unregister all service workers
             if ('serviceWorker' in navigator) {
                 const registrations = await navigator.serviceWorker.getRegistrations();
@@ -68,13 +80,17 @@ const AdminDashboard = () => {
                 }
             }
 
-            alert('Service workers e caches limpos com sucesso! A página será recarregada.');
+            alert('Service workers e caches limpos! Recarregando app...');
 
-            // Force hard reload from server by adding timestamp
-            // This is more reliable than reload(true) which is deprecated
-            const url = new URL(window.location.href);
-            url.searchParams.set('_refresh', Date.now().toString());
-            window.location.href = url.toString();
+            // Wait a bit and then reload
+            setTimeout(() => {
+                const url = new URL(window.location.href);
+                if (remoteVersion) {
+                    url.searchParams.set('v', remoteVersion);
+                }
+                url.searchParams.set('_refresh', Date.now().toString());
+                window.location.href = url.toString();
+            }, 1000);
         } catch (error) {
             console.error('[ForceUpdate] Error during force update:', error);
             alert('Erro ao forçar atualização: ' + error.message);

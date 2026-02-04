@@ -126,10 +126,17 @@ const VersionChecker = () => {
         // Clear all caches using the centralized function
         await clearAllCaches();
 
-        // Force hard reload from server by adding timestamp
-        const url = new URL(window.location.href);
-        url.searchParams.set('_refresh', Date.now().toString());
-        window.location.href = url.toString();
+        console.log('[VersionChecker] Manual refresh triggered, reloading in 1s...');
+
+        // Force hard reload from server by adding timestamp and version
+        setTimeout(() => {
+            const url = new URL(window.location.href);
+            if (latestVersion) {
+                url.searchParams.set('v', latestVersion);
+            }
+            url.searchParams.set('_refresh', Date.now().toString());
+            window.location.href = url.toString();
+        }, 1000);
     };
 
     const handleDismiss = () => {
