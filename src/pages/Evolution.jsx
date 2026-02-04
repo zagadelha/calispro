@@ -227,7 +227,7 @@ const Evolution = () => {
                                 <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t('common.level')}</span>
                             </div>
                             <div className="overflow-x-auto pb-2" style={{ WebkitOverflowScrolling: 'touch' }}>
-                                <div className="flex flex-row gap-2 p-2 bg-black bg-opacity-40 backdrop-blur-md rounded-2xl border border-white border-opacity-10 shadow-lg">
+                                <div className="flex flex-row gap-1.5 p-1.5 bg-[#1a1f2e] rounded-2xl border border-white border-opacity-10 shadow-inner">
                                     {[
                                         { id: 'all', label: t('dashboard.view_all'), icon: '📊' },
                                         { id: 'beginner', label: t('common.beginner'), icon: '🌱', color: '#10B981' },
@@ -239,11 +239,11 @@ const Evolution = () => {
                                             onClick={() => setActiveTab(tab.id)}
                                             className={`
                                                 flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl
-                                                font-semibold tracking-wide whitespace-nowrap
+                                                font-bold tracking-wider whitespace-nowrap uppercase
                                                 transition-all duration-200 ease-out
                                                 ${activeTab === tab.id
-                                                    ? 'text-white shadow-lg'
-                                                    : 'text-gray-300 hover:text-white hover:bg-white hover:bg-opacity-10'
+                                                    ? 'text-white shadow-lg scale-[1.02]'
+                                                    : 'text-white text-opacity-40 hover:text-opacity-100 hover:bg-white hover:bg-opacity-5'
                                                 }
                                             `}
                                             style={{
@@ -251,10 +251,12 @@ const Evolution = () => {
                                                     ? tab.color
                                                         ? `linear-gradient(135deg, ${tab.color}, ${tab.color}cc)`
                                                         : 'linear-gradient(135deg, var(--primary-light), var(--primary-dark))'
-                                                    : 'transparent',
-                                                fontSize: '13px',
-                                                letterSpacing: '0.03em',
-                                                minWidth: '100px'
+                                                    : '#1a1f2e',
+                                                fontSize: '11px',
+                                                letterSpacing: '0.08em',
+                                                minWidth: '100px',
+                                                border: '1px solid',
+                                                borderColor: activeTab === tab.id ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.08)'
                                             }}
                                         >
                                             <span style={{ fontSize: '16px' }}>{tab.icon}</span>
