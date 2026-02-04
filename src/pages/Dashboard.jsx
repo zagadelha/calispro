@@ -608,7 +608,7 @@ const Dashboard = () => {
                     )}
 
                     {/* Specialized Workout Section */}
-                    {!isWorkoutActive && (!workout || workout.status !== 'completed') && (
+                    {!isWorkoutActive && (
                         <section className="specialized-section mt-xl">
                             <div className="card specialized-card overflow-hidden">
                                 <div className="flex justify-between items-center mb-md">

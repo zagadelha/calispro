@@ -186,7 +186,8 @@
         "limitations_label": "Restricciones o Lesiones (opcional)",
         "limitations_placeholder": "Ej: dolor en el hombro derecho, problema en la rodilla...",
         "limitations_desc": "Esto nos ayuda a personalizar tu entrenamiento y evitar ejercicios inadecuados",
-        "creating_plan": "Creando plan..."
+        "creating_plan": "Creando plan...",
+        "setup_goal": "Meta"
     },
     "profile": {
         "title": "Mi Perfil",
@@ -230,13 +231,17 @@
         "workout_done": "Entrenamiento Completado",
         "next_workout": "Próximo Entrenamiento",
         "readiness_score": "Nivel de Preparación",
-        "off_plan_title": "Entrenamiento fuera del plan",
+        "off_plan_title": "Entrenamiento Adicional",
         "off_plan_desc": "Generar un entrenamiento avulso basado en categoría o habilidad",
         "by_category": "Categoría",
         "by_skill": "Habilidad",
         "generate_now": "Generar Entrenamiento Ahora",
         "off_plan_note1": "Genere entrenamientos enfocados en habilidades o categorías musculares específicas.",
-        "off_plan_note2": "Este entrenamiento no está programado y no se contabilizará en su evolución."
+        "off_plan_note2": "Este entrenamiento no está programado y no se contabilizará en su evolución.",
+        "stats": {
+            "workouts_done": "entrenamientos",
+            "total_time": "Total"
+        }
     },
     "exercises": {
         "push_up": "Flexiones de Brazos",

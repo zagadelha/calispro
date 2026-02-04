@@ -186,7 +186,8 @@
         "limitations_label": "Restrictions or Injuries (optional)",
         "limitations_placeholder": "E.g.: right shoulder pain, knee problem...",
         "limitations_desc": "This helps us personalize your workout and avoid unsuitable exercises",
-        "creating_plan": "Creating plan..."
+        "creating_plan": "Creating plan...",
+        "setup_goal": "Goal"
     },
     "profile": {
         "title": "My Profile",
@@ -230,13 +231,17 @@
         "workout_done": "Workout Done",
         "next_workout": "Next Workout",
         "readiness_score": "Preparation Level",
-        "off_plan_title": "Off-plan workout",
+        "off_plan_title": "Extra Workout",
         "off_plan_desc": "Generate a custom workout based on category or skill",
         "by_category": "Category",
         "by_skill": "Skill",
         "generate_now": "Generate Workout Now",
         "off_plan_note1": "Generate workouts focused on specific skills or muscle categories.",
-        "off_plan_note2": "This workout is not scheduled and will not be counted in your evolution."
+        "off_plan_note2": "This workout is not scheduled and will not be counted in your evolution.",
+        "stats": {
+            "workouts_done": "workouts",
+            "total_time": "Total"
+        }
     },
     "exercises": {
         "push_up": "Push-Up",

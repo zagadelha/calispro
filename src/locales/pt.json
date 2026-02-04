@@ -186,7 +186,8 @@
         "limitations_label": "Restrições ou Lesões (opcional)",
         "limitations_placeholder": "Ex: dor no ombro direito, problema no joelho...",
         "limitations_desc": "Isso nos ajuda a personalizar seu treino e evitar exercícios inadequados",
-        "creating_plan": "Criando plano..."
+        "creating_plan": "Criando plano...",
+        "setup_goal": "Meta"
     },
     "profile": {
         "title": "Meu Perfil",
@@ -230,13 +231,17 @@
         "workout_done": "Treino Concluído",
         "next_workout": "Próximo Treino",
         "readiness_score": "Nível de Preparação",
-        "off_plan_title": "Treino fora do plano",
+        "off_plan_title": "Treino Extra",
         "off_plan_desc": "Gere um treino avulso baseado em categoria ou habilidade",
         "by_category": "Categoria",
         "by_skill": "Habilidade",
         "generate_now": "Gerar Treino Agora",
         "off_plan_note1": "Gere treinos focados em habilidades ou categorias musculares específicas.",
-        "off_plan_note2": "Este treino não é programado e não será contabilizado na sua evolução."
+        "off_plan_note2": "Este treino não é programado e não será contabilizado na sua evolução.",
+        "stats": {
+            "workouts_done": "treinos",
+            "total_time": "Total"
+        }
     },
     "exercises": {
         "push_up": "Flexão de Braços",
