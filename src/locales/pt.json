@@ -376,6 +376,12 @@
             "base_pull": "Puxar (Base)",
             "base_legs": "Pernas (Base)",
             "base_core": "Core (Base)"
+        },
+        "patterns": {
+            "push": "Empurrar",
+            "pull": "Puxar",
+            "legs": "Pernas",
+            "core": "Core"
         }
     },
     "progression": {

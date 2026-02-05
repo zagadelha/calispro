@@ -376,6 +376,12 @@
             "base_pull": "Pull (Base)",
             "base_legs": "Legs (Base)",
             "base_core": "Core (Base)"
+        },
+        "patterns": {
+            "push": "Push",
+            "pull": "Pull",
+            "legs": "Legs",
+            "core": "Core"
         }
     },
     "progression": {

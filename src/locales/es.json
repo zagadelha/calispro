@@ -376,6 +376,12 @@
             "base_pull": "Tirar (Base)",
             "base_legs": "Piernas (Base)",
             "base_core": "Core (Base)"
+        },
+        "patterns": {
+            "push": "Empujar",
+            "pull": "Tirar",
+            "legs": "Piernas",
+            "core": "Core"
         }
     },
     "progression": {

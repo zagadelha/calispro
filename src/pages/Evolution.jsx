@@ -85,12 +85,12 @@ const Evolution = () => {
 
             setSkillStages(stages);
 
-            // Prepare Radar Data
+            // Prepare Radar Data - Movement Patterns
             const categoryMap = {
-                push: t('onboarding.equipment_list.dip_bars'),
-                pull: t('onboarding.equipment_list.pullup_bar'),
-                legs: t('onboarding.equipment_list.bodyweight'),
-                core: t('common.core'),
+                push: t('evolution.patterns.push'),
+                pull: t('evolution.patterns.pull'),
+                legs: t('evolution.patterns.legs'),
+                core: t('evolution.patterns.core'),
                 skills: t('evolution.skills')
             };
 
@@ -272,15 +272,15 @@ const Evolution = () => {
 
                         {/* Active Filter Indicator */}
                         {activeTab !== 'all' && (
-                            <div className="mt-3 flex items-center gap-2 text-sm text-secondary animate-fadeIn">
-                                <span className="opacity-60">{t('dashboard.focus_prefix')}:</span>
+                            <div className="mt-3 text-sm text-secondary animate-fadeIn">
+                                <span className="opacity-60">{t('dashboard.focus_prefix')}: </span>
                                 <span className="font-bold text-white">
                                     {activeTab === 'beginner' ? t('common.beginner') :
                                         activeTab === 'intermediate' ? t('common.intermediate') :
                                             t('common.advanced')}
                                 </span>
                                 <span className="opacity-40">
-                                    ({skillStages.filter(s => {
+                                    {' '}({skillStages.filter(s => {
                                         const diff = s.stage.difficulty_score;
                                         if (activeTab === 'beginner') return diff <= 3;
                                         if (activeTab === 'intermediate') return diff > 3 && diff <= 6;
@@ -315,106 +315,137 @@ const Evolution = () => {
                                     return (
                                         <div
                                             key={skill}
-                                            className={`group relative flex flex-col overflow-hidden rounded-[2rem] transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer bg-[#1a1f2e] border border-white border-opacity-5 ${status === 'locked' ? 'opacity-60 grayscale-[0.8]' : ''}`}
-                                            style={{ backgroundColor: '#1a1f2e' }}
+                                            className={`group relative flex flex-col transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer ${status === 'locked' ? 'opacity-50' : ''}`}
+                                            style={{
+                                                background: 'linear-gradient(180deg, #1e2433 0%, #151922 100%)',
+                                                border: '1px solid rgba(255,255,255,0.06)',
+                                                borderRadius: '16px',
+                                                overflow: 'hidden'
+                                            }}
                                         >
-                                            {/* Media Header with GIF */}
-                                            <div className="relative h-48 w-full overflow-hidden bg-black">
+                                            {/* Compact Image Section */}
+                                            <div className="relative h-40 w-full">
                                                 {stage.media?.url ? (
                                                     <img
                                                         src={stage.media.url}
                                                         alt={stage.name}
-                                                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                                        style={{ opacity: 1 }}
+                                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                     />
                                                 ) : (
-                                                    <div className="flex h-full w-full items-center justify-center text-white/10 uppercase font-black text-4xl italic">
-                                                        {skill.slice(0, 2)}
+                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                                                        <span className="text-4xl font-black text-white/10 uppercase italic">
+                                                            {skill.slice(0, 2)}
+                                                        </span>
                                                     </div>
                                                 )}
 
-                                                {/* Overlays */}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-[#1a1f2e] via-transparent to-transparent" />
+                                                {/* Gradient Overlay */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-[#151922] via-transparent to-transparent opacity-90" />
 
-                                                {/* Top Badge (Level) */}
-                                                <div className="absolute top-4 left-4">
-                                                    <span
-                                                        className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-lg backdrop-blur-md border border-white/10"
-                                                        style={{ backgroundColor: `${levelColor}cc`, color: '#fff' }}
-                                                    >
-                                                        {levelLabel}
-                                                    </span>
-                                                </div>
-
-                                                {/* Status Icon */}
-                                                <div className="absolute top-4 right-4 h-8 w-8 rounded-full flex items-center justify-center backdrop-blur-md border border-white/10 text-white shadow-lg">
+                                                {/* Status Badge - Top Right */}
+                                                <div
+                                                    className="absolute top-3 right-3 h-7 w-7 rounded-lg flex items-center justify-center"
+                                                    style={{
+                                                        background: status === 'completed' ? 'rgba(16, 185, 129, 0.2)' :
+                                                            status === 'locked' ? 'rgba(255,255,255,0.05)' :
+                                                                'rgba(102, 126, 234, 0.2)',
+                                                        border: `1px solid ${status === 'completed' ? 'rgba(16, 185, 129, 0.3)' :
+                                                            status === 'locked' ? 'rgba(255,255,255,0.1)' :
+                                                                'rgba(102, 126, 234, 0.3)'}`
+                                                    }}
+                                                >
                                                     {status === 'completed' ? (
-                                                        <Trophy size={16} className="text-yellow-400" />
+                                                        <Trophy size={14} className="text-emerald-400" />
                                                     ) : status === 'locked' ? (
-                                                        <Lock size={16} className="text-white/40" />
+                                                        <Lock size={14} className="text-white/30" />
                                                     ) : (
-                                                        <TrendingUp size={16} className="text-primary" />
+                                                        <TrendingUp size={14} className="text-primary" />
                                                     )}
                                                 </div>
                                             </div>
 
-                                            {/* Content Partition */}
-                                            <div className="px-6 pb-6 -mt-4 relative z-10 flex flex-col flex-grow bg-[#1a1f2e]">
-                                                <div className="mb-4">
-                                                    <h3 className="text-xl font-bold text-white capitalize tracking-tight mb-1">
-                                                        {formatSkillName(skill)}
-                                                    </h3>
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
-                                                            <div
-                                                                className={`h-full transition-all duration-1000 ${status === 'completed' ? 'bg-success shadow-glow' : 'bg-primary'}`}
-                                                                style={{ width: `${(masteredCount / totalCount) * 100}%` }}
+                                            {/* Content Section */}
+                                            <div className="p-6 flex flex-col gap-4">
+                                                {/* Header: Skill Name + Level */}
+                                                <div className="flex items-start justify-between gap-3">
+                                                    <div className="flex-1 min-w-0">
+                                                        <h3 className="text-lg font-bold text-white truncate mb-1">
+                                                            {formatSkillName(skill)}
+                                                        </h3>
+                                                        <div className="flex items-center gap-2">
+                                                            <span
+                                                                className="w-1.5 h-1.5 rounded-full"
+                                                                style={{ backgroundColor: levelColor }}
                                                             />
+                                                            <span className="text-xs text-white/50 font-medium">
+                                                                {levelLabel}
+                                                            </span>
                                                         </div>
-                                                        <span className="text-[10px] font-bold text-white/40 uppercase tracking-tighter">
-                                                            {masteredCount}/{totalCount}
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <span className="text-2xl font-black text-white tabular-nums">
+                                                            {masteredCount}
                                                         </span>
+                                                        <span className="text-sm text-white/30 font-medium">/{totalCount}</span>
                                                     </div>
                                                 </div>
 
-                                                <div className="flex-grow flex flex-col justify-end gap-4">
-                                                    <div>
-                                                        <p className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-1">
-                                                            {status === 'completed' ? t('evolution.max_achievement') : status === 'locked' ? t('evolution.locked') : t('evolution.current_focus')}
+                                                {/* Progress Bar */}
+                                                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                                                    <div
+                                                        className="h-full rounded-full transition-all duration-700"
+                                                        style={{
+                                                            width: `${(masteredCount / totalCount) * 100}%`,
+                                                            background: status === 'completed'
+                                                                ? 'linear-gradient(90deg, #10B981, #34D399)'
+                                                                : 'linear-gradient(90deg, var(--primary-light), var(--primary-dark))'
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                {/* Current Exercise Focus */}
+                                                <div className="flex items-center justify-between py-3 px-4 rounded-xl"
+                                                    style={{ background: 'rgba(0,0,0,0.3)' }}>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-0.5">
+                                                            {status === 'completed' ? t('evolution.max_achievement') : t('evolution.current_focus')}
                                                         </p>
-                                                        <h4 className={`text-sm font-semibold truncate ${status === 'locked' ? 'text-white/40 italic' : 'text-gray-200'}`}>
+                                                        <p className={`text-sm font-medium truncate ${status === 'locked' ? 'text-white/30 italic' : 'text-white/90'}`}>
                                                             {t(`dashboard.exercises.${stage.id}`, { defaultValue: stage.name })}
-                                                        </h4>
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Stats Row */}
+                                                <div className="grid grid-cols-3 gap-2 items-center">
+                                                    <div className="text-left">
+                                                        <p className="text-[9px] text-white/40 uppercase font-semibold tracking-wider mb-1">{t('evolution.pr')}</p>
+                                                        <p className="text-lg font-bold text-white">{current}<span className="text-xs text-white/40 ml-0.5">{unit}</span></p>
+                                                    </div>
+                                                    <div className="text-center">
+                                                        <p className="text-[9px] text-white/40 uppercase font-semibold tracking-wider mb-1">{t('evolution.objective')}</p>
+                                                        <p className="text-lg font-bold text-white/50">{goal}<span className="text-xs text-white/30 ml-0.5">{unit}</span></p>
                                                     </div>
 
-                                                    {/* Progress Box */}
-                                                    <div className="bg-black/40 p-4 rounded-2xl border border-white/5 shadow-inner">
-                                                        <div className="flex justify-between items-center mb-2">
-                                                            <div className="flex flex-col">
-                                                                <span className="text-[9px] text-white/30 uppercase font-black tracking-widest">{t('evolution.pr')}</span>
-                                                                <span className="text-sm font-bold text-white">{current}{unit}</span>
+                                                    {/* Mini Progress Circle */}
+                                                    <div className="flex justify-end">
+                                                        <div
+                                                            className="relative h-10 w-10 rounded-full flex items-center justify-center"
+                                                            style={{
+                                                                background: `conic-gradient(${status === 'completed' ? '#10B981' : 'var(--primary-light)'} ${status === 'completed' ? 100 : percent}%, rgba(255,255,255,0.05) 0%)`,
+                                                            }}
+                                                        >
+                                                            <div className="h-7 w-7 rounded-full bg-[#151922] flex items-center justify-center">
+                                                                <span className="text-[10px] font-bold text-white/70">{Math.round(status === 'completed' ? 100 : percent)}%</span>
                                                             </div>
-                                                            <div className="h-6 w-px bg-white/10" />
-                                                            <div className="flex flex-col items-end">
-                                                                <span className="text-[9px] text-white/30 uppercase font-black tracking-widest">{t('evolution.objective')}</span>
-                                                                <span className="text-sm font-bold text-white/40">{goal}{unit}</span>
-                                                            </div>
-                                                        </div>
-
-                                                        {/* Progress Meter */}
-                                                        <div className="relative h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                                                            <div
-                                                                className={`h-full transition-all duration-1000 ease-out ${status === 'completed' ? 'bg-success' : current >= goal ? 'bg-primary shadow-glow' : 'bg-primary/60'}`}
-                                                                style={{ width: `${status === 'completed' ? 100 : percent}%` }}
-                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            {/* Locked Overlay Mask */}
+                                            {/* Locked Overlay */}
                                             {status === 'locked' && (
-                                                <div className="absolute inset-0 bg-[#1a1f2e]/40 backdrop-blur-[2px] pointer-events-none z-30" />
+                                                <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px] pointer-events-none" />
                                             )}
                                         </div>
                                     );
