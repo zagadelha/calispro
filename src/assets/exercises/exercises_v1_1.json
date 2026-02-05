@@ -37,7 +37,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/push_up.gif"
+        "url": "/exercises/push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/push-up"
     },
@@ -71,7 +71,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/push_up_knee.gif"
+        "url": "/exercises/push_up_knee.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/knee-push-up"
     },
@@ -107,7 +107,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/incline_push_up.gif"
+        "url": "/exercises/incline_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/incline-push-up"
     },
@@ -143,7 +143,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/diamond_push_up_light.gif"
+        "url": "/exercises/diamond_push_up_light.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/diamond-push-up"
     },
@@ -179,7 +179,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/wide_grip_push_up.gif"
+        "url": "/exercises/wide_grip_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/wide-push-up"
     },
@@ -214,7 +214,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/pike_push_up_beginner.gif"
+        "url": "/exercises/pike_push_up_beginner.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pike-push-up"
     },
@@ -251,7 +251,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/australian_row.gif"
+        "url": "/exercises/australian_row.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/australian_row"
     },
@@ -285,7 +285,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/towel_row_table.gif"
+        "url": "/exercises/towel_row_table.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/towel-row"
     },
@@ -318,7 +318,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/dead_hang.gif"
+        "url": "/exercises/dead_hang.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dead-hang"
     },
@@ -354,7 +354,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/scapular_retraction_bar.gif"
+        "url": "/exercises/scapular_retraction_bar.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/scapular-pull-up"
     },
@@ -390,7 +390,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/assisted_chin_up.gif"
+        "url": "/exercises/assisted_chin_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/assisted-chin-up"
     },
@@ -425,7 +425,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/bodyweight_squat.gif"
+        "url": "/exercises/bodyweight_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/bodyweight-squat"
     },
@@ -458,7 +458,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/partial_squat.gif"
+        "url": "/exercises/partial_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/partial-squat"
     },
@@ -492,7 +492,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/static_lunge.gif"
+        "url": "/exercises/static_lunge.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/static-lunge"
     },
@@ -525,7 +525,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/step_up.gif"
+        "url": "/exercises/step_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/step-up-exercise"
     },
@@ -557,7 +557,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/calf_raise.gif"
+        "url": "/exercises/calf_raise.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/calf-raise"
     },
@@ -591,7 +591,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/glute_bridge.gif"
+        "url": "/exercises/glute_bridge.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/glute-bridge"
     },
@@ -625,7 +625,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/plank.gif"
+        "url": "/exercises/plank.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/plank-exercise"
     },
@@ -659,7 +659,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/side_plank.gif"
+        "url": "/exercises/side_plank.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/side-plank"
     },
@@ -691,7 +691,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/crunch.gif"
+        "url": "/exercises/crunch.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/crunch-exercise"
     },
@@ -724,7 +724,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/lying_knee_raises.gif"
+        "url": "/exercises/lying_knee_raises.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/lying-knee-raise"
     },
@@ -757,7 +757,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/dead_bug.gif"
+        "url": "/exercises/dead_bug.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dead-bug-exercise"
     },
@@ -790,7 +790,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/hollow_hold_basic.gif"
+        "url": "/exercises/hollow_hold_basic.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/hollow-hold"
     },
@@ -824,7 +824,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/mountain_climber.gif"
+        "url": "/exercises/mountain_climber.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/mountain-climbers"
     },
@@ -858,7 +858,7 @@
       },
       "media": {
         "type": "image",
-        "url": "/src/assets/exercises/superman.jpg"
+        "url": "/exercises/superman.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/superman-exercise"
     },
@@ -896,7 +896,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/decline_push_up.gif"
+        "url": "/exercises/decline_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/decline-push-up"
     },
@@ -932,7 +932,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/explosive_push_up.gif"
+        "url": "/exercises/explosive_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/explosive-push-up"
     },
@@ -969,7 +969,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/archer_push_up.gif"
+        "url": "/exercises/archer_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/archer-push-up"
     },
@@ -1005,7 +1005,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/dips_parallel.gif"
+        "url": "/exercises/dips_parallel.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dips-exercise"
     },
@@ -1044,7 +1044,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/pseudo_planche_push_up.gif"
+        "url": "/exercises/pseudo_planche_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pseudo-planche-push-up"
     },
@@ -1080,7 +1080,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/pike_push_up_advanced.gif"
+        "url": "/exercises/pike_push_up_advanced.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pike-push-up"
     },
@@ -1118,7 +1118,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/pull_up.gif"
+        "url": "/exercises/pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pull-ups"
     },
@@ -1154,7 +1154,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/chin_up.gif"
+        "url": "/exercises/chin_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/chin-ups"
     },
@@ -1190,7 +1190,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/commando_pull_up.gif"
+        "url": "/exercises/commando_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/commando-pull-up"
     },
@@ -1226,7 +1226,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/isometric_90_deg.gif"
+        "url": "/exercises/isometric_90_deg.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pull-up-hold"
     },
@@ -1262,7 +1262,7 @@
       },
       "media": {
         "type": "link",
-        "url": "/src/assets/exercises/scapula_pull_up.gif"
+        "url": "/exercises/scapula_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/scapular-pull-up"
     },
@@ -1298,7 +1298,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/bulgarian_split_squat.gif"
+        "url": "/exercises/bulgarian_split_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/bulgarian-split-squat"
     },
@@ -1334,7 +1334,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/walking_lunge.gif"
+        "url": "/exercises/walking_lunge.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/walking-lunge"
     },
@@ -1370,7 +1370,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/assisted_pistol_squat.gif"
+        "url": "/exercises/assisted_pistol_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pistol-squat"
     },
@@ -1406,7 +1406,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/jump_squat.gif"
+        "url": "/exercises/jump_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/jump-squat"
     },
@@ -1442,7 +1442,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/box_jump.gif"
+        "url": "/exercises/box_jump.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/box-jump"
     },
@@ -1477,7 +1477,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/Assisted-Nordic-Curl.gif"
+        "url": "/exercises/Assisted-Nordic-Curl.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/nordic-curl"
     },
@@ -1512,7 +1512,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/hanging_knee_raises.gif"
+        "url": "/exercises/hanging_knee_raises.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/hanging-knee-raise"
     },
@@ -1548,7 +1548,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/hanging_leg_raises.gif"
+        "url": "/exercises/hanging_leg_raises.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/hanging-leg-raise"
     },
@@ -1585,7 +1585,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/l_sit_tuck.gif"
+        "url": "/exercises/l_sit_tuck.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/l-sit"
     },
@@ -1620,7 +1620,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/hollow_body_hold.gif"
+        "url": "/exercises/hollow_body_hold.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/hollow-body-hold"
     },
@@ -1657,7 +1657,7 @@
       },
       "media": {
         "type": "link",
-        "url": "/src/assets/exercises/dragon_flag_negative.gif"
+        "url": "/exercises/dragon_flag_negative.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dragon-flag"
     },
@@ -1693,7 +1693,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/windshield_wipers_partial.gif"
+        "url": "/exercises/windshield_wipers_partial.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/windshield-wipers-exercise"
     },
@@ -1729,7 +1729,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/Partial-Toes-To-Bar.gif"
+        "url": "/exercises/Partial-Toes-To-Bar.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/toes-to-bar"
     },
@@ -1766,7 +1766,7 @@
       },
       "media": {
         "type": "image",
-        "url": "/src/assets/exercises/front_lever_tuck.jpg"
+        "url": "/exercises/front_lever_tuck.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/front-lever"
     },
@@ -1801,7 +1801,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/handstand_push_up.gif"
+        "url": "/exercises/handstand_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/handstand-push-up"
     },
@@ -1836,7 +1836,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/one_arm_push_up.gif"
+        "url": "/exercises/one_arm_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/one-arm-push-up"
     },
@@ -1874,7 +1874,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/planche_lean.gif"
+        "url": "/exercises/planche_lean.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/planche-lean"
     },
@@ -1912,7 +1912,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/tuck_planche.gif"
+        "url": "/exercises/tuck_planche.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/tuck-planche"
     },
@@ -1948,7 +1948,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/planche_push_up.gif"
+        "url": "/exercises/planche_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/planche-push-up"
     },
@@ -1982,7 +1982,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/korean_dips.gif"
+        "url": "/exercises/korean_dips.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/korean-dip"
     },
@@ -2018,7 +2018,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/muscle_up.gif"
+        "url": "/exercises/muscle_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/muscle-up"
     },
@@ -2054,7 +2054,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/explosive_pull_up.gif"
+        "url": "/exercises/explosive_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/explosive-pull-up"
     },
@@ -2089,7 +2089,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/one_arm_pull_up_progression.gif"
+        "url": "/exercises/one_arm_pull_up_progression.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/one-arm-pull-up"
     },
@@ -2125,7 +2125,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/typewriter_pull_up.gif"
+        "url": "/exercises/typewriter_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/typewriter-pull-up"
     },
@@ -2160,7 +2160,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/front_lever_pull_up.gif"
+        "url": "/exercises/front_lever_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/front-lever-pull-up"
     },
@@ -2194,7 +2194,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/ice_cream_makers.gif"
+        "url": "/exercises/ice_cream_makers.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/ice-cream-maker-exercise"
     },
@@ -2230,7 +2230,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/pistol_squat.gif"
+        "url": "/exercises/pistol_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/pistol-squat"
     },
@@ -2264,7 +2264,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/shrimp_squat.gif"
+        "url": "/exercises/shrimp_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/shrimp-squat"
     },
@@ -2297,7 +2297,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/nordic-hamstring-curl-movement.gif"
+        "url": "/exercises/nordic-hamstring-curl-movement.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/nordic-curl"
     },
@@ -2331,7 +2331,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/jump_pistol_squat.gif"
+        "url": "/exercises/jump_pistol_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/jump-pistol-squat"
     },
@@ -2363,7 +2363,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/sissy_squat.gif"
+        "url": "/exercises/sissy_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/sissy-squat"
     },
@@ -2397,7 +2397,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/single_leg_box_jump.gif"
+        "url": "/exercises/single_leg_box_jump.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/single-leg-box-jump"
     },
@@ -2434,7 +2434,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/l_sit_full.gif"
+        "url": "/exercises/l_sit_full.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/l-sit"
     },
@@ -2468,7 +2468,7 @@
       },
       "media": {
         "type": "image",
-        "url": "/src/assets/exercises/v_sit.jpg"
+        "url": "/exercises/v_sit.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/v-sit"
     },
@@ -2502,7 +2502,7 @@
       },
       "media": {
         "type": "image",
-        "url": "/src/assets/exercises/dragon_flag_full.jpg"
+        "url": "/exercises/dragon_flag_full.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/dragon-flag"
     },
@@ -2536,7 +2536,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/windshield_wipers_full.gif"
+        "url": "/exercises/windshield_wipers_full.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/windshield-wipers-exercise"
     },
@@ -2573,7 +2573,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/toes_to_bar.gif"
+        "url": "/exercises/toes_to_bar.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/toes-to-bar"
     },
@@ -2610,7 +2610,7 @@
       },
       "media": {
         "type": "image",
-        "url": "/src/assets/exercises/front_lever.jpg"
+        "url": "/exercises/front_lever.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/front-lever"
     },
@@ -2644,7 +2644,7 @@
       },
       "media": {
         "type": "image",
-        "url": "/src/assets/exercises/back_lever.jpg"
+        "url": "/exercises/back_lever.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/explore/back-lever"
     },
@@ -2680,7 +2680,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/Skin-The-Cat.gif"
+        "url": "/exercises/Skin-The-Cat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/skin-the-cat"
     },
@@ -2716,7 +2716,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/human_flag.gif"
+        "url": "/exercises/human_flag.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/human-flag"
     },
@@ -2751,7 +2751,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/hollow_body_rock.gif"
+        "url": "/exercises/hollow_body_rock.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/hollow-body-rock"
     },
@@ -2787,7 +2787,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/ab_wheel_rollout_knees.gif"
+        "url": "/exercises/ab_wheel_rollout_knees.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/ab-wheel"
     },
@@ -2823,7 +2823,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/archer_pull_up.gif"
+        "url": "/exercises/archer_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pullup"
     },
@@ -2859,7 +2859,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/commando_pull_up.gif"
+        "url": "/exercises/commando_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pullup"
     },
@@ -2895,7 +2895,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/wide_grip_pull_up.gif"
+        "url": "/exercises/wide_grip_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pullup"
     },
@@ -2931,7 +2931,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/Cossack-Squat.gif"
+        "url": "/exercises/Cossack-Squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/squat"
     },
@@ -2966,7 +2966,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/Archer-Squat.gif"
+        "url": "/exercises/Archer-Squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/squat"
     },
@@ -3001,7 +3001,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/nordic-hamstring-curl-movement.gif"
+        "url": "/exercises/nordic-hamstring-curl-movement.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/nordic-curl"
     },
@@ -3035,7 +3035,7 @@
       },
       "media": {
         "type": "image",
-        "url": "/src/assets/exercises/l_sit_knee_tuck.jpg"
+        "url": "/exercises/l_sit_knee_tuck.jpg"
       },
       "fallback_media_search_url": "https://giphy.com/search/l-sit"
     },
@@ -3070,7 +3070,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/pike_push_up_elevated_feet.gif"
+        "url": "/exercises/pike_push_up_elevated_feet.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pike-pushup"
     },
@@ -3106,7 +3106,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/close_grip_push_up.gif"
+        "url": "/exercises/close_grip_push_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pushup"
     },
@@ -3141,7 +3141,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/assisted_pistol_squat.gif"
+        "url": "/exercises/assisted_pistol_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pistol-squat"
     },
@@ -3176,7 +3176,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/negative_pull_up.gif"
+        "url": "/exercises/negative_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/pullup"
     },
@@ -3212,7 +3212,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/tucked_front_lever_raise.gif"
+        "url": "/exercises/tucked_front_lever_raise.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/front-lever"
     },
@@ -3248,7 +3248,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/wall_handstand_hold.gif"
+        "url": "/exercises/wall_handstand_hold.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/handstand"
     },
@@ -3284,7 +3284,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/assisted_pull_up.gif"
+        "url": "/exercises/assisted_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/assisted-pullup"
     },
@@ -3321,7 +3321,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/chest_to_bar_pull_up.gif"
+        "url": "/exercises/chest_to_bar_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/chest-to-bar-pullup"
     },
@@ -3358,7 +3358,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/weighted_pull_up.gif"
+        "url": "/exercises/weighted_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/weighted-pullup"
     },
@@ -3394,7 +3394,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/one_arm_pull_up_assisted.gif"
+        "url": "/exercises/one_arm_pull_up_assisted.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/assisted-one-arm-pullup"
     },
@@ -3427,7 +3427,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/one_arm_pull_up.gif"
+        "url": "/exercises/one_arm_pull_up.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/one-arm-pullup"
     },
@@ -3460,7 +3460,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/src/assets/exercises/dip.gif"
+        "url": "/exercises/dip.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/dip-exercise"
     }
