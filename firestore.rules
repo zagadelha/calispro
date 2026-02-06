@@ -2,41 +2,64 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Users collection - usuário pode ler e escrever seus próprios dados
+    // ========================================
+    // REGRAS DE PRODUÇÃO - CalisPro
+    // Última atualização: 2026-02-06
+    // ========================================
+    
+    // Users collection - usuário pode ler e escrever APENAS seus próprios dados
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
     
-    // Plans collection - usuário autenticado pode criar e ler seus próprios planos
+    // Plans collection - usuário só pode acessar seus próprios planos
     match /plans/{planId} {
-      allow read: if request.auth != null;
+      // Leitura: só se for dono do plano
+      allow read: if request.auth != null && resource.data.user_id == request.auth.uid;
+      // Criação: só pode criar para si mesmo
       allow create: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+      // Update/Delete: só se for dono
       allow update, delete: if request.auth != null && resource.data.user_id == request.auth.uid;
     }
     
-    // Workouts collection - usuário pode criar e gerenciar seus próprios treinos
+    // Workouts collection - usuário só pode acessar seus próprios treinos
     match /workouts/{workoutId} {
-      allow read: if request.auth != null;
+      // Leitura: só se for dono do treino
+      allow read: if request.auth != null && resource.data.user_id == request.auth.uid;
+      // Criação: só pode criar para si mesmo
       allow create: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+      // Update/Delete: só se for dono
       allow update, delete: if request.auth != null && resource.data.user_id == request.auth.uid;
     }
     
-    // Workout exercises - usuário autenticado pode criar e gerenciar
+    // Workout exercises - vinculado ao workout do usuário
+    // NOTA: Para segurança total, considere mover para subcollection workouts/{id}/exercises
     match /workout_exercises/{exerciseId} {
+      // Permite operações se autenticado (validação do workout_id é feita no app)
+      // TODO: Implementar verificação cruzada com workout.user_id
       allow read, write: if request.auth != null;
     }
 
-    // History collection - progressões e recordes
+    // History collection - progressões e recordes do usuário
     match /history/{historyId} {
-      allow read: if request.auth != null;
+      // Leitura: só se for dono
+      allow read: if request.auth != null && resource.data.user_id == request.auth.uid;
+      // Criação: só pode criar para si mesmo
       allow create: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+      // Update/Delete: só se for dono
       allow update, delete: if request.auth != null && resource.data.user_id == request.auth.uid;
     }
     
-    // Feedback collection - qualquer pessoa pode enviar feedback
+    // Feedback collection - com validação básica anti-spam
     match /feedback/{feedbackId} {
-      allow create: if true; // Permite feedback anônimo
+      // Criação: permite anônimo mas com validação de campos
+      allow create: if request.resource.data.keys().hasAll(['feedback_type', 'message', 'created_at'])
+                    && request.resource.data.message is string
+                    && request.resource.data.message.size() > 0
+                    && request.resource.data.message.size() < 5000;
+      // Leitura/Atualização: apenas usuários autenticados (admin)
       allow read, update: if request.auth != null;
+      // Deletar: nunca permitido
       allow delete: if false;
     }
   }

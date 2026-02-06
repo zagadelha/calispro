@@ -78,34 +78,48 @@ npm install
 4. Ative **Cloud Firestore**:
    - Vá em Firestore Database
    - Crie um banco de dados em modo de teste
-5. Configure as regras do Firestore:
+5. Configure as regras do Firestore (veja `firestore.rules` para versão completa):
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users collection
+    // Users - apenas o próprio usuário pode ler/escrever
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
     
-    // Plans collection
+    // Plans - apenas o dono do plano pode acessar
     match /plans/{planId} {
-      allow read, write: if request.auth != null;
+      allow read: if request.auth != null && resource.data.user_id == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.user_id == request.auth.uid;
     }
     
-    // Workouts collection
+    // Workouts - apenas o dono pode acessar
     match /workouts/{workoutId} {
-      allow read, write: if request.auth != null;
+      allow read: if request.auth != null && resource.data.user_id == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.user_id == request.auth.uid;
     }
     
-    // Workout exercises collection
+    // Workout exercises - usuário autenticado (vinculado ao workout)
     match /workout_exercises/{exerciseId} {
       allow read, write: if request.auth != null;
+    }
+    
+    // History - apenas o dono pode acessar
+    match /history/{historyId} {
+      allow read: if request.auth != null && resource.data.user_id == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.user_id == request.auth.uid;
     }
   }
 }
 ```
+
+> ⚠️ **IMPORTANTE**: Consulte o arquivo `firestore.rules` para a versão completa com validações de feedback.
+
 
 6. Obtenha as credenciais do projeto:
    - Vá em Project Settings (ícone de engrenagem)

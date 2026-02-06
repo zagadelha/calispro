@@ -7,6 +7,7 @@ import InstallPrompt from './components/InstallPrompt';
 import FeedbackButton from './components/FeedbackButton';
 import VersionChecker from './components/VersionChecker';
 import DebugPanel from './components/DebugPanel';
+import EnvironmentBadge from './components/EnvironmentBadge';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // Pages
@@ -33,6 +34,7 @@ function App() {
           <InstallPrompt />
           <FeedbackButton />
           <DebugPanel />
+          <EnvironmentBadge />
           <SpeedInsights />
           <Routes>
             {/* Public Routes */}

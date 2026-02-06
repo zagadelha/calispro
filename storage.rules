@@ -1,0 +1,28 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // ========================================
+    // REGRAS DE PRODUÇÃO - CalisPro Storage
+    // Última atualização: 2026-02-06
+    // ========================================
+    
+    // Profile photos - usuário pode fazer upload/atualizar apenas sua própria foto
+    match /profile_photos/{userId} {
+      // Leitura: pública (fotos de perfil podem ser vistas por qualquer um)
+      allow read: if true;
+      
+      // Escrita: apenas o próprio usuário, com validações
+      allow write: if request.auth != null 
+                   && request.auth.uid == userId
+                   && request.resource.size < 5 * 1024 * 1024  // Max 5MB
+                   && request.resource.contentType.matches('image/.*');  // Apenas imagens
+    }
+    
+    // Exercícios GIFs - apenas leitura pública (admins gerenciam via console)
+    match /exercises/{exerciseId} {
+      allow read: if true;
+      allow write: if false;  // Gerenciado apenas via console Firebase
+    }
+  }
+}

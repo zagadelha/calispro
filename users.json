@@ -1,0 +1,19 @@
+{"users": [
+{
+  "localId": "1NV2jPCGmShn24tANoLg8lxh3vM2",
+  "email": "zagadelha@gmail.com",
+  "emailVerified": true,
+  "displayName": "Marcio Gadelha",
+  "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocKF1wvRf9vWnwbmhsBkP6va38drRQ4YASfOkkjsNv-UDl_G2ITR_w=s96-c",
+  "lastSignedInAt": "1770393484235",
+  "createdAt": "1770393484234",
+  "providerUserInfo": [
+    {
+      "providerId": "google.com",
+      "rawId": "109236481110197458692",
+      "email": "zagadelha@gmail.com",
+      "displayName": "Marcio Gadelha",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocKF1wvRf9vWnwbmhsBkP6va38drRQ4YASfOkkjsNv-UDl_G2ITR_w=s96-c"
+    }
+  ]
+}]}

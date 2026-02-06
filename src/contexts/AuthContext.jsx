@@ -47,16 +47,24 @@ export const AuthProvider = ({ children }) => {
         // Check if user profile exists, if not create one
         const userDoc = await getDoc(doc(db, 'users', result.user.uid));
         if (!userDoc.exists()) {
-            await setDoc(doc(db, 'users', result.user.uid), {
-                name: result.user.displayName,
+            const newProfile = {
+                name: result.user.displayName || '',
                 email: result.user.email,
+                photoURL: result.user.photoURL || null,
                 created_at: getVirtualNow().toISOString(),
                 profile_completed: false
-            });
+            };
+            await setDoc(doc(db, 'users', result.user.uid), newProfile);
+            // Atualiza o estado imediatamente para evitar condição de corrida
+            setUserProfile(newProfile);
+        } else {
+            // Usuário existente - carrega o perfil
+            setUserProfile(userDoc.data());
         }
 
         return result;
     };
+
 
     // Sign out
     const logout = () => {
