@@ -232,6 +232,7 @@
         "start_workout": "Start Workout",
         "continue_workout": "Continue Workout",
         "workout_done": "Workout Done",
+        "workout_cancelled": "Workout Abandoned",
         "next_workout": "Next Workout",
         "readiness_score": "Preparation Level",
         "off_plan_title": "Extra Workout",
@@ -424,6 +425,8 @@
         "mild": "Mild",
         "moderate": "Moderate+",
         "finish_workout": "Finish Workout",
+        "abandon_workout": "Abandon Workout",
+        "abandon_confirm": "Are you sure you want to abandon this workout? Current progress will be lost.",
         "complete_feedback_warning": "Fill out all feedback to finish the workout",
         "performance_warning": "Please fill in performance data for all exercises.",
         "warmup_steps": {

@@ -281,7 +281,7 @@ const Dashboard = () => {
         // If workout exists in DB, just go
         if (workout) {
             try {
-                if (workout.status === 'pending') {
+                if (workout.status === 'pending' || workout.status === 'cancelled') {
                     await updateDoc(doc(db, 'workouts', workout.id), {
                         status: 'in_progress',
                         started_at: getVirtualNow().toISOString()
@@ -590,7 +590,8 @@ const Dashboard = () => {
                                     className="btn btn-primary btn-full btn-lg py-4 text-lg shadow-lg hover:transform hover:scale-[1.02] transition-all"
                                 >
                                     {workout && workout.status === 'completed' ? '✅ ' + t('dashboard.workout_done') :
-                                        isWorkoutActive ? '▶️ ' + t('dashboard.continue_workout') : '🚀 ' + t('dashboard.start_workout')}
+                                        workout && workout.status === 'cancelled' ? '🏳️ ' + t('dashboard.workout_cancelled') :
+                                            isWorkoutActive ? '▶️ ' + t('dashboard.continue_workout') : '🚀 ' + t('dashboard.start_workout')}
                                 </button>
 
                                 {workout && workout.status === 'completed' && (

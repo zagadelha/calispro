@@ -233,8 +233,8 @@ export const getTodayWorkout = async (userId) => {
         }
 
         // If multiple found (e.g. specialized + plan), prioritize active/pending ones
-        // Status priority: in_progress (0) > pending (1) > completed (2)
-        const statusPriority = { 'in_progress': 0, 'pending': 1, 'completed': 2 };
+        // Status priority: in_progress (0) > pending (1) > completed (2) > cancelled (3)
+        const statusPriority = { 'in_progress': 0, 'pending': 1, 'completed': 2, 'cancelled': 3 };
 
         const allWorkouts = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
         allWorkouts.sort((a, b) => {

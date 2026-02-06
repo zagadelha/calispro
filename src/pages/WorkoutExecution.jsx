@@ -308,6 +308,32 @@ const WorkoutExecution = () => {
         }
     };
 
+    const handleAbandonWorkout = async () => {
+        if (!window.confirm(t('workout_execution.abandon_confirm'))) return;
+
+        try {
+            await updateDoc(doc(db, 'workouts', workout.id), {
+                status: 'cancelled',
+                abandoned_at: getVirtualNow().toISOString()
+            });
+
+            // Reset progress for this workout's exercises
+            const resetPromises = exercises.map(ex =>
+                updateDoc(doc(db, 'workout_exercises', ex.id), {
+                    completed: false,
+                    performed_reps: 0,
+                    performed_seconds: 0
+                })
+            );
+            await Promise.all(resetPromises);
+
+            navigate('/dashboard');
+        } catch (err) {
+            console.error('Error abandoning workout:', err);
+            alert(t('common.error'));
+        }
+    };
+
     if (loading) {
         return (
             <div className="workout-execution-container">
@@ -568,6 +594,16 @@ const WorkoutExecution = () => {
                                     ⚠️ {t('workout_execution.complete_feedback_warning')}
                                 </p>
                             )}
+
+                            <div className="mt-3xl text-center">
+                                <button
+                                    onClick={handleAbandonWorkout}
+                                    className="btn btn-error btn-full btn-lg"
+                                    style={{ color: '#fff' }}
+                                >
+                                    ✖️ {t('workout_execution.abandon_workout')}
+                                </button>
+                            </div>
                         </>
                     )}
                 </div>

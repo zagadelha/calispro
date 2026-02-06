@@ -232,6 +232,7 @@
         "start_workout": "Iniciar Entrenamiento",
         "continue_workout": "Continuar Entrenamiento",
         "workout_done": "Entrenamiento Completado",
+        "workout_cancelled": "Entrenamiento Abandonado",
         "next_workout": "Próximo Entrenamiento",
         "readiness_score": "Nivel de Preparación",
         "off_plan_title": "Entrenamiento Adicional",
@@ -424,6 +425,8 @@
         "mild": "Leve",
         "moderate": "Moderada+",
         "finish_workout": "Finalizar Entrenamiento",
+        "abandon_workout": "Abandonar Entrenamiento",
+        "abandon_confirm": "¿Estás seguro de que deseas abandonar este entrenamiento? Se perderá el progreso actual.",
         "complete_feedback_warning": "Complete todo el feedback para finalizar el entrenamiento",
         "performance_warning": "Por favor, complete los datos de rendimiento para todos los ejercicios.",
         "warmup_steps": {
