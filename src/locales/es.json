@@ -224,6 +224,8 @@
         "today_workout": "Entrenamiento de Hoy",
         "no_workout": "No hay entrenamiento para hoy",
         "generate_extra": "Generar Entrenamiento Extra",
+        "extra_workout_create": "Crear",
+        "extra_workout_close": "Cerrar",
         "view_all": "Todas",
         "objective_prefix": "Objetivo",
         "focus_prefix": "Enfoque en",

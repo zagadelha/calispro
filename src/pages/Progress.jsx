@@ -64,7 +64,8 @@ const Progress = () => {
                     id: doc.id,
                     ...doc.data()
                 }))
-                .filter(w => (w.date || '') <= today);
+                .filter(w => (w.date || '') <= today)
+                .filter(w => !w.is_extra && w.plan_id !== 'specialized_workout'); // Exclude extra workouts from official charts
 
             // Sort by date in JavaScript (descending)
             workoutData.sort((a, b) => {

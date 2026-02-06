@@ -175,7 +175,8 @@ export const generateWorkoutPlan = async (userId, profile) => {
                 notes: '',
                 readiness_score: genWorkout.readiness_score || 0,
                 skill_id: targetSkill,
-                skill_media_url: genWorkout.skill_media_url || null
+                skill_media_url: genWorkout.skill_media_url || null,
+                created_at: getVirtualNow().toISOString()
             });
 
             // Add exercises to workout
@@ -231,9 +232,21 @@ export const getTodayWorkout = async (userId) => {
             return null;
         }
 
-        // If multiple found (e.g. specialized + plan), pick most recent or plan
-        const workoutDoc = querySnapshot.docs[0];
-        const workout = { id: workoutDoc.id, ...workoutDoc.data() };
+        // If multiple found (e.g. specialized + plan), prioritize active/pending ones
+        // Status priority: in_progress (0) > pending (1) > completed (2)
+        const statusPriority = { 'in_progress': 0, 'pending': 1, 'completed': 2 };
+
+        const allWorkouts = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        allWorkouts.sort((a, b) => {
+            const pA = statusPriority[a.status] !== undefined ? statusPriority[a.status] : 99;
+            const pB = statusPriority[b.status] !== undefined ? statusPriority[b.status] : 99;
+
+            if (pA !== pB) return pA - pB;
+            // If same status, take most recent
+            return (b.created_at || '').localeCompare(a.created_at || '');
+        });
+
+        const workout = allWorkouts[0];
 
         // Get exercises for this workout
         const exercisesQuery = query(

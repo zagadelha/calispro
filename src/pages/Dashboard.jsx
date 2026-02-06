@@ -237,6 +237,7 @@ const Dashboard = () => {
             const workoutData = {
                 user_id: currentUser.uid,
                 plan_id: 'specialized_workout',
+                is_extra: true,
                 day_label: 'Extra',
                 name: genWorkout.name,
                 date: getVirtualDate(),
@@ -617,7 +618,7 @@ const Dashboard = () => {
                                         onClick={() => setShowSpecialized(!showSpecialized)}
                                         className="btn btn-secondary btn-sm"
                                     >
-                                        {showSpecialized ? t('profile.recalculate').split(' ')[0] : t('landing.calisthenics_info.more').split(' ')[0]}
+                                        {showSpecialized ? t('dashboard.extra_workout_close') : t('dashboard.extra_workout_create')}
                                     </button>
                                 </div>
 

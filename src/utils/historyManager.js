@@ -26,6 +26,8 @@ export const getUserHistory = async (userId, beforeDate = null) => {
         // Filter and Sort in memory instead
         const workouts = wSnap.docs
             .map(d => ({ id: d.id, ...d.data() }))
+            // Filter extra workouts: they shouldn't count for official progression/charts
+            .filter(w => !w.is_extra && w.plan_id !== 'specialized_workout')
             // Filter by date if provided (important for test environment/time travel)
             .filter(w => !beforeDate || (w.date || '') <= beforeDate)
             .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
