@@ -7,6 +7,8 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { getVirtualNow } from '../utils/timeTravel';
 import exercisesData from '../assets/exercises/exercises_v1_1.json';
+import warmupGif from '../assets/warmup.gif';
+
 
 const WorkoutExecution = () => {
     const { t } = useTranslation();
@@ -400,10 +402,11 @@ const WorkoutExecution = () => {
                                     margin: '0 auto 24px'
                                 }}>
                                     <img
-                                        src="/src/assets/warmup.gif"
+                                        src={warmupGif}
                                         alt="Demonstração de Aquecimento"
                                         style={{ width: '100%', display: 'block' }}
                                     />
+
                                 </div>
 
                                 <div className="warmup-steps-grid" style={{
