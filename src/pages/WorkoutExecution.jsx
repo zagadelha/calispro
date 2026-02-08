@@ -400,7 +400,7 @@ const WorkoutExecution = () => {
                                     margin: '0 auto 24px'
                                 }}>
                                     <img
-                                        src="https://i.pinimg.com/originals/0f/59/99/0f5999285c02a718b8b7f1cd75336356.gif"
+                                        src="/src/assets/warmup.gif"
                                         alt="Demonstração de Aquecimento"
                                         style={{ width: '100%', display: 'block' }}
                                     />
