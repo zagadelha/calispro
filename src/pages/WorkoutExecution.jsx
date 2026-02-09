@@ -585,6 +585,12 @@ const WorkoutExecution = () => {
                                 </div>
                             </section>
 
+                            {!isFeedbackComplete() && completedCount > 0 && (
+                                <p className="text-center text-white mb-lg">
+                                    ⚠️ {t('workout_execution.complete_feedback_warning')}
+                                </p>
+                            )}
+
                             <button
                                 onClick={handleFinishWorkout}
                                 className="btn btn-primary btn-full btn-lg"
@@ -592,13 +598,8 @@ const WorkoutExecution = () => {
                             >
                                 ✅ {t('workout_execution.finish_workout')}
                             </button>
-                            {!isFeedbackComplete() && completedCount > 0 && (
-                                <p className="text-center text-error text-sm mt-md">
-                                    ⚠️ {t('workout_execution.complete_feedback_warning')}
-                                </p>
-                            )}
 
-                            <div className="mt-3xl text-center">
+                            <div className="mt-lg text-center">
                                 <button
                                     onClick={handleAbandonWorkout}
                                     className="btn btn-error btn-full btn-lg"
