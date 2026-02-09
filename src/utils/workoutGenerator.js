@@ -184,6 +184,7 @@ export const generateWorkoutPlan = async (userId, profile) => {
             for (let j = 0; j < exercisesToAdd.length; j++) {
                 const ex = exercisesToAdd[j];
                 await addDoc(collection(db, 'workout_exercises'), {
+                    user_id: userId,
                     workout_id: workoutRef.id,
                     exercise_name: ex.exercise_name || ex.name,
                     muscle_group: ex.muscle_group,

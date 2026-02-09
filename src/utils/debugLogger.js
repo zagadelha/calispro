@@ -3,9 +3,13 @@
  * Especialmente útil para rastrear problemas de EmailJS no mobile
  */
 
+// Flag para desativar logs em produção
+const IS_PROD = import.meta.env.PROD;
+
 // Logger centralizado para problemas de EmailJS
 export const emailJSLogger = {
     logAttempt: (data) => {
+        if (IS_PROD) return;
         console.log('📧 EmailJS: Tentando enviar email', {
             templateId: data.templateId,
             serviceId: data.serviceId,
@@ -16,6 +20,7 @@ export const emailJSLogger = {
     },
 
     logSuccess: (data) => {
+        if (IS_PROD) return;
         console.log('✅ EmailJS: Email enviado com sucesso', {
             ...data,
             timestamp: new Date().toISOString()
@@ -23,6 +28,7 @@ export const emailJSLogger = {
     },
 
     logError: (error, context = {}) => {
+        // Erros sempre logamos, mas podemos ser mais sutis em produção
         console.error('❌ EmailJS: Erro ao enviar email', {
             errorMessage: error?.message || 'Unknown error',
             errorText: error?.text || '',
@@ -31,11 +37,12 @@ export const emailJSLogger = {
             timestamp: new Date().toISOString(),
             userAgent: navigator.userAgent,
             online: navigator.onLine,
-            stack: error?.stack
+            stack: IS_PROD ? undefined : error?.stack
         });
     },
 
     logConfig: (config) => {
+        if (IS_PROD) return;
         console.log('⚙️ EmailJS: Configuração carregada', {
             hasServiceId: !!config.serviceId,
             hasTemplateId: !!config.templateId,
@@ -46,6 +53,7 @@ export const emailJSLogger = {
     },
 
     logEnvironment: () => {
+        if (IS_PROD) return;
         console.log('🌍 EmailJS: Informações do ambiente', {
             userAgent: navigator.userAgent,
             platform: navigator.platform,
@@ -65,18 +73,20 @@ export const emailJSLogger = {
 // Logger para eventos gerais
 export const appLogger = {
     log: (category, message, data = {}) => {
+        if (IS_PROD) return;
         console.log(`[${category}] ${message}`, data);
     },
 
     error: (category, message, error = {}) => {
         console.error(`[${category}] ${message}`, {
             error: error?.message || error,
-            stack: error?.stack,
+            stack: IS_PROD ? undefined : error?.stack,
             timestamp: new Date().toISOString()
         });
     },
 
     warn: (category, message, data = {}) => {
+        if (IS_PROD) return;
         console.warn(`[${category}] ${message}`, data);
     }
 };

@@ -1477,7 +1477,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/exercises/Assisted-Nordic-Curl.gif"
+        "url": "/exercises/assisted_nordic_curl.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/nordic-curl"
     },
@@ -1729,7 +1729,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/exercises/Partial-Toes-To-Bar.gif"
+        "url": "/exercises/partial_toes_to_bar.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/toes-to-bar"
     },
@@ -2297,7 +2297,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/exercises/nordic-hamstring-curl-movement.gif"
+        "url": "/exercises/nordic_hamstring_curl_movement.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/nordic-curl"
     },
@@ -2680,7 +2680,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/exercises/Skin-The-Cat.gif"
+        "url": "/exercises/skin_the_cat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/explore/skin-the-cat"
     },
@@ -2931,7 +2931,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/exercises/Cossack-Squat.gif"
+        "url": "/exercises/cossack_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/squat"
     },
@@ -2966,7 +2966,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/exercises/Archer-Squat.gif"
+        "url": "/exercises/archer_squat.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/squat"
     },
@@ -3001,7 +3001,7 @@
       },
       "media": {
         "type": "gif",
-        "url": "/exercises/nordic-hamstring-curl-movement.gif"
+        "url": "/exercises/nordic_hamstring_curl_movement.gif"
       },
       "fallback_media_search_url": "https://giphy.com/search/nordic-curl"
     },

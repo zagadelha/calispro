@@ -32,12 +32,25 @@ service cloud.firestore {
       allow update, delete: if request.auth != null && resource.data.user_id == request.auth.uid;
     }
     
-    // Workout exercises - vinculado ao workout do usuário
-    // NOTA: Para segurança total, considere mover para subcollection workouts/{id}/exercises
+    // Workout exercises - vinculado ao treino e usuário
     match /workout_exercises/{exerciseId} {
-      // Permite operações se autenticado (validação do workout_id é feita no app)
-      // TODO: Implementar verificação cruzada com workout.user_id
-      allow read, write: if request.auth != null;
+      // Leitura: só se for dono
+      allow read: if request.auth != null && (
+        resource.data.user_id == request.auth.uid || 
+        // Fallback para legados (verificação de workout dono) - menos performático mas mantém compatibilidade
+        get(/databases/$(database)/documents/workouts/$(resource.data.workout_id)).data.user_id == request.auth.uid
+      );
+      // Criação: permite se for o dono
+      allow create: if request.auth != null && (
+        request.resource.data.user_id == request.auth.uid ||
+        // Fallback legado: se não enviar user_id, verifica o workout_id
+        get(/databases/$(database)/documents/workouts/$(request.resource.data.workout_id)).data.user_id == request.auth.uid
+      );
+      // Update/Delete: só se for dono
+      allow update, delete: if request.auth != null && (
+        resource.data.user_id == request.auth.uid ||
+        get(/databases/$(database)/documents/workouts/$(resource.data.workout_id)).data.user_id == request.auth.uid
+      );
     }
 
     // History collection - progressões e recordes do usuário
@@ -52,13 +65,14 @@ service cloud.firestore {
     
     // Feedback collection - com validação básica anti-spam
     match /feedback/{feedbackId} {
-      // Criação: permite anônimo mas com validação de campos
+      // Criação: permite qualquer um mas com validação de campos
       allow create: if request.resource.data.keys().hasAll(['feedback_type', 'message', 'created_at'])
                     && request.resource.data.message is string
                     && request.resource.data.message.size() > 0
                     && request.resource.data.message.size() < 5000;
-      // Leitura/Atualização: apenas usuários autenticados (admin)
-      allow read, update: if request.auth != null;
+      // Leitura/Atualização: apenas administradores
+      allow read, update: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.is_admin == true;
       // Deletar: nunca permitido
       allow delete: if false;
     }

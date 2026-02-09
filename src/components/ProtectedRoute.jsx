@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, adminOnly = false }) => {
     const { currentUser, userProfile, loading } = useAuth();
 
     // Aguarda o carregamento da autenticação
@@ -20,8 +20,14 @@ const ProtectedRoute = ({ children }) => {
         return null; // ou um componente de loading
     }
 
-    // Se o usuário está logado mas não completou o perfil, redireciona para onboarding
-    if (!userProfile.profile_completed) {
+    // Se a rota é exclusiva para admin e o usuário não é admin
+    if (adminOnly && userProfile.is_admin !== true) {
+        return <Navigate to="/dashboard" />;
+    }
+
+    // Se o usuário está logado mas não completou o perfil e não é admin
+    // (admins podem pular onboarding para manutenção)
+    if (!userProfile.profile_completed && !userProfile.is_admin) {
         return <Navigate to="/onboarding" />;
     }
 

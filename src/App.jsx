@@ -97,7 +97,7 @@ function App() {
             <Route
               path="/admin"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute adminOnly={true}>
                   <AdminDashboard />
                 </ProtectedRoute>
               }
@@ -105,7 +105,7 @@ function App() {
             <Route
               path="/admin/exercises"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute adminOnly={true}>
                   <ExerciseTreeReport />
                 </ProtectedRoute>
               }
@@ -113,7 +113,7 @@ function App() {
             <Route
               path="/admin/feedback"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute adminOnly={true}>
                   <FeedbackReport />
                 </ProtectedRoute>
               }
